@@ -221,10 +221,65 @@ body {
 .dot.pain { background-color: #F43F5E; } 
 .dot.sleep { background-color: #3B82F6; } 
 
-/* YENİ GÜNCELLEME ROZETLERİ VE SYNC */
-@keyframes premium-glow { 0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.15); } 50% { box-shadow: 0 0 0 6px rgba(139, 92, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); } }
-.new-report-pulse { animation: premium-glow 3s infinite ease-in-out !important; border: 1px solid rgba(139, 92, 246, 0.3) !important; }
-.new-badge { background: var(--purple); color: white; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; margin-left: 8px; display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; text-transform: uppercase; }
+/* --- LÜKS BİLDİRİM SİSTEMİ (APPLE CARD SHINE EFEKTİ) --- */
+.unread-premium-card {
+    position: relative;
+    border-color: rgba(139, 92, 246, 0.45) !important;
+    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.12) !important;
+}
 
+/* Kartın üzerinden yağ gibi kayan lüks cam/ışık yansıması */
+.unread-premium-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -150%; width: 60%; height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(139, 92, 246, 0.08), rgba(255,255,255,0));
+    transform: skewX(-25deg);
+    animation: premiumShine 3.5s infinite;
+    pointer-events: none;
+    border-radius: 24px;
+}
+
+@keyframes premiumShine {
+    0% { left: -150%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+}
+
+/* Zarif "YENİ" Rozeti */
+.premium-new-badge {
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+/* Rozetin içindeki nefes alan (nabız) zarif nokta */
+.premium-new-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: dotPulse 2s infinite ease-in-out;
+}
+
+@keyframes dotPulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* SYNC İKONU */
 @keyframes spin-anim { 100% { transform: rotate(360deg); } }
 .spin { display: inline-block; animation: spin-anim 1s linear infinite; }
