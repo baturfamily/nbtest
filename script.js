@@ -25,22 +25,26 @@ window.switchTab = function(tabId, btn) {
 const now = new Date();
 const hour = now.getHours();
 let gMsg = "İyi Geceler"; 
-let vipBg = "linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%)";
+/* Gece: Sakin ve derin bir gece mavisi */
+let vipBg = "linear-gradient(135deg, #334155 0%, #0F172A 100%)";
 let greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
 
 if (hour >= 5 && hour < 12) { 
     gMsg = "Günaydın"; 
-    vipBg = "linear-gradient(135deg, #FF9500 0%, #FF5E3A 100%)"; 
+    /* Sabah: Uçuk şeftali ve gün doğumu pembesi (Huzur verir) */
+    vipBg = "linear-gradient(135deg, #FDBA74 0%, #F472B6 100%)"; 
     greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="m20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg>';
 } 
 else if (hour >= 12 && hour < 17) { 
     gMsg = "Tünaydın"; 
-    vipBg = "linear-gradient(135deg, #32ADE6 0%, #007AFF 100%)"; 
+    /* Öğle: Açık gökyüzü ve ferah mavi */
+    vipBg = "linear-gradient(135deg, #7DD3FC 0%, #3B82F6 100%)"; 
     greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
 } 
 else if (hour >= 17 && hour < 22) { 
     gMsg = "İyi Akşamlar"; 
-    vipBg = "linear-gradient(135deg, #AF52DE 0%, #5E5CE6 100%)"; 
+    /* Akşam: Sakin bir okyanus laciverti/mor */
+    vipBg = "linear-gradient(135deg, #818CF8 0%, #4F46E5 100%)"; 
     greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
 }
 
