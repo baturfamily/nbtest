@@ -241,15 +241,16 @@ body {
     );
     transform: skewX(-25deg);
     /* Toplam döngü süresi 7 saniyeye çıkarılarak sakinleştirildi */
-    animation: premiumShine 7s infinite ease-in-out;
+    animation: premiumShine 3s infinite ease-in-out;
     pointer-events: none;
     border-radius: 24px;
 }
 
 @keyframes premiumShine {
-    /* Hareketin kendisi toplam sürenin %45'ine yayılarak yavaşlatıldı */
+    /* Parlama ilk 1 saniye içinde (-150'den +200'e) tamamlanır */
     0% { left: -150%; }
-    45% { left: 200%; } 
+    35% { left: 200%; } 
+    /* Kalan sürede (yaklaşık 2 saniye) ışık dışarıda bekler */
     100% { left: 200%; }
 }
 
