@@ -461,31 +461,82 @@ function doktorRaporuOlustur() {
 // --- YENİ: GRAFİK ÇİZME FONKSİYONU ---
 function grafikCiz() {
     if (!apiData || !apiData.tumVeriler) return;
+
     const tarihler = Object.keys(apiData.tumVeriler).sort((a,b) => {
         const pA = a.split('.'); const pB = b.split('.');
         return new Date(pA[2], pA[1]-1, pA[0]) - new Date(pB[2], pB[1]-1, pB[0]);
     });
+
     const sonYediGun = tarihler.slice(-7);
     const labels = sonYediGun.map(t => t.substring(0,5));
-    const agriData = sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"]));
-    const uykuData = sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"]));
+
+    // Arka planda çizim için sayısal puanlar
+    const agriPuanlari = sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"]));
+    const uykuPuanlari = sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"]));
+
+    // Annenin görmesi için E-Tablo'daki gerçek kelimeler
+    const agriMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || "Veri Yok");
+    const uykuMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || "Veri Yok");
+
     const ctx = document.getElementById('healthChart').getContext('2d');
     if (healthChartInstance) healthChartInstance.destroy();
+
     healthChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
             datasets: [
-                { label: 'Ağrı', data: agriData, borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.1)', borderWidth: 3, tension: 0.4, fill: true, pointRadius: 4 },
-                { label: 'Uyku', data: uykuData, borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 }
+                { 
+                    label: 'Ağrı', 
+                    data: agriPuanlari, 
+                    realValues: agriMetinleri, // <--- Eksik buydu: Metinleri buraya bağladık
+                    borderColor: '#F43F5E', 
+                    backgroundColor: 'rgba(244, 63, 94, 0.1)', 
+                    borderWidth: 3, 
+                    tension: 0.4, 
+                    fill: true, 
+                    pointRadius: 6 // Mobilde daha rahat dokunması için büyüttüm
+                },
+                { 
+                    label: 'Uyku', 
+                    data: uykuPuanlari, 
+                    realValues: uykuMetinleri, // <--- Eksik buydu: Metinleri buraya bağladık
+                    borderColor: '#3B82F6', 
+                    borderWidth: 3, 
+                    tension: 0.4, 
+                    pointRadius: 6 
+                }
             ]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: { 
+                legend: { display: false },
+                tooltip: { // <--- Eksik buydu: Sayı yerine kelimeyi gösteren baloncuğu ekledik
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const valueText = context.dataset.realValues[context.dataIndex];
+                            return label + ': ' + valueText; // "Ağrı: Şiş ve Ağrılı" yazacak
+                        }
+                    }
+                }
+            },
             scales: {
-                y: { beginAtZero: true, max: 3, ticks: { stepSize: 1, callback: (v) => ["Yok", "Hafif", "Orta", "Yüksek"][v], font: { size: 10, weight: '600' } } },
-                x: { ticks: { font: { size: 10, weight: '600' } } }
+                y: { 
+                    beginAtZero: true, max: 3, 
+                    ticks: { 
+                        stepSize: 1, 
+                        callback: function(value) { // <--- Eksik buydu: Sol tarafa kelimeleri yazdık
+                            const seviyeler = ["Yok/Kötü", "Hafif", "Orta", "Yüksek"];
+                            return seviyeler[value];
+                        },
+                        font: { size: 10, weight: '700' }
+                    } 
+                },
+                x: { ticks: { font: { size: 10, weight: '700' } } }
             }
         }
     });
