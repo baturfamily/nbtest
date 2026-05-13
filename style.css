@@ -233,53 +233,51 @@ body {
 .dot.pain { background-color: #F43F5E; } 
 .dot.sleep { background-color: #3B82F6; } 
 
-/* --- ULTRA-PREMIUM "LIVING GLOW" SİSTEMİ --- */
+/* --- ULTRA-PREMIUM "LIVING GLOW" SİSTEMİ (4 KART İÇİN KESİN ÇÖZÜM) --- */
 .unread-premium-card {
     position: relative;
     z-index: 1;
-    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    border: 1px solid rgba(139, 92, 246, 0.4) !important;
     background: #FFFFFF;
-    /* Kartın kendisi çok hafif ve lüks bir şekilde nefes alır */
     animation: premiumPulse 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     transition: all 0.5s ease;
+    /* KRİTİK: Işığın dışarı taşması için kilit komut */
+    overflow: visible !important; 
 }
 
-/* Kartın arkasındaki "Sihirli" Işık Halesi */
-.unread-premium-card::before {
+/* Parlayan haleyi ::after kısmına aldık. 
+   Böylece diary-card'ın sol çizgisi (::before) ile çakışmayacak. */
+.unread-premium-card::after {
     content: '';
     position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
-    z-index: -1;
-    /* Mordan Maviye lüks bir gradyan */
+    /* Kartın biraz dışına taşarak aura oluşturması için */
+    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    z-index: -1; 
     background: linear-gradient(45deg, #8B5CF6, #3B82F6, #D8B4FE, #8B5CF6);
     background-size: 400% 400%;
-    border-radius: 30px; /* Karttan biraz daha geniş bir yuvarlaklık */
-    filter: blur(12px); /* Işığı yumuşatıp aura efekti verir */
+    border-radius: 40px; 
+    filter: blur(16px); 
     opacity: 0;
     animation: magicGlow 4s ease infinite;
+    pointer-events: none;
+    display: block !important;
 }
 
 @keyframes magicGlow {
     0% { opacity: 0.1; background-position: 0% 50%; }
-    50% { opacity: 0.45; background-position: 100% 50%; }
+    50% { opacity: 0.5; background-position: 100% 50%; }
     100% { opacity: 0.1; background-position: 0% 50%; }
 }
 
 @keyframes premiumPulse {
-    0% { 
-        transform: scale(1);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.04);
-    }
+    0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
     50% { 
-        transform: scale(1.015); /* Çok hafif büyüme, kalite hissi verir */
-        /* Kartın altına derin bir mor gölge ekler */
+        transform: scale(1.015); 
         box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15);
-        background-color: #FDFBFF; /* Çok uçuk bir lila tonu */
+        background-color: #FDFBFF; 
     }
-    100% { 
-        transform: scale(1);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.04);
-    }
+    100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
+}
 }
 
 /* Yeni rozet tasarımı - Siri stili */
