@@ -488,8 +488,8 @@ function grafikCiz() {
         data: {
             labels: labels,
             datasets: [
-                { label: 'Ağrı', data: sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"])), borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.05)', borderWidth: 3, tension: 0.4, pointRadius: 4 },
-                { label: 'Uyku', data: sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"])), borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Ağrı', data: sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"])), borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.05)', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Uyku', data: sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"])), borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 },
                 { label: 'Enerji', data: sonYediGun.map(t => puanla.enerji(apiData.tumVeriler[t]["Enerji Seviyesi"])), borderColor: '#F59E0B', borderWidth: 3, tension: 0.4, pointRadius: 4 },
                 { label: 'Kaçamak', data: sonYediGun.map(t => puanla.beslenme(apiData.tumVeriler[t]["Beslenme Kaçamak"])), borderColor: '#8B5CF6', borderWidth: 3, borderDash: [5, 5], tension: 0.4, pointRadius: 4 }
             ]
@@ -500,7 +500,7 @@ function grafikCiz() {
             scales: { 
                 y: { 
                     beginAtZero: true, 
-                    max: 3.5, // KESİLMEYİ ÖNLEYEN KRİTİK AYAR (Tavanı yükselttik)
+                    max: 3.5, // KESİLMEYİ ÖNLEYEN AYAR: Üst sınırı 3'ten 3.5'e çıkardık.
                     ticks: { 
                         stepSize: 1, 
                         callback: (v) => v <= 3 ? ["Yok/Kötü", "Hafif", "Orta", "Yüksek"][v] : "", 
