@@ -8,7 +8,6 @@ const svgCheck = `<svg viewBox="0 0 14 10"><polyline points="1.5 5 5 8.5 12.5 1"
 const svgSync = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>`;
 const svgWait = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
 
-// --- SEKME DEĞİŞTİRME MANTIĞI (iOS 26) ---
 window.switchTab = function(tabId, btn) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -16,10 +15,11 @@ window.switchTab = function(tabId, btn) {
     if(targetTab) targetTab.classList.add('active');
     btn.classList.add('active');
     
-        if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
+    if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
         setTimeout(grafikCiz, 150);
     }
-    updateTabGlows(); // Her sekme değişiminde kontrol etmesi için dışarı aldık
+    // Her sekme geçişinde noktaları tekrar kontrol et
+    setTimeout(updateTabGlows, 50); 
 };
 
 const now = new Date();
@@ -385,7 +385,7 @@ function renderMonthStat(prefix, data, statType, cardId) {
             cardEl.classList.remove('unread-premium-card');
             if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
         }
-        setTimeout(updateTabGlows, 150); // Yeni olsa da olmasa da basıldıktan sonra kontrol et
+        setTimeout(updateTabGlows, 200); // Yeni olsa da olmasa da basıldıktan sonra kontrol et
     }
     }
 }
@@ -485,11 +485,11 @@ function grafikCiz() {
     const sonYediGun = tarihler.slice(-7);
     const labels = sonYediGun.map(t => t.substring(0,5));
 
-    // Veri anahtarlarını (keys) tüm olasılıklara karşı kontrol ediyoruz (Boşluklu, Alt Tireli, Büyük Harf)
-    const agriMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || apiData.tumVeriler[t]["eklem_agrisi"] || "");
-    const uykuMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || apiData.tumVeriler[t]["uyku"] || "");
-    const enerjiMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Bugün enerji seviyen nasıldı?"] || apiData.tumVeriler[t]["Enerji Seviyesi"] || apiData.tumVeriler[t]["ENERJI_SEVIYESI"] || apiData.tumVeriler[t]["enerji_seviyesi"] || "");
-    const beslenmeMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Kortizonun oyununa gelip bugün tatlı veya hamur işi kaçamağı yaptın mı?"] || apiData.tumVeriler[t]["Beslenme Kaçamak"] || apiData.tumVeriler[t]["BESLENME_KACAMAK"] || apiData.tumVeriler[t]["beslenme_kacamak"] || "");
+    // VERİ KONTROLÜ (Crash Koruması)
+    const agriMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || "") : ""));
+    const uykuMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || "") : ""));
+    const enerjiMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Bugün enerji seviyen nasıldı?"] || apiData.tumVeriler[t]["Enerji Seviyesi"] || "") : ""));
+    const beslenmeMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Kortizonun oyununa gelip bugün tatlı veya hamur işi kaçamağı yaptın mı?"] || apiData.tumVeriler[t]["Beslenme Kaçamak"] || "") : ""));
 
     const ctx = document.getElementById('healthChart').getContext('2d');
     if (healthChartInstance) healthChartInstance.destroy();
@@ -521,14 +521,7 @@ function grafikCiz() {
                 }
             },
             scales: { 
-                y: { 
-                    beginAtZero: true, max: 3.5, 
-                    ticks: { 
-                        stepSize: 1, 
-                        callback: (v) => v <= 3 ? ["Yok/Az", "Hafif", "Orta", "Yüksek"][v] : "", 
-                        font: { size: 10, weight: '700' } 
-                    } 
-                }
+                y: { beginAtZero: true, max: 3.5, ticks: { stepSize: 1, callback: (v) => v <= 3 ? ["Yok/Az", "Hafif", "Orta", "Yüksek"][v] : "", font: { size: 10, weight: '700' } } }
             }
         }
     });
@@ -658,7 +651,6 @@ function updateTabGlows() {
     // 1. GÜNÜM SEKMESİ
     const gununAnalizi = document.getElementById('aiDiaryCard');
     const tabGunum = document.querySelector('button[onclick*="tab-day"]');
-    
     if(tabGunum) {
         const isDayNew = gununAnalizi && gununAnalizi.classList.contains('unread-premium-card');
         tabGunum.classList.toggle('unread-indicator', !!isDayNew);
@@ -667,7 +659,6 @@ function updateTabGlows() {
     // 2. ANALİZ (ARŞİV) SEKMESİ
     const arsivKartlari = ['card-stat-this-month', 'card-stat-last-month', 'card-stat-yearly'];
     const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
-    
     if(tabAnaliz) {
         let hasUnreadArchive = arsivKartlari.some(id => {
             let el = document.getElementById(id);
