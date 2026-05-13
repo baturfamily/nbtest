@@ -221,37 +221,35 @@ body {
 .dot.pain { background-color: #F43F5E; } 
 .dot.sleep { background-color: #3B82F6; } 
 
-/* --- LÜKS BİLDİRİM SİSTEMİ (APPLE CARD SHINE EFEKTİ) --- */
+/* --- LÜKS BİLDİRİM SİSTEMİ (BREATHING AURA EFEKTİ) --- */
 .unread-premium-card {
     position: relative;
-    border-color: rgba(139, 92, 246, 0.45) !important;
-    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.12) !important;
+    /* Kartın kenarlığını çok hafif mor yapıyoruz */
+    border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
+    /* Nefes alan mor gölge animasyonu */
+    animation: auraPulse 3s infinite ease-in-out;
 }
 
-/* Kartın üzerinden yağ gibi kayan lüks cam/ışık yansıması */
-/* Daha baskın ve dikkat çekici mor parlama efekti */
+/* Kartın üzerinden geçen o yorucu ışığı (::after) tamamen iptal ediyoruz */
 .unread-premium-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -150%; width: 80%; height: 100%;
-    background: linear-gradient(to right, 
-        rgba(255,255,255,0) 0%, 
-        rgba(139, 92, 246, 0.45) 50%, 
-        rgba(255,255,255,0) 100%
-    );
-    transform: skewX(-25deg);
-    /* Toplam döngü süresi 7 saniyeye çıkarılarak sakinleştirildi */
-    animation: premiumShine 2s infinite ease-in-out;
-    pointer-events: none;
-    border-radius: 24px;
+    display: none !important;
 }
 
-@keyframes premiumShine {
-    /* Parlama ilk 1 saniye içinde tamamlanır */
-    0% { left: -150%; }
-    50% { left: 200%; } 
-    /* Kalan 1 saniye boyunca ışık dışarıda bekler */
-    100% { left: 200%; }
+@keyframes auraPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.2), 0 10px 40px rgba(0,0,0,0.04);
+        transform: scale(1);
+    }
+    50% {
+        /* Gölge hafifçe dışarı doğru yayılıyor */
+        box-shadow: 0 0 20px 5px rgba(139, 92, 246, 0.15), 0 10px 40px rgba(0,0,0,0.04);
+        /* Kart çok belli belirsiz (farkedilmeyecek kadar az) büyüyor */
+        transform: scale(1.005);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.2), 0 10px 40px rgba(0,0,0,0.04);
+        transform: scale(1);
+    }
 }
 
 /* Zarif "YENİ" Rozeti */
