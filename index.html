@@ -154,17 +154,12 @@
 
     <script>
         function switchTab(tabId, btn) {
-            // Tüm içerikleri gizle
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            // Tüm butonları pasif yap
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             
-            // Seçili içeriği göster
             document.getElementById(tabId).classList.add('active');
-            // Seçili butonu aktif yap
             btn.classList.add('active');
             
-            // Eğer analiz sekmesine geçildiyse grafiği bir kez daha tetikle (boyut hatasını önlemek için)
             if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
                 setTimeout(grafikCiz, 100);
             }
