@@ -127,7 +127,19 @@ body {
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.92; } }
 
 /* --- ASİSTAN GÜNLÜĞÜ (APPLE HEALTH MESAJ BALONU) --- */
-.diary-card { padding: 22px 24px; border-radius: 28px; margin-bottom: 16px; cursor: pointer; background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.12); box-shadow: 0 12px 36px rgba(139, 92, 246, 0.08), 0 4px 12px rgba(0,0,0,0.02); position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.diary-card { 
+    padding: 22px 24px; 
+    border-radius: 28px; 
+    margin-bottom: 16px; 
+    cursor: pointer; 
+    background: #FFFFFF; 
+    border: 1px solid rgba(139, 92, 246, 0.12); 
+    box-shadow: 0 12px 36px rgba(139, 92, 246, 0.08), 0 4px 12px rgba(0,0,0,0.02);
+    position: relative;
+    /* overflow: hidden; SİLİNDİ - Işığın dışarı taşması için */
+    z-index: 1; /* EKLENDİ - Işık halesinin kartın arkasında kalması için */
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+}
 .diary-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #8B5CF6 0%, #3B82F6 100%); opacity: 0.8; }
 .diary-card:active { transform: scale(0.98); }
 .diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
