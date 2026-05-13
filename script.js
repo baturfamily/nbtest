@@ -232,7 +232,7 @@ function renderHealthDiary() {
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
     let isNew = (aiMsg && !aiMsg.includes("değerlendiriliyor") && !aiMsg.includes("güncellenemiyor") && lastReadReport !== aiMsg);
     let pulseClass = isNew ? "unread-premium-card" : "";
-    let badgeHTML = isNew ? `<span class="premium-new-badge">YENİ</span>` : `<span style="font-size:10px; color:var(--purple); font-weight:900; background: rgba(175, 82, 222, 0.1); padding: 4px 8px; border-radius: 8px; letter-spacing:0.5px;">YAPAY ZEKA</span>`;
+    let badgeHTML = isNew ? `<span class="premium-new-badge">YENİ</span>` : "";
     let finalHTML = `
         <div class="diary-card ${pulseClass} collapsed" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.classList.toggle('collapsed')">
             <div class="diary-header">
@@ -262,8 +262,9 @@ window.markStatAsRead = function(statType, cardId) {
             card.removeAttribute('data-new-text');
                         card.classList.remove('unread-premium-card');
             let titleSpan = document.getElementById('title-' + statType);
-            if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, `<span style="font-size:10px; color:var(--purple); font-weight:900; background: rgba(175, 82, 222, 0.1); padding: 4px 8px; border-radius: 8px; letter-spacing:0.5px;">YAPAY ZEKA</span>`);
-        }
+            if(titleSpan) {
+                titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
+            }
     }
 };
 
