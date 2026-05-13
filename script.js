@@ -300,10 +300,11 @@ function analyzeMonth(year, month) {
     const isCurrentMonth = (year === dNow.getFullYear() && month === dNow.getMonth());
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const maxDay = isCurrentMonth ? dNow.getDate() : daysInMonth;
-    const START_DATE = new Date(2026, 2, 7);
-    for (let d = maxDay; d >= 1; d--) { 
-        let currentDay = new Date(year, month, d);
-        if (currentDay < START_DATE) continue; 
+    const START_DATE = new Date(2026, 2, 7); // 7 Mart 2026
+for (let d = maxDay; d >= 1; d--) { 
+    let currentDay = new Date(year, month, d);
+    // Milattan önceki günleri hesaba katma
+    if (currentDay < START_DATE) continue; 
         let dateStr = String(d).padStart(2, '0') + '.' + String(month + 1).padStart(2, '0') + '.' + year;
         let prog = getDailyProgram(currentDay);
         let dayTotal = 0; let dayMissedCount = 0; let dayMissedNames = [];
@@ -531,15 +532,22 @@ async function veriCek() {
     fetchDevamEdiyor = true;
     const todayStr = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + now.getFullYear();
     try {
-        const res = await fetch(`${API_URL}?tarih=${todayStr}`);
-        if (!res.ok) throw new Error("Ağ Hatası");
-        apiData = await res.json();
-        sonBasariZamani = Date.now();
-        ekraniCiz(); 
-        istatistikleriCiz(); 
-        renderHealthDiary(); 
-        grafikCiz(); 
-    } catch(e) { console.error(e); } finally { 
+    const res = await fetch(`${API_URL}?tarih=${todayStr}`);
+    if (!res.ok) throw new Error("Ağ Hatası");
+    apiData = await res.json();
+    sonBasariZamani = Date.now();
+    
+    // Her fonksiyonu güvenli çağır
+    if(typeof ekraniCiz === 'function') ekraniCiz(); 
+    if(typeof istatistikleriCiz === 'function') istatistikleriCiz(); 
+    if(typeof renderHealthDiary === 'function') renderHealthDiary(); 
+    
+    // Grafiği çizmeden önce bir nefes al (Sizing hatasını önler)
+    setTimeout(() => {
+        if(typeof grafikCiz === 'function') grafikCiz();
+    }, 100);
+
+} catch(e) { console.error("Veri çekme hatası:", e); }
         fetchDevamEdiyor = false; 
         const uText = document.getElementById('update-text');
         if(uText) uText.innerHTML = `Güncellemek İçin Aşağı Kaydırın`;
@@ -601,8 +609,13 @@ document.addEventListener("visibilitychange", () => {
 
 let pStartY = 0; let pCurrentY = 0; let pIsPulling = false;
 document.addEventListener('touchstart', (e) => {
-    const vList = document.querySelector('.tab-content.active');
-    if (vList && vList.scrollTop <= 0) { pStartY = e.touches[0].clientY; pIsPulling = true; }
+    // Aktif olan sekmenin içeriğini bul
+    const activeTab = document.querySelector('.tab-content.active');
+    // Sadece sekme en üstteyse (scrollTop <= 0) yenilemeye izin ver
+    if (activeTab && activeTab.scrollTop <= 0) { 
+        pStartY = e.touches[0].clientY; 
+        pIsPulling = true; 
+    }
 }, {passive: true});
 document.addEventListener('touchmove', (e) => {
     if (!pIsPulling || fetchDevamEdiyor) return;
