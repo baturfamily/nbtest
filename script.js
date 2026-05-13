@@ -2,6 +2,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyVML9s78ajHrNf_xCDGh4g
 let sonBasariZamani = 0;
 let fetchDevamEdiyor = false;
 let apiData = {}; 
+let healthChartInstance = null; // Yeni Grafik Nesnesi
 
 const svgCheck = `<svg viewBox="0 0 14 10"><polyline points="1.5 5 5 8.5 12.5 1"></polyline></svg>`;
 const svgSync = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>`;
@@ -9,8 +10,7 @@ const svgWait = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" str
 
 const now = new Date();
 const hour = now.getHours();
-let gMsg = "İyi Geceler"; 
-let vipBg = "linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%)";
+let gMsg = "İyi Geceler"; let vipBg = "linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%)";
 let greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
 
 if (hour >= 5 && hour < 12) { 
@@ -35,6 +35,28 @@ if(document.getElementById('currentYearText')) document.getElementById('currentY
 
 const dynamicHeaderBg = document.getElementById('dynamicHeaderBg');
 if (dynamicHeaderBg) { dynamicHeaderBg.style.background = vipBg; dynamicHeaderBg.style.border = "none"; }
+
+// --- GRAFİK İÇİN PUANLAMA MOTORU ---
+const puanla = {
+    agri: (val) => {
+        if (!val) return 0;
+        const v = val.toLowerCase();
+        if (v.includes("yok")) return 0;
+        if (v.includes("hafif")) return 1;
+        if (v.includes("şiş") || v.includes("ağrılı")) return 2;
+        if (v.includes("sinir")) return 3;
+        return 0;
+    },
+    uyku: (val) => {
+        if (!val) return 0;
+        const v = val.toLowerCase();
+        if (v.includes("fazla uyuyamadım")) return 0;
+        if (v.includes("bölündü") || v.includes("ağrım vardı")) return 1;
+        if (v.includes("iyiydi")) return 2;
+        if (v.includes("deliksiz") || v.includes("harika")) return 3;
+        return 1;
+    }
+};
 
 const ilacAciklamalari = {
   "INH": [
@@ -68,7 +90,7 @@ const ilacAciklamalari = {
   "Quantavir": [
     "Vücudun zorlu tedavilerle meşgulken karaciğerini yorulmaktan korur. İlaçların karaciğerine zarar vermemesi için sağlam ve güçlü bir zırh oluşturur.",
     "Geçmişte uyuyan virüslerin bir daha asla uyanmasına izin vermez. Karaciğer enzimlerini dengede tutarak midenin bulanmasını tamamen engeller.",
-    "Ağır romatizma tedavilerinin karaciğerde yaratacağı yükü pamuk gibi hafifletir. Senin hissetmediğin tehlikeleri önceden sezerek karaciğerinin sarsılmaz nöbetçisidir."
+    "Ağır romatizma tedavilerinin karaciğerde yaratacağı yüku pamuk gibi hafifletir. Senin hissetmediğin tehlikelere karşı karaciğerinin sarsılmaz nöbetçisidir."
   ],
   "Deltacortril": [
     "Eklemlerindeki alevi ve şişliği saniyeler içinde söndüren en hızlı itfaiyecidir. Sabah yataktan çok daha ağrısız ve enerjik bir şekilde kalkmanı sağlar.",
@@ -125,7 +147,6 @@ async function fetchWeather() {
         const h = data.current.relative_humidity_2m;
         const w = data.current.wind_speed_10m;
         const uv = data.daily.uv_index_max[0]; 
-
         const currentHour = new Date().getHours();
         const isDaytime = (currentHour >= 7 && currentHour < 19);
 
@@ -437,6 +458,39 @@ function doktorRaporuOlustur() {
     setTimeout(function() { window.print(); }, 250);
 }
 
+// --- YENİ: GRAFİK ÇİZME FONKSİYONU ---
+function grafikCiz() {
+    if (!apiData || !apiData.tumVeriler) return;
+    const tarihler = Object.keys(apiData.tumVeriler).sort((a,b) => {
+        const pA = a.split('.'); const pB = b.split('.');
+        return new Date(pA[2], pA[1]-1, pA[0]) - new Date(pB[2], pB[1]-1, pB[0]);
+    });
+    const sonYediGun = tarihler.slice(-7);
+    const labels = sonYediGun.map(t => t.substring(0,5));
+    const agriData = sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"]));
+    const uykuData = sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"]));
+    const ctx = document.getElementById('healthChart').getContext('2d');
+    if (healthChartInstance) healthChartInstance.destroy();
+    healthChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                { label: 'Ağrı', data: agriData, borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.1)', borderWidth: 3, tension: 0.4, fill: true, pointRadius: 4 },
+                { label: 'Uyku', data: uykuData, borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, max: 3, ticks: { stepSize: 1, callback: (v) => ["Yok", "Hafif", "Orta", "Yüksek"][v], font: { size: 10, weight: '600' } } },
+                x: { ticks: { font: { size: 10, weight: '600' } } }
+            }
+        }
+    });
+}
+
 async function veriCek() {
     if (fetchDevamEdiyor) return;
     fetchDevamEdiyor = true;
@@ -451,6 +505,7 @@ async function veriCek() {
         ekraniCiz(); 
         istatistikleriCiz(); 
         renderHealthDiary(); 
+        grafikCiz(); // Grafik burada çiziliyor
     } catch(e) { console.error(e); } finally { 
         fetchDevamEdiyor = false; 
         const updateText = document.getElementById('update-text');
@@ -463,6 +518,7 @@ async function veriCek() {
 function ekraniCiz() {
     const dNow = new Date(); 
     const todayProg = getDailyProgram(dNow);
+    const dateKey = String(dNow.getDate()).padStart(2, '0') + '.' + String(dNow.getMonth() + 1).padStart(2, '0') + '.' + dNow.getFullYear();
     let alertsHTML = "";
     todayProg.forEach(s => {
         if(!s.meds) return;
@@ -479,7 +535,7 @@ function ekraniCiz() {
     todayProg.forEach((s) => {
         let sTC = 0; let medsHTML = "";
         s.meds.forEach(m => { 
-            const isDone = (apiData && apiData.tumVeriler && apiData.tumVeriler[String(dNow.getDate()).padStart(2, '0') + '.' + String(dNow.getMonth() + 1).padStart(2, '0') + '.' + dNow.getFullYear()] && apiData.tumVeriler[String(dNow.getDate()).padStart(2, '0') + '.' + String(dNow.getMonth() + 1).padStart(2, '0') + '.' + dNow.getFullYear()][m.key] === "İçildi");
+            const isDone = (apiData && apiData.tumVeriler && apiData.tumVeriler[dateKey] && apiData.tumVeriler[dateKey][m.key] === "İçildi");
             if(isDone) sTC++; 
             const iconHTML = isDone ? `<div class="check-icon done">${svgCheck}</div>` : `<div class="check-icon"></div>`;
             const doneClass = isDone ? "is-done" : "";
