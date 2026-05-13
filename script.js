@@ -16,11 +16,10 @@ window.switchTab = function(tabId, btn) {
     if(targetTab) targetTab.classList.add('active');
     btn.classList.add('active');
     
-    // Analiz sekmesine tıklandığında grafiği otomatik boyutlandır
-    if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
+        if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
         setTimeout(grafikCiz, 150);
-        updateTabGlows();
     }
+    updateTabGlows(); // Her sekme değişiminde kontrol etmesi için dışarı aldık
 };
 
 const now = new Date();
@@ -382,11 +381,12 @@ function renderMonthStat(prefix, data, statType, cardId) {
             cardEl.classList.add('unread-premium-card');
             if(titleSpan && !titleSpan.innerHTML.includes('YENİ')) { titleSpan.innerHTML += ` <span class="premium-new-badge">YENİ</span>`; }
             cardEl.setAttribute('data-new-text', aiText); 
-        } else {
+                } else {
             cardEl.classList.remove('unread-premium-card');
             if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
-                    setTimeout(updateTabGlows, 100);
         }
+        setTimeout(updateTabGlows, 150); // Yeni olsa da olmasa da basıldıktan sonra kontrol et
+    }
     }
 }
 
