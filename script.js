@@ -248,7 +248,8 @@ function renderHealthDiary() {
     let pulseClass = isNew ? "unread-premium-card" : "";
     let badgeHTML = isNew ? `<span class="premium-new-badge">YENİ</span>` : "";
     let finalHTML = `
-        <div class="diary-card ${pulseClass} collapsed" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.classList.toggle('collapsed')">
+        <div class="diary-card ${pulseClass} collapsed" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}">
+    <div class="diary-header" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;">
             <div class="diary-header">
                 <h3 class="diary-title" id="title-gunluk">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
@@ -378,15 +379,20 @@ function renderMonthStat(prefix, data, statType, cardId) {
     if (aiText && !aiText.includes("bekleniyor") && !aiText.includes("güncellenemiyor")) {
         let lastRead = localStorage.getItem('lastRead_' + statType);
                 if (lastRead !== aiText) {
-            cardEl.classList.add('unread-premium-card');
-            if(titleSpan && !titleSpan.innerHTML.includes('YENİ')) { titleSpan.innerHTML += ` <span class="premium-new-badge">YENİ</span>`; }
-            cardEl.setAttribute('data-new-text', aiText); 
-                } else {
-            cardEl.classList.remove('unread-premium-card');
-            if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
-        }
-        setTimeout(updateTabGlows, 200); // Yeni olsa da olmasa da basıldıktan sonra kontrol et
-    }
+          cardEl.classList.add('unread-premium-card');
+          if(titleSpan && !titleSpan.innerHTML.includes('YENİ')) { 
+              titleSpan.innerHTML += ` <span class="premium-new-badge">YENİ</span>`; 
+          }
+          cardEl.setAttribute('data-new-text', aiText); 
+      } else {
+          cardEl.classList.remove('unread-premium-card');
+          if(titleSpan) {
+              titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
+          }
+      }
+      // KRİTİK DÜZELTME: setTimeout'u if/else bloğunun DIŞINA aldık. 
+      // Böylece kart yeni olsa da olmasa da sekmelerdeki noktalar güncellenir.
+      setTimeout(updateTabGlows, 250); 
     }
 }
 
@@ -599,7 +605,14 @@ function ekraniCiz() {
         const colClass = isAllDone ? "collapsed" : "";
         
         // Kartın HTML yapısını bir değişkene alıyoruz
-        let cardHTML = `<div class="premium-card card ${cClass} ${colClass}" onclick="this.classList.toggle('collapsed')"><div class="card-header"><div class="drug-name">${s.icon} ${s.title}</div><div class="badge ${bClass}">${bText}</div></div><div class="meds-container">${medsHTML}</div></div>`;
+        let cardHTML = `
+    <div class="premium-card card ${cClass} ${colClass}">
+        <div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;">
+            <div class="drug-name">${s.icon} ${s.title}</div>
+            <div class="badge ${bClass}">${bText}</div>
+        </div>
+        <div class="meds-container">${medsHTML}</div>
+    </div>`;
 
         // EĞER TAMAMLANDIYSA "completedHTML" kutusuna, DEĞİLSE "pendingHTML" kutusuna ekle
         if (isAllDone) {
