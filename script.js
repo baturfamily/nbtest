@@ -56,41 +56,38 @@ if(document.getElementById('currentYearText')) document.getElementById('currentY
 const dynamicHeaderBg = document.getElementById('dynamicHeaderBg');
 if (dynamicHeaderBg) { dynamicHeaderBg.style.background = vipBg; dynamicHeaderBg.style.border = "none"; }
 
-// --- GRAFİK PUANLAMA MOTORU ---
 const puanla = {
     agri: (val) => {
         if (!val) return 0;
         const v = val.toLowerCase();
-        if (v.includes("yok")) return 0;
-        if (v.includes("hafif")) return 1;
-        if (v.includes("şiş") || v.includes("ağrılı")) return 2;
-        if (v.includes("sinir")) return 3;
+        if (v.includes("ağrım yok")) return 0;
+        if (v.includes("hafif sızlıyor")) return 1;
+        if (v.includes("sinir uçlarım")) return 2;
+        if (v.includes("şiş ve ağrılı")) return 3;
         return 0;
     },
     uyku: (val) => {
         if (!val) return 0;
         const v = val.toLowerCase();
+        if (v.includes("deliksiz")) return 3;
+        if (v.includes("bölündü") || v.includes("ağrım vardı")) return 1.5;
         if (v.includes("fazla uyuyamadım")) return 0;
-        if (v.includes("bölündü") || v.includes("ağrım vardı")) return 1;
-        if (v.includes("iyiydi")) return 2;
-        if (v.includes("deliksiz") || v.includes("harika")) return 3;
         return 1;
     },
     enerji: (val) => {
         if (!val) return 1;
         const v = val.toLowerCase();
         if (v.includes("dinamik")) return 3;
-        if (v.includes("zinde") || v.includes("iyi")) return 2;
-        if (v.includes("orta")) return 1;
-        if (v.includes("yorgun")) return 0;
+        if (v.includes("orta")) return 1.5;
+        if (v.includes("çok bitkin")) return 0;
         return 1;
     },
     beslenme: (val) => {
         if (!val) return 0;
         const v = val.toLowerCase();
-        if (v.includes("fazla") || v.includes("maalesef")) return 3;
-        if (v.includes("ucundan") || v.includes("hafif")) return 1.5;
-        if (v.includes("hiç") || v.includes("yemedim")) return 0;
+        if (v.includes("maalesef") || v.includes("fazla kaçırdım")) return 3;
+        if (v.includes("ucundan")) return 1.5;
+        if (v.includes("hiç yemedim")) return 0;
         return 0;
     }
 };
