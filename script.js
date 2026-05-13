@@ -19,6 +19,7 @@ window.switchTab = function(tabId, btn) {
     // Analiz sekmesine tıklandığında grafiği otomatik boyutlandır
     if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
         setTimeout(grafikCiz, 150);
+        updateTabGlows();
     }
 };
 
@@ -265,6 +266,7 @@ function renderHealthDiary() {
         </div>`;
     const diaryArea = document.getElementById('healthDiaryArea');
     if(diaryArea) diaryArea.innerHTML = finalHTML;
+    setTimeout(updateTabGlows, 100);
 }
 
 window.markStatAsRead = function(statType, cardId) {
@@ -274,14 +276,15 @@ window.markStatAsRead = function(statType, cardId) {
         if (textToSave) {
             localStorage.setItem('lastRead_' + statType, textToSave);
             card.removeAttribute('data-new-text');
-                        card.classList.remove('unread-premium-card');
+            card.classList.remove('unread-premium-card');
             let titleSpan = document.getElementById('title-' + statType);
-                        if(titleSpan) {
+            if(titleSpan) {
                 titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
             }
         }
     }
-    updateTabGlows(); // Buraya eklendi
+    // Gecikme olmadan hemen kontrol et
+    updateTabGlows(); 
 };
 
 function analyzeMonth(year, month) {
@@ -382,6 +385,7 @@ function renderMonthStat(prefix, data, statType, cardId) {
         } else {
             cardEl.classList.remove('unread-premium-card');
             if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
+                    setTimeout(updateTabGlows, 100);
         }
     }
 }
@@ -651,30 +655,24 @@ document.addEventListener('touchend', (e) => {
 });
 
 function updateTabGlows() {
-    // 1. GÜNÜM SEKMESİ (Günün Analizi)
+    // 1. GÜNÜM SEKMESİ
     const gununAnalizi = document.getElementById('aiDiaryCard');
     const tabGunum = document.querySelector('button[onclick*="tab-day"]');
+    
     if(tabGunum) {
-        if (gununAnalizi && gununAnalizi.classList.contains('unread-premium-card')) {
-            tabGunum.classList.add('unread-indicator');
-        } else {
-            tabGunum.classList.remove('unread-indicator');
-        }
+        const isDayNew = gununAnalizi && gununAnalizi.classList.contains('unread-premium-card');
+        tabGunum.classList.toggle('unread-indicator', !!isDayNew);
     }
 
-    // 2. ANALİZ SEKMESİ (Arşiv Kartları)
+    // 2. ANALİZ (ARŞİV) SEKMESİ
     const arsivKartlari = ['card-stat-this-month', 'card-stat-last-month', 'card-stat-yearly'];
     const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
+    
     if(tabAnaliz) {
         let hasUnreadArchive = arsivKartlari.some(id => {
             let el = document.getElementById(id);
             return el && el.classList.contains('unread-premium-card');
         });
-
-        if (hasUnreadArchive) {
-            tabAnaliz.classList.add('unread-indicator');
-        } else {
-            tabAnaliz.classList.remove('unread-indicator');
-        }
+        tabAnaliz.classList.toggle('unread-indicator', hasUnreadArchive);
     }
 }
