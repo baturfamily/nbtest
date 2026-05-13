@@ -650,33 +650,31 @@ document.addEventListener('touchend', (e) => {
     if (pCurrentY - pStartY > 60) manuelYenile();
 });
 
-// Sekmelerdeki parlamayı kontrol eden fonksiyon
 function updateTabGlows() {
     // 1. GÜNÜM SEKMESİ (Günün Analizi)
     const gununAnalizi = document.getElementById('aiDiaryCard');
-    const tabGunum = document.querySelector('button[onclick*="tab-day"]'); // HTML'deki sekme butonun
+    const tabGunum = document.querySelector('button[onclick*="tab-day"]');
     if(tabGunum) {
         if (gununAnalizi && gununAnalizi.classList.contains('unread-premium-card')) {
-            tabGunum.classList.add('unread-tab-glow');
+            tabGunum.classList.add('unread-indicator');
         } else {
-            tabGunum.classList.remove('unread-tab-glow');
+            tabGunum.classList.remove('unread-indicator');
         }
     }
 
-    // 2. ANALİZ SEKMESİ (3 Arşiv Kartı)
+    // 2. ANALİZ SEKMESİ (Arşiv Kartları)
     const arsivKartlari = ['card-stat-this-month', 'card-stat-last-month', 'card-stat-yearly'];
     const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
     if(tabAnaliz) {
-        // Eğer 3 karttan herhangi birinde parlama varsa sekme de parlar
         let hasUnreadArchive = arsivKartlari.some(id => {
             let el = document.getElementById(id);
             return el && el.classList.contains('unread-premium-card');
         });
 
         if (hasUnreadArchive) {
-            tabAnaliz.classList.add('unread-tab-glow');
+            tabAnaliz.classList.add('unread-indicator');
         } else {
-            tabAnaliz.classList.remove('unread-tab-glow');
+            tabAnaliz.classList.remove('unread-indicator');
         }
     }
 }
