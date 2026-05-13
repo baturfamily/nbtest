@@ -238,7 +238,7 @@ function renderHealthDiary() {
             <div class="diary-header">
                 <h3 class="diary-title" id="title-gunluk">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                    Asistan Analizi ${badgeHTML}
+                    Günlük Analiz ${badgeHTML}
                 </h3>
                 <div class="diary-toggle-icon">▲</div>
             </div>
