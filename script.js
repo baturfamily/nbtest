@@ -276,11 +276,12 @@ window.markStatAsRead = function(statType, cardId) {
             card.removeAttribute('data-new-text');
                         card.classList.remove('unread-premium-card');
             let titleSpan = document.getElementById('title-' + statType);
-            if(titleSpan) {
+                        if(titleSpan) {
                 titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
-         }
+            }
         }
     }
+    updateTabGlows(); // Buraya eklendi
 };
 
 function analyzeMonth(year, month) {
@@ -540,9 +541,11 @@ async function veriCek() {
         apiData = await res.json();
         sonBasariZamani = Date.now();
         
-        if(typeof ekraniCiz === 'function') ekraniCiz(); 
+                if(typeof ekraniCiz === 'function') ekraniCiz(); 
         if(typeof istatistikleriCiz === 'function') istatistikleriCiz(); 
         if(typeof renderHealthDiary === 'function') renderHealthDiary(); 
+        
+        setTimeout(updateTabGlows, 500); // Buraya eklendi
         
         setTimeout(() => {
             if(typeof grafikCiz === 'function') grafikCiz();
