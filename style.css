@@ -1,20 +1,22 @@
-/* GÜNCEL PREMIUM FINANS/SAĞLIK CSS MİMARİSİ - iOS 26 SPATIAL EDITION */
+/* GÜNCEL PREMIUM SAĞLIK CSS MİMARİSİ - İSVİÇRE KLİNİĞİ KONSEPTİ */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 /* --- AÇIK (LIGHT) MOD RENKLERİ --- */
 :root {
-  --bg: #F4F5F8;
-  /* iOS 26 Dinamik Mesh Arka Plan */
-  --bg-mesh: radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
-              radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-              radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-              radial-gradient(at 0% 100%, rgba(244, 63, 94, 0.08) 0px, transparent 50%);
+  /* Göz yormayan, kağıt ferahlığında fildişi arka plan */
+  --bg: #F7F8FA;
+  /* Çok soft, rahatlatıcı mesh (belirsiz) */
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.03) 0px, transparent 50%),
+              radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.03) 0px, transparent 50%),
+              radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.03) 0px, transparent 50%),
+              radial-gradient(at 0% 100%, rgba(244, 63, 94, 0.03) 0px, transparent 50%);
               
-  --card: rgba(255, 255, 255, 0.85); 
-  --text: #1E293B; 
+  --card: #FFFFFF; /* Saf, yansımasız beyaz */
+  --text: #334155; /* Saf siyah yerine, göz dinlendiren koyu antrasit */
   --muted: #64748B; 
   --line: rgba(0,0,0,0.04);
   
+  /* Daha pastel, sakin renk paleti */
   --accent: #10B981;
   --warning: #F59E0B;
   --danger: #F43F5E;
@@ -25,37 +27,40 @@
   --vip-text: #FFFFFF; 
   --vip-muted: #94A3B8;
   --vip-gold: #FBBF24; 
-  --vip-shadow: 0 12px 24px rgba(0,0,0,0.15); 
-  --card-border: rgba(0,0,0,0.04);
-  --card-shadow: 0 4px 24px rgba(0,0,0,0.03);
   
-  --done-bg: rgba(16, 185, 129, 0.04);
-  --done-border: rgba(16, 185, 129, 0.2); 
+  /* Yuvarlak hatlar ve soft gölgeler */
+  --vip-shadow: 0 16px 32px rgba(0,0,0,0.1); 
+  --card-border: rgba(0,0,0,0.03);
+  --card-shadow: 0 10px 40px rgba(0,0,0,0.04);
+  
+  /* Tamamlanmış (Kestirmeler'den gelen) hissiyatı */
+  --done-bg: #F0FDF4; /* Çok uçuk huzur verici yeşil */
+  --done-border: #BBF7D0; 
   --wait-badge-bg: #F1F5F9; 
   --wait-badge-text: #64748B;
-  --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 /* --- KARANLIK (DARK) MOD RENKLERİ --- */
 @media (prefers-color-scheme: dark) { 
   :root { 
     --bg: #0B0B0E;
-    --bg-mesh: radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%);
-    --card: rgba(30, 41, 59, 0.75); 
+    --bg-mesh: radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+    --card: #1E293B; 
     --text: #F8FAFC; 
     --muted: #94A3B8; 
     --line: rgba(255,255,255,0.06);
     
-    --vip-shadow: 0 12px 30px rgba(0,0,0,0.5); 
-    --card-border: rgba(255,255,255,0.04);
+    --vip-shadow: 0 12px 30px rgba(0,0,0,0.4); 
+    --card-border: rgba(255,255,255,0.03);
     --card-shadow: 0 8px 30px rgba(0,0,0,0.2); 
     
-    --done-bg: rgba(16, 185, 129, 0.05);
-    --done-border: rgba(16, 185, 129, 0.2); 
+    --done-bg: rgba(16, 185, 129, 0.08);
+    --done-border: rgba(16, 185, 129, 0.15); 
     --wait-badge-bg: rgba(255,255,255,0.05); 
     --wait-badge-text: #94A3B8;
-    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -78,119 +83,154 @@ body {
     padding-bottom: 140px; 
     overflow-y: auto;
     height: 100%;
-    animation: spatialZoom 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: spatialZoom 0.3s ease-out; /* Animasyon hızlandı, bekleme yapmasın */
 }
 .tab-content.active { display: flex; }
 
 @keyframes spatialZoom {
-    from { opacity: 0; transform: scale(0.97) translateY(10px); filter: blur(5px); }
-    to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    from { opacity: 0; transform: scale(0.98) translateY(5px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* --- YÜZEN ALT NAVİGASYON (iOS 26 Kapsül) --- */
+/* --- YÜZEN ALT NAVİGASYON (Göz Yormayan Katı Zemin) --- */
 .bottom-nav {
-    position: fixed; bottom: 30px; left: 20px; right: 20px; height: 76px;
-    background: var(--card); backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%);
+    position: fixed; bottom: 25px; left: 20px; right: 20px; height: 76px;
+    background: rgba(255, 255, 255, 0.95); /* Blur yerine beyaz ağırlıklı */
+    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
     border-radius: 38px; display: flex; justify-content: space-around; align-items: center;
-    border: var(--glass-border); box-shadow: 0 15px 50px rgba(0,0,0,0.2); z-index: 1000;
+    border: var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
 }
 .nav-item {
-    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
     color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%;
 }
 .nav-item.active { color: var(--purple); }
 .nav-item.active svg { transform: scale(1.15) translateY(-2px); }
-.nav-item span { font-size: 11px; font-weight: 800; }
+.nav-item span { font-size: 12px; font-weight: 700; letter-spacing: -0.2px; }
 
 /* --- HEADER SİSTEMİ --- */
-.sticky-top-wrapper { position: relative; z-index: 100; flex-shrink: 0; padding: max(12px, env(safe-area-inset-top)) 16px 12px 16px; }
-.header-compact { text-align: center; background: var(--vip-bg); padding: 20px 16px; border-radius: 20px; border: 1px solid var(--line); box-shadow:0 8px 24px rgba(0,0,0,0.15); user-select: none; -webkit-tap-highlight-color: transparent; transition: transform 0.15s ease, opacity 0.15s ease; touch-action: manipulation; }
-.header-compact:active { transform: scale(0.95) !important; opacity: 0.9 !important; }
-.app-title { font-size: 20px; font-weight: 900; letter-spacing: -0.3px; margin-bottom: 8px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
-.app-title .greeting { font-size: 17px; font-weight: 600; opacity: 0.9; }
-.app-title .name-tag { font-size: 20px; font-weight: 800; white-space: nowrap; color: #fff; }
-.header-sub { font-size: 13px; color: rgba(255, 255, 255, 0.8); font-weight: 600; margin-bottom: 12px; transition: color 0.3s; }
+.sticky-top-wrapper { position: relative; z-index: 100; flex-shrink: 0; padding: max(12px, env(safe-area-inset-top)) 16px 8px 16px; }
+.header-compact { text-align: center; background: var(--vip-bg); padding: 18px 16px; border-radius: 24px; border: 1px solid var(--line); box-shadow: var(--vip-shadow); user-select: none; transition: transform 0.15s ease; }
+.header-compact:active { transform: scale(0.98); }
+.app-title { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
+.app-title .greeting { font-size: 18px; font-weight: 500; opacity: 0.9; }
+.app-title .name-tag { font-size: 21px; font-weight: 700; white-space: nowrap; color: #fff; }
+.header-sub { font-size: 13px; color: rgba(255, 255, 255, 0.8); font-weight: 500; margin-bottom: 12px; }
 .header-info { display: flex; justify-content: center; align-items: center; gap: 12px; }
-.clock-text { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); }
-.sync-badge { font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 10px; background: rgba(0,0,0,0.25); color: #fff; display: flex; align-items: center; gap: 6px; }
+.clock-text { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
+.sync-badge { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 12px; background: rgba(0,0,0,0.2); color: #fff; display: flex; align-items: center; gap: 6px; }
 
-/* --- PREMIUM ANIMASYONLAR VE ROZETLER --- */
+/* --- PREMIUM ROZET VE GLOW ANİMASYONLARI --- */
 @keyframes premium-glow { 
-  0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.3); transform: translateY(0); } 
-  50% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); transform: translateY(-1px); } 
+  0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.2); transform: translateY(0); } 
+  50% { box-shadow: 0 0 0 8px rgba(139, 92, 246, 0); transform: translateY(-1px); } 
   100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); transform: translateY(0); } 
 }
 @keyframes badge-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-.new-report-pulse { animation: premium-glow 2.5s infinite ease-in-out !important; border: 1px solid var(--purple) !important; }
+.new-report-pulse { animation: premium-glow 3s infinite ease-in-out !important; border: 1px solid rgba(139, 92, 246, 0.4) !important; }
 .new-badge { background: var(--purple); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.3px; margin-left: 8px; display: inline-flex; align-items: center; gap: 4px; animation: badge-float 2s infinite ease-in-out; vertical-align: middle; text-transform: uppercase; }
 
-/* --- KARTLAR VE İÇERİK --- */
-.premium-card { background: var(--card); border-radius: 20px; padding: 16px; border: 1px solid var(--card-border); margin-bottom: 12px; box-shadow: var(--card-shadow); transition: transform 0.2s ease, box-shadow 0.2s ease; overflow: hidden; flex-shrink: 0; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-.vertical-list { display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; -webkit-overflow-scrolling: touch; } 
+/* --- KARTLARIN TEMEL YAPISI (Mat ve Net) --- */
+.premium-card { 
+    background: var(--card); 
+    border-radius: 24px; /* Daha yumuşak köşeler */
+    padding: 20px; 
+    border: 1px solid var(--card-border); 
+    margin-bottom: 14px; 
+    box-shadow: var(--card-shadow); 
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+    flex-shrink: 0; 
+}
+.vertical-list { display: flex; flex-direction: column; gap: 10px; flex: 1; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; -webkit-overflow-scrolling: touch; } 
 .vertical-list::-webkit-scrollbar { display: none; }
 
-/* --- HAVA DURUMU --- */
-.ios-weather-card { padding: 18px; }
+/* --- HAVA DURUMU KARTI --- */
+.ios-weather-card { padding: 22px; }
 .ios-w-top { display: flex; justify-content: space-between; align-items: center; }
-.ios-w-city { font-size: 12px; font-weight: 800; color: var(--muted); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; width: 85px; text-align: center; line-height: 1.4; white-space: normal; flex-shrink: 0; }
-.ios-w-temp { font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1; margin: 0; color: var(--text); }
-.ios-w-hum { font-size: 13px; font-weight: 800; background: var(--wait-badge-bg); color: var(--text); padding: 0 12px; border-radius: 10px; height: 28px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; line-height: 1; }
-.ios-w-divider { height: 1px; background: var(--line); margin: 16px 0; }
+.ios-w-city { font-size: 13px; font-weight: 700; color: var(--muted); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; width: 85px; line-height: 1.4; }
+.ios-w-right-group { display: flex; align-items: center; gap: 12px; }
+.ios-w-temp { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1; color: var(--text); }
+.ios-w-icon { font-size: 28px; line-height: 1; }
+.ios-w-hum { font-size: 13px; font-weight: 700; background: var(--wait-badge-bg); color: var(--text); padding: 0 12px; border-radius: 12px; height: 30px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+.ios-w-divider { height: 1px; background: var(--line); margin: 18px 0; }
 .ios-w-advice { display: flex; gap: 12px; align-items: flex-start; }
-.ios-w-adv-text { font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.5; letter-spacing: -0.2px; display: block; }
+.ios-w-adv-icon { font-size: 24px; margin-top: 2px; }
+.ios-w-adv-text { font-size: 17px; font-weight: 500; color: var(--text); line-height: 1.5; letter-spacing: -0.2px; display: block; }
 
-/* --- ALARMLAR VE SHIELDS --- */
+/* --- ALARMLAR VE SHIELDS (Kaygı Azaltıldı) --- */
 #alertsArea { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; flex-shrink: 0; }
-.safety-shield { padding: 12px 14px; text-align: center; font-weight: 800; font-size: 15px; border-radius: 16px; box-shadow: var(--card-shadow); letter-spacing: 0.3px; color: white; line-height: 1.3;}
-.shield-red { background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%); animation: pulse-red 2.5s ease-in-out infinite; }
-.shield-yellow { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); animation: pulse-yellow 2.5s ease-in-out infinite; }
-.shield-purple { background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); animation: pulse-purple 2.5s ease-in-out infinite; }
-.shield-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); animation: pulse-blue 2.5s ease-in-out infinite; }
+.safety-shield { 
+    padding: 14px 16px; text-align: center; font-weight: 600; font-size: 16px; 
+    border-radius: 20px; box-shadow: 0 6px 15px rgba(0,0,0,0.05); color: white; line-height: 1.3;
+}
+/* Animasyonlar çok soft hale getirildi (1 -> 0.95) */
+.shield-red { background: linear-gradient(135deg, #EF4444 0%, #E11D48 100%); animation: pulse-soft 3s ease-in-out infinite; }
+.shield-yellow { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); animation: pulse-soft 3s ease-in-out infinite; }
+.shield-purple { background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); animation: pulse-soft 3s ease-in-out infinite; }
+.shield-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); animation: pulse-soft 3s ease-in-out infinite; }
 
-@keyframes pulse-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } } 
-@keyframes pulse-yellow { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } } 
-@keyframes pulse-purple { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } } 
-@keyframes pulse-blue { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+@keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.92; } }
 
-/* --- İLAÇ KARTI VE LİSTE DETAYLARI --- */
-.card { display: flex; flex-direction: column; padding: 16px; margin-bottom: 12px; flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;} 
+/* --- ASİSTAN GÜNLÜĞÜ (ŞEFKATLİ DOKTOR MESAJI) --- */
+.diary-card { 
+    padding: 24px; border-radius: 24px; margin-bottom: 14px; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; 
+    background: #F8F5FF; /* Uçuk Lila Arka Plan */
+    border: 1px solid rgba(139, 92, 246, 0.15); 
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.05);
+}
+.diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.diary-title { font-size: 19px; font-weight: 700; color: var(--purple); margin: 0; letter-spacing: -0.3px; display: flex; align-items: center; gap: 6px; }
+.diary-toggle-icon { font-size: 14px; color: var(--purple); transition: transform 0.3s ease; }
+.diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); } 
+.diary-ai-box { margin-top: 18px; padding: 0 4px; font-size: 17px; font-weight: 500; color: var(--text); line-height: 1.6; border: none; }
+.diary-card.collapsed .diary-ai-box { display: none; }
+
+/* --- İSTATİSTİK SİSTEMİ --- */
+.stat-ai-summary { padding: 4px; font-size: 17px; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--purple); padding-left: 14px; }
+.stat-ai-summary strong { color: var(--purple); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+/* --- İLAÇ KARTI (OKUMA PANELİ) --- */
+.card { display: flex; flex-direction: column; padding: 20px; margin-bottom: 14px; cursor: pointer;} 
 .card.done-card { border-color: var(--done-border); background: var(--done-bg); box-shadow: none; }
 .card-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 16px; width: 100%; padding: 4px 0; }
-.drug-name { font-size: 19px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin: 0; white-space: nowrap; color: var(--text); letter-spacing: -0.3px;}
-.badge { padding: 6px 10px; border-radius: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase; margin: 0 4px 0 0; white-space: nowrap; display: flex; align-items: center; gap: 4px; letter-spacing: 0.3px;}
+.drug-name { font-size: 19px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin: 0; color: var(--text); letter-spacing: -0.3px;}
+.badge { padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 12px; text-transform: uppercase; margin: 0; display: flex; align-items: center; gap: 4px; letter-spacing: 0.2px;}
 .badge-safe { background: rgba(16, 185, 129, 0.1); color: var(--accent); } 
 .badge-wait { background: var(--wait-badge-bg); color: var(--wait-badge-text); } 
 .badge-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); } 
-.badge-danger { background: rgba(244, 63, 94, 0.1); color: var(--danger); font-weight: 800; } 
+.badge-danger { background: rgba(244, 63, 94, 0.1); color: var(--danger); } 
 .exp-arrow { transition: transform 0.3s ease; display: inline-block; font-size: 10px; } 
 .card.collapsed .exp-arrow { transform: rotate(180deg); } 
-.check-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--muted); flex-shrink: 0; transition: 0.2s; background: var(--card); }
-.check-icon.done { background-color: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); }
+
+/* İkonlar artık buton değil, sadece "Durum (Status)" göstergesi */
+.check-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--muted); flex-shrink: 0; background: var(--card); opacity: 0.6; }
+.check-icon.done { background-color: var(--accent); border-color: var(--accent); color: white; opacity: 1; }
+.check-icon svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
 .meds-container { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 0; transition: opacity 0.3s; }
-.history-item { display: flex; align-items: center; padding: 14px 0; border-bottom: 1px dashed var(--line); gap: 14px;} 
+.history-item { display: flex; align-items: flex-start; padding: 16px 0; border-bottom: 1px dashed var(--line); gap: 14px;} 
+.history-item:last-child { border-bottom: none; }
 .history-item.is-done .drug-title { text-decoration: line-through; color: var(--muted); }
 .history-item.is-done .drug-purpose { color: var(--muted); opacity: 0.6; }
-.drug-title { font-size: 20px; font-weight: 800; color: var(--text); white-space: normal; line-height: 1.2; transition: all 0.3s ease; } 
-.drug-purpose { font-size: 18px; color: var(--muted); font-weight: 500; line-height: 1.45; margin-top: 2px; display: block; transition: all 0.3s ease; }
+
+.med-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.drug-title { font-size: 19px; font-weight: 600; color: var(--text); line-height: 1.3; } 
+.drug-purpose { font-size: 16px; color: var(--muted); font-weight: 400; line-height: 1.5; margin-top: 2px; }
+
 .card.collapsed .meds-container { display: none; } 
 .card.collapsed .card-header { margin-bottom: 0; }
-.late-card { border-color: var(--danger) !important; animation: latePulse 2s infinite; }
-@keyframes latePulse { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.2); } 70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
 
-/* --- ASİSTAN VE İSTATİSTİK --- */
-.diary-card { padding: 18px; border-radius: 20px; margin-bottom: 14px; transition: transform 0.2s ease; cursor: pointer; overflow: hidden; position: relative; background: var(--card); border: 1px solid var(--line); box-shadow: var(--card-shadow); }
-.diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.diary-title { font-size: 19px; font-weight: 800; color: var(--purple); margin: 0; letter-spacing: -0.3px; display: flex; align-items: center; gap: 6px; line-height: 1.2; }
-.diary-ai-box { margin-top: 18px; background: transparent; padding: 0 4px; font-size: 18px; font-weight: 500; letter-spacing: 0.1px; color: var(--text); line-height: 1.6; border: none; }
-.stat-ai-summary { background: transparent; padding: 4px; font-size: 18px; font-weight: 500; letter-spacing: 0.1px; line-height: 1.6; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--purple); padding-left: 14px; }
-.stat-ai-summary strong { color: var(--purple); font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 10px; }
+.late-card { border-color: rgba(244, 63, 94, 0.3) !important; animation: latePulse-soft 3s infinite; }
+@keyframes latePulse-soft { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.1); } 70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
 
 /* --- BUTON VE RAPOR ALANI --- */
-.rapor-btn { background: var(--text); color: var(--bg); padding: 16px 20px; border: none; border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 8px; margin-bottom: 24px; width: 100%; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); flex-shrink:0; transition: transform 0.2s ease;}
-.rapor-btn:active { transform: scale(0.96); }
+.rapor-btn { background: var(--text); color: var(--card); padding: 18px 20px; border: none; border-radius: 20px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 8px; margin-bottom: 24px; width: 100%; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); flex-shrink:0; transition: transform 0.2s ease;}
+.rapor-btn:active { transform: scale(0.97); }
+
 #print-report-area { display: none; }
 
-/* --- DOKTOR RAPORU YAZDIRMA (Eksiksiz) --- */
+/* --- DOKTOR RAPORU YAZDIRMA CSS (TAMAMEN KORUNDU) --- */
 @media print {
   @page { margin: 10mm; } 
   html, body { position: static !important; overflow: visible !important; height: auto !important; width: auto !important; display: block !important; background: white !important; padding: 0 !important; margin: 0 !important; }
@@ -207,15 +247,15 @@ body {
 }
 
 /* --- SAĞLIK TREND GRAFİĞİ STİLLERİ --- */
-.chart-container-wrapper { padding: 18px; margin-bottom: 14px; background: var(--card); border-radius: 20px; border: 1px solid var(--line); box-shadow: var(--card-shadow); }
+.chart-container-wrapper { padding: 22px; margin-bottom: 14px; background: var(--card); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
 .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.chart-title { font-size: 18px; font-weight: 800; color: var(--text); margin: 0; display: flex; align-items: center; letter-spacing: -0.3px; }
-.chart-area { width: 100%; height: 220px; position: relative; }
-.chart-legend { display: flex; justify-content: center; gap: 20px; margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--line); }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.chart-title { font-size: 18px; font-weight: 700; color: var(--text); margin: 0; display: flex; align-items: center; letter-spacing: -0.3px; }
+.chart-area { width: 100%; height: 240px; position: relative; } /* iPhone 11'de daha net görünmesi için yükseklik arttı */
+.chart-legend { display: flex; justify-content: center; gap: 24px; margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--line); }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
 .dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot.pain { background-color: #F43F5E; }
-.dot.sleep { background-color: #3B82F6; }
+.dot.pain { background-color: #F43F5E; } 
+.dot.sleep { background-color: #3B82F6; } 
 
 /* SYNC İKONU */
 @keyframes spin-anim { 100% { transform: rotate(360deg); } }
