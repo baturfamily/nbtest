@@ -480,11 +480,11 @@ function grafikCiz() {
     const sonYediGun = tarihler.slice(-7);
     const labels = sonYediGun.map(t => t.substring(0,5));
 
-    // Verilerin orijinal metin hallerini diziye alıyoruz
-    const agriMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || "Veri Yok");
-    const uykuMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || "Veri Yok");
-    const enerjiMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Enerji Seviyesi"] || "Veri Yok");
-    const beslenmeMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Beslenme Kaçamak"] || "Veri Yok");
+    // Veri anahtarlarını (keys) tüm olasılıklara karşı kontrol ediyoruz (Boşluklu, Alt Tireli, Büyük Harf)
+    const agriMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || apiData.tumVeriler[t]["eklem_agrisi"] || "");
+    const uykuMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || apiData.tumVeriler[t]["uyku"] || "");
+    const enerjiMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Bugün enerji seviyen nasıldı?"] || apiData.tumVeriler[t]["Enerji Seviyesi"] || apiData.tumVeriler[t]["ENERJI_SEVIYESI"] || apiData.tumVeriler[t]["enerji_seviyesi"] || "");
+    const beslenmeMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Kortizonun oyununa gelip bugün tatlı veya hamur işi kaçamağı yaptın mı?"] || apiData.tumVeriler[t]["Beslenme Kaçamak"] || apiData.tumVeriler[t]["BESLENME_KACAMAK"] || apiData.tumVeriler[t]["beslenme_kacamak"] || "");
 
     const ctx = document.getElementById('healthChart').getContext('2d');
     if (healthChartInstance) healthChartInstance.destroy();
@@ -494,10 +494,10 @@ function grafikCiz() {
         data: {
             labels: labels,
             datasets: [
-                { label: 'Ağrı', data: sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"])), metinler: agriMetinleri, borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.05)', borderWidth: 3, tension: 0.4, pointRadius: 4 },
-                { label: 'Uyku', data: sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"])), metinler: uykuMetinleri, borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 },
-                { label: 'Enerji', data: sonYediGun.map(t => puanla.enerji(apiData.tumVeriler[t]["Enerji Seviyesi"])), metinler: enerjiMetinleri, borderColor: '#F59E0B', borderWidth: 3, tension: 0.4, pointRadius: 4 },
-                { label: 'Kaçamak', data: sonYediGun.map(t => puanla.beslenme(apiData.tumVeriler[t]["Beslenme Kaçamak"])), metinler: beslenmeMetinleri, borderColor: '#8B5CF6', borderWidth: 3, borderDash: [5, 5], tension: 0.4, pointRadius: 4 }
+                { label: 'Ağrı', data: agriMetinleri.map(m => puanla.agri(m)), metinler: agriMetinleri, borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.05)', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Uyku', data: uykuMetinleri.map(m => puanla.uyku(m)), metinler: uykuMetinleri, borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Enerji', data: enerjiMetinleri.map(m => puanla.enerji(m)), metinler: enerjiMetinleri, borderColor: '#F59E0B', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Kaçamak', data: beslenmeMetinleri.map(m => puanla.beslenme(m)), metinler: beslenmeMetinleri, borderColor: '#8B5CF6', borderWidth: 3, borderDash: [5, 5], tension: 0.4, pointRadius: 4 }
             ]
         },
         options: {
@@ -508,11 +508,9 @@ function grafikCiz() {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
                     callbacks: {
-                        // PUAN YERİNE METİN GÖSTEREN KRİTİK AYAR
                         label: function(context) {
-                            const index = context.dataIndex;
-                            const metin = context.dataset.metinler[index];
-                            return context.dataset.label + ": " + metin;
+                            const metin = context.dataset.metinler[context.dataIndex];
+                            return context.dataset.label + ": " + (metin || "Veri Yok");
                         }
                     }
                 }
