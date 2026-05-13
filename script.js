@@ -29,11 +29,10 @@ else if (hour >= 17 && hour < 22) {
     greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
 }
 
-const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-
-// Başlangıç Ayarları
 document.getElementById('greetingText').innerHTML = `${greetingIcon}${gMsg},`;
+const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
 if(document.getElementById('currentYearText')) document.getElementById('currentYearText').innerText = now.getFullYear();
+
 const dynamicHeaderBg = document.getElementById('dynamicHeaderBg');
 if (dynamicHeaderBg) { dynamicHeaderBg.style.background = vipBg; dynamicHeaderBg.style.border = "none"; }
 
@@ -64,12 +63,12 @@ const ilacAciklamalari = {
   "Plaquenil": [
     "Eklemlerindeki iltihabı yavaşça ve derinden temizleyen temel ilacındır. Vücudunun kendi kendine zarar vermesini engelleyen şefkatli bir dengeleyicidir.",
     "Romatizmanın hızını keserek eklemlerini geleceğe dönük güvence altına alır. Hastalığı alevlenmesini önleyerek yarın sabah çok daha rahat uyanmanı sağlar.",
-    "Eklem kıkırdaklarını koruyan ve yıkımı sessizce durduran en büyük dostundur. Şişlik ve ağrıların geri gelmemesi için arka planda yorulmadan çalışır."
+    "Eklem kıkırdaklarını koruyan ve yıkımı sessizce durdurun en büyük dostundur. Şişlik ve ağrıların geri gelmemesi için arka planda yorulmadan çalışır."
   ],
   "Quantavir": [
     "Vücudun zorlu tedavilerle meşgulken karaciğerini yorulmaktan korur. İlaçların karaciğerine zarar vermemesi için sağlam ve güçlü bir zırh oluşturur.",
     "Geçmişte uyuyan virüslerin bir daha asla uyanmasına izin vermez. Karaciğer enzimlerini dengede tutarak midenin bulanmasını tamamen engeller.",
-    "Ağır romatizma tedavilerinin karaciğerde yaratacağı yükü pamuk gibi hafifletir. Senin hissetmediğin tehlikelere karşı karaciğerinin sarsılmaz nöbetçisidir."
+    "Ağır romatizma tedavilerinin karaciğerde yaratacağı yükü pamuk gibi hafifletir. Senin hissetmediğin tehlikeleri önceden sezerek karaciğerinin sarsılmaz nöbetçisidir."
   ],
   "Deltacortril": [
     "Eklemlerindeki alevi ve şişliği saniyeler içinde söndüren en hızlı itfaiyecidir. Sabah yataktan çok daha ağrısız ve enerjik bir şekilde kalkmanı sağlar.",
@@ -160,6 +159,7 @@ async function fetchWeather() {
         document.getElementById('wAdvice').innerText = pick(adviceList);
     } catch(e) { console.error("Hava durumu çekilemedi:", e); }
 }
+fetchWeather();
 
 function saniyeTiktak() {
     const syncElement = document.getElementById('last-sync');
@@ -501,7 +501,6 @@ function ekraniCiz() {
     const timelineEl = document.getElementById('timelineArea'); if(timelineEl) timelineEl.innerHTML = timelineHTML;
 }
 
-// Başlatma ve Olay Dinleyicileri
 veriCek();
 setInterval(veriCek, 600000); 
 setInterval(saniyeTiktak, 1000);
@@ -516,16 +515,10 @@ document.addEventListener("visibilitychange", () => {
     }
 });
 
-let pStartY = 0;
-let pCurrentY = 0;
-let pIsPulling = false;
-
+let pStartY = 0; let pCurrentY = 0; let pIsPulling = false;
 document.addEventListener('touchstart', (e) => {
     const vList = document.querySelector('.vertical-list');
-    if (vList && vList.scrollTop <= 0) {
-        pStartY = e.touches[0].clientY;
-        pIsPulling = true;
-    }
+    if (vList && vList.scrollTop <= 0) { pStartY = e.touches[0].clientY; pIsPulling = true; }
 }, {passive: true});
 
 document.addEventListener('touchmove', (e) => {
@@ -533,9 +526,7 @@ document.addEventListener('touchmove', (e) => {
     pCurrentY = e.touches[0].clientY;
     let diff = pCurrentY - pStartY;
     const uText = document.getElementById('update-text');
-    if (diff > 60) {
-        if(uText) uText.innerHTML = `Bırakın Güncellensin ${svgSync}`;
-    }
+    if (diff > 60) { if(uText) uText.innerHTML = `Bırakın Güncellensin ${svgSync}`; }
 }, {passive: true});
 
 document.addEventListener('touchend', (e) => {
@@ -544,9 +535,7 @@ document.addEventListener('touchend', (e) => {
     if (fetchDevamEdiyor) return;
     let diff = pCurrentY - pStartY;
     pCurrentY = 0;
-    if (diff > 60) {
-        manuelYenile();
-    } else {
+    if (diff > 60) { manuelYenile(); } else {
         const uText = document.getElementById('update-text');
         if(uText) uText.innerHTML = "Güncellemek İçin Aşağı Kaydırın";
     }
