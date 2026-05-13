@@ -568,7 +568,9 @@ function ekraniCiz() {
 }
 
 veriCek();
+fetchWeather(); // <-- EKSİK OLAN BUYDU, ŞİMDİ TETİKLENECEK
 setInterval(veriCek, 600000); 
+setInterval(fetchWeather, 3600000); // <-- Hava durumunu saatte bir yenile
 setInterval(saniyeTiktak, 1000);
 
 document.addEventListener("visibilitychange", () => { 
