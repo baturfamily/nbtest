@@ -75,6 +75,23 @@ const puanla = {
         if (v.includes("iyiydi")) return 2;
         if (v.includes("deliksiz") || v.includes("harika")) return 3;
         return 1;
+    },
+    enerji: (val) => {
+        if (!val) return 1;
+        const v = val.toLowerCase();
+        if (v.includes("dinamik")) return 3;
+        if (v.includes("zinde") || v.includes("iyi")) return 2;
+        if (v.includes("orta")) return 1;
+        if (v.includes("yorgun")) return 0;
+        return 1;
+    },
+    beslenme: (val) => {
+        if (!val) return 0;
+        const v = val.toLowerCase();
+        if (v.includes("fazla") || v.includes("maalesef")) return 3;
+        if (v.includes("ucundan") || v.includes("hafif")) return 1.5;
+        if (v.includes("hiç") || v.includes("yemedim")) return 0;
+        return 0;
     }
 };
 
@@ -457,7 +474,6 @@ function doktorRaporuOlustur() {
     setTimeout(function() { window.print(); }, 250);
 }
 
-// --- GRAFİK ÇİZME ---
 function grafikCiz() {
     if (!apiData || !apiData.tumVeriler) return;
     const tarihler = Object.keys(apiData.tumVeriler).sort((a,b) => {
@@ -466,37 +482,34 @@ function grafikCiz() {
     });
     const sonYediGun = tarihler.slice(-7);
     const labels = sonYediGun.map(t => t.substring(0,5));
-    const agriPuanlari = sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"]));
-    const uykuPuanlari = sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"]));
-    const agriMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || "Veri Yok");
-    const uykuMetinleri = sonYediGun.map(t => apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || "Veri Yok");
+
     const ctx = document.getElementById('healthChart').getContext('2d');
     if (healthChartInstance) healthChartInstance.destroy();
+    
     healthChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
             datasets: [
-                { label: 'Ağrı', data: agriPuanlari, realValues: agriMetinleri, borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.1)', borderWidth: 3, tension: 0.4, fill: true, pointRadius: 6 },
-                { label: 'Uyku', data: uykuPuanlari, realValues: uykuMetinleri, borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 6 }
+                { label: 'Ağrı', data: sonYediGun.map(t => puanla.agri(apiData.tumVeriler[t]["Eklem Ağrısı"])), borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.05)', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Uyku', data: sonYediGun.map(t => puanla.uyku(apiData.tumVeriler[t]["Uyku Kalitesi"])), borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Enerji', data: sonYediGun.map(t => puanla.enerji(apiData.tumVeriler[t]["Enerji Seviyesi"])), borderColor: '#F59E0B', borderWidth: 3, tension: 0.4, pointRadius: 4 },
+                { label: 'Kaçamak', data: sonYediGun.map(t => puanla.beslenme(apiData.tumVeriler[t]["Beslenme Kaçamak"])), borderColor: '#8B5CF6', borderWidth: 3, borderDash: [5, 5], tension: 0.4, pointRadius: 4 }
             ]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
-            plugins: { 
-                legend: { display: false }, 
-                tooltip: { 
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    padding: 12,
-                    callbacks: { label: function(context) { return context.dataset.label + ': ' + context.dataset.realValues[context.dataIndex]; } } 
-                } 
-            },
+            plugins: { legend: { display: false } },
             scales: { 
                 y: { 
-                    beginAtZero: true, max: 3, 
-                    ticks: { stepSize: 1, callback: (v) => ["Yok/Kötü", "Hafif", "Orta", "Yüksek"][v], font: { size: 10, weight: '700' } } 
-                },
-                x: { ticks: { font: { size: 10, weight: '700' } } }
+                    beginAtZero: true, 
+                    max: 3.5, // KESİLMEYİ ÖNLEYEN KRİTİK AYAR (Tavanı yükselttik)
+                    ticks: { 
+                        stepSize: 1, 
+                        callback: (v) => v <= 3 ? ["Yok/Kötü", "Hafif", "Orta", "Yüksek"][v] : "", 
+                        font: { size: 10, weight: '700' } 
+                    } 
+                }
             }
         }
     });
