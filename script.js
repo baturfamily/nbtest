@@ -154,11 +154,17 @@ function manuelYenile() {
 }
 
 async function fetchWeather() {
+    const tempEl = document.getElementById('wTempText');
+    const mainIconEl = document.getElementById('wMainIcon');
+    const humEl = document.getElementById('wHumText');
+    const advIconEl = document.getElementById('wAdvIcon');
+    const adviceEl = document.getElementById('wAdvice');
+
     try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.07&longitude=28.64&current=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=uv_index_max&timezone=auto');
-        const data = await res.json();
+        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.07&longitude=28.64&current=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=uv_index_max&timezone=auto');
+        if (!response.ok) throw new Error('Hava durumu servisi yanıt vermiyor');
         
-        // Verileri alıyoruz
+        const data = await response.json();
         const t = Math.round(data.current.temperature_2m); 
         const h = data.current.relative_humidity_2m;
         const w = data.current.wind_speed_10m;
@@ -167,45 +173,38 @@ async function fetchWeather() {
         const currentHour = new Date().getHours();
         const isDaytime = (currentHour >= 7 && currentHour < 19);
 
-        // Varsayılan ikon ve değerler (Hatalı "镜" karakterini sildik)
-        let icon = "🌥️", advIcon = "🩺", advColor = "var(--accent)", adviceList = [];
-        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        let icon = "🌥️", advIcon = "🩺", advColor = "var(--accent)", advice = "";
 
+        // Mantık Kontrolleri
         if (isDaytime && uv > 5) { 
             advIcon = "🕶️"; advColor = "var(--warning)"; 
-            adviceList = ["Güneş (UV) bugün çok dik geliyor. İlaçların cildini hassas yapabilir, lütfen koruyucu sür ve gölgede kal."]; 
+            advice = "Güneş bugün çok dik geliyor. Koruyucu sürmeyi ve gölgede kalmayı unutma."; 
         } 
         else if (w > 20) { 
             icon = "🌬️"; advIcon = "💧"; advColor = "var(--early)"; 
-            adviceList = ["Dışarıda esintili bir hava var. En ufak rüzgar bile Sjögren'li gözleri anında kurutur, damlanı almadan çıkma."]; 
+            advice = "Dışarıda esintili bir hava var. Göz kuruluğu için damlanı yanına almayı unutma."; 
         } 
         else if (h > 70 && t < 15) { 
-            icon = "🌧️"; advIcon = "⚠️"; advColor = "var(--danger)"; 
-            adviceList = [`Hava soğuk ve nemli (%${h}). Nem eklem sıvılarının basıncını değiştirip ağrı yapabilir. Lütfen dizlerini sıcak tut.`]; 
+            icon = "🌧️"; advIcon = "⚠️"; advColor = "var(--danger)";
+            advice = `Hava soğuk ve nemli (%${h}). Dizlerini ve eklemlerini mutlaka sıcak tut.`; 
         } 
         else if (t < 12) { 
             icon = "🥶"; advIcon = "🧣"; advColor = "var(--warning)"; 
-            adviceList = ["Dışarısı oldukça soğuk. Soğuk hava eklemleri sertleştirir, lütfen kat kat giyinmeyi ihmal etme."]; 
+            advice = "Dışarısı oldukça soğuk. Eklemlerin sertleşmemesi için kat kat giyinmelisin."; 
         } 
         else if (t > 28) { 
             icon = "☀️"; advIcon = "🥤"; advColor = "var(--warning)"; 
-            adviceList = ["Hava oldukça sıcak. Sıvı kaybı ağız ve göz kuruluğunu artırır. Bol bol su içmeyi unutma."]; 
+            advice = "Hava oldukça sıcak. Sıvı kaybı kuruluğu artırır, bol bol su içmeyi unutma."; 
         } 
         else if (!isDaytime) {
-            adviceList = [`Hava dışarıda ${t}°C. İlaçlarını alıp dinlenme vakti, iyi geceler.`]; 
             icon = "🌙";
+            advice = `Hava dışarıda ${t}°C. İlaçlarını alıp dinlenme vakti, iyi geceler Nurten Hanım.`; 
         }
         else { 
-            adviceList = [`Hava bugün senin için gayet güzel (${t}°C). Keyfini çıkar!`]; 
+            advice = `Hava bugün senin için gayet güzel (${t}°C). Keyfini çıkar Nurten Sultan!`; 
         }
 
-        // EKRANA YAZDIRMA (Buradaki ID'lerin index.html ile eşleştiğinden eminiz)
-        const tempEl = document.getElementById('wTempText');
-        const mainIconEl = document.getElementById('wMainIcon');
-        const humEl = document.getElementById('wHumText');
-        const advIconEl = document.getElementById('wAdvIcon');
-        const adviceEl = document.getElementById('wAdvice');
-
+        // Verileri Ekrana Bas
         if(tempEl) tempEl.innerText = t + "°";
         if(mainIconEl) mainIconEl.innerText = icon;
         if(humEl) humEl.innerText = "%" + h + " Nem";
@@ -213,12 +212,11 @@ async function fetchWeather() {
             advIconEl.innerText = advIcon;
             advIconEl.style.color = advColor;
         }
-        if(adviceEl) adviceEl.innerText = pick(adviceList);
+        if(adviceEl) adviceEl.innerText = advice;
 
-    } catch(e) { 
-        console.error("Hava durumu çekilemedi:", e); 
-        const adviceEl = document.getElementById('wAdvice');
-        if(adviceEl) adviceEl.innerText = "Hava durumu şu an alınamıyor, lütfen bağlantını kontrol et.";
+    } catch(error) { 
+        console.error("Hava durumu hatası:", error); 
+        if(adviceEl) adviceEl.innerText = "Hava durumu şu an güncellenemedi, lütfen sonra tekrar deneyin.";
     }
 }
 
