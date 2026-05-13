@@ -264,7 +264,8 @@ window.markStatAsRead = function(statType, cardId) {
             let titleSpan = document.getElementById('title-' + statType);
             if(titleSpan) {
                 titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
-            }
+         }
+        }
     }
 };
 
