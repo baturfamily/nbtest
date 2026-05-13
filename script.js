@@ -231,8 +231,8 @@ function renderHealthDiary() {
     let aiMsg = apiData.ai.gunluk || "Veriler değerlendiriliyor...";
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
     let isNew = (aiMsg && !aiMsg.includes("değerlendiriliyor") && !aiMsg.includes("güncellenemiyor") && lastReadReport !== aiMsg);
-    let pulseClass = isNew ? "new-report-pulse" : "";
-    let badgeHTML = isNew ? `<span class="new-badge">✨ YENİ</span>` : `<span style="font-size:10px; color:var(--purple); font-weight:900; background: rgba(175, 82, 222, 0.1); padding: 4px 8px; border-radius: 8px; letter-spacing:0.5px;">YAPAY ZEKA</span>`;
+    let pulseClass = isNew ? "unread-premium-card" : "";
+    let badgeHTML = isNew ? `<span class="premium-new-badge">YENİ</span>` : `<span style="font-size:10px; color:var(--purple); font-weight:900; background: rgba(175, 82, 222, 0.1); padding: 4px 8px; border-radius: 8px; letter-spacing:0.5px;">YAPAY ZEKA</span>`;
     let finalHTML = `
         <div class="diary-card ${pulseClass} collapsed" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.classList.toggle('collapsed')">
             <div class="diary-header">
@@ -260,9 +260,9 @@ window.markStatAsRead = function(statType, cardId) {
         if (textToSave) {
             localStorage.setItem('lastRead_' + statType, textToSave);
             card.removeAttribute('data-new-text');
-            card.classList.remove('new-report-pulse');
+                        card.classList.remove('unread-premium-card');
             let titleSpan = document.getElementById('title-' + statType);
-            if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="new-badge[^>]*>.*?<\/span>/gi, `<span style="font-size:10px; color:var(--purple); font-weight:900; background: rgba(175, 82, 222, 0.1); padding: 4px 8px; border-radius: 8px; letter-spacing:0.5px;">YAPAY ZEKA</span>`);
+            if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, `<span style="font-size:10px; color:var(--purple); font-weight:900; background: rgba(175, 82, 222, 0.1); padding: 4px 8px; border-radius: 8px; letter-spacing:0.5px;">YAPAY ZEKA</span>`);
         }
     }
 };
@@ -358,13 +358,13 @@ function renderMonthStat(prefix, data, statType, cardId) {
     detailsEl.innerHTML = html;
     if (aiText && !aiText.includes("bekleniyor") && !aiText.includes("güncellenemiyor")) {
         let lastRead = localStorage.getItem('lastRead_' + statType);
-        if (lastRead !== aiText) {
-            cardEl.classList.add('new-report-pulse');
-            if(titleSpan && !titleSpan.innerHTML.includes('YENİ')) { titleSpan.innerHTML += ` <span class="new-badge">✨ YENİ</span>`; }
+                if (lastRead !== aiText) {
+            cardEl.classList.add('unread-premium-card');
+            if(titleSpan && !titleSpan.innerHTML.includes('YENİ')) { titleSpan.innerHTML += ` <span class="premium-new-badge">YENİ</span>`; }
             cardEl.setAttribute('data-new-text', aiText); 
         } else {
-            cardEl.classList.remove('new-report-pulse');
-            if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="new-badge[^>]*>.*?<\/span>/gi, '');
+            cardEl.classList.remove('unread-premium-card');
+            if(titleSpan) titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
         }
     }
 }
@@ -386,13 +386,13 @@ function istatistikleriCiz() {
         yDetails.innerHTML = `<div class="stat-ai-summary"><strong><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> ${currentYear} Yılı Özeti</strong>${yillikText}</div>`;
         if (yillikText && !yillikText.includes("bekleniyor") && !yillikText.includes("güncellenemiyor")) {
             let lastRead = localStorage.getItem('lastRead_yillik');
-            if (lastRead !== yillikText) {
-                cardYillik.classList.add('new-report-pulse');
-                if(titleYillik && !titleYillik.innerHTML.includes('YENİ')) { titleYillik.innerHTML += ` <span class="new-badge">✨ YENİ</span>`; }
+                        if (lastRead !== yillikText) {
+                cardYillik.classList.add('unread-premium-card');
+                if(titleYillik && !titleYillik.innerHTML.includes('YENİ')) { titleYillik.innerHTML += ` <span class="premium-new-badge">YENİ</span>`; }
                 cardYillik.setAttribute('data-new-text', yillikText);
             } else {
-                cardYillik.classList.remove('new-report-pulse');
-                if(titleYillik) titleYillik.innerHTML = titleYillik.innerHTML.replace(/\s*<span class="new-badge[^>]*>.*?<\/span>/gi, '');
+                cardYillik.classList.remove('unread-premium-card');
+                if(titleYillik) titleYillik.innerHTML = titleYillik.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
             }
         }
     }
