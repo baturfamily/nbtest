@@ -252,7 +252,7 @@ function renderHealthDiary() {
             <div class="diary-header">
                 <h3 class="diary-title" id="title-gunluk">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                    Günlük Analiz ${badgeHTML}
+                    Günün Analizi ${badgeHTML}
                 </h3>
                 <div class="diary-toggle-icon">▲</div>
             </div>
@@ -646,3 +646,34 @@ document.addEventListener('touchend', (e) => {
     pIsPulling = false;
     if (pCurrentY - pStartY > 60) manuelYenile();
 });
+
+// Sekmelerdeki parlamayı kontrol eden fonksiyon
+function updateTabGlows() {
+    // 1. GÜNÜM SEKMESİ (Günün Analizi)
+    const gununAnalizi = document.getElementById('aiDiaryCard');
+    const tabGunum = document.querySelector('button[onclick*="tab-day"]'); // HTML'deki sekme butonun
+    if(tabGunum) {
+        if (gununAnalizi && gununAnalizi.classList.contains('unread-premium-card')) {
+            tabGunum.classList.add('unread-tab-glow');
+        } else {
+            tabGunum.classList.remove('unread-tab-glow');
+        }
+    }
+
+    // 2. ANALİZ SEKMESİ (3 Arşiv Kartı)
+    const arsivKartlari = ['card-stat-this-month', 'card-stat-last-month', 'card-stat-yearly'];
+    const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
+    if(tabAnaliz) {
+        // Eğer 3 karttan herhangi birinde parlama varsa sekme de parlar
+        let hasUnreadArchive = arsivKartlari.some(id => {
+            let el = document.getElementById(id);
+            return el && el.classList.contains('unread-premium-card');
+        });
+
+        if (hasUnreadArchive) {
+            tabAnaliz.classList.add('unread-tab-glow');
+        } else {
+            tabAnaliz.classList.remove('unread-tab-glow');
+        }
+    }
+}
