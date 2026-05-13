@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Nurten Sağlık Merkezi</title>
+    
+    <link rel="apple-touch-icon" href="https://i.ibb.co/JW7nK9RK/nurten-ikon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="İlaç Paneli">
+
+    <link rel="manifest" href="manifest.json">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="theme-color" content="#F4F4F7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0B0B0E" media="(prefers-color-scheme: dark)">
+</head>
+<body>
+
+    <div id="alertsArea"></div>
+
+    <div class="sticky-top-wrapper">
+        <div class="header-compact" id="dynamicHeaderBg" ontouchstart="">
+            <div class="app-title">
+                <span class="greeting" id="greetingText" style="display: flex; align-items: center;"></span> 
+                <span class="name-tag">Nurten Hanım 🌼</span>
+                <span id="sync-icon" style="display:inline-flex; align-items:center; margin-left: 4px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                </span>
+            </div>
+            <div class="header-sub" id="update-text">Güncellemek İçin Aşağı Kaydırın</div>
+            <div class="header-info">
+                <div id="clock" class="clock-text">--:--</div>
+                <div id="last-sync" class="sync-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                    Bağlanıyor...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="vertical-list">
+        
+        <div class="premium-card ios-weather-card">
+            <div class="ios-w-top">
+                <div class="ios-w-city">📍 Avrupark Hayat</div>
+                <div class="ios-w-right-group">
+                    <div class="ios-w-temp" id="wTempText">--°</div>
+                    <div class="ios-w-icon" id="wMainIcon">🌥️</div>
+                    <div class="ios-w-hum" id="wHumText">%-- Nem</div>
+                </div>
+            </div>
+            <div class="ios-w-divider"></div>
+            <div class="ios-w-advice">
+                <div class="ios-w-adv-icon" id="wAdvIcon">🩺</div>
+                <div class="ios-w-adv-text" id="wAdvice">Hastalık teşhis motoru yükleniyor...</div>
+            </div>
+        </div>
+
+        <div id="healthDiaryArea"></div>
+
+        <div id="timelineArea"></div>
+
+        <div id="statsArea">
+            <div class="premium-card card collapsed stat-card" id="card-stat-this-month" onclick="this.classList.toggle('collapsed'); markStatAsRead('buAy', 'card-stat-this-month')">
+                <div class="card-header">
+                    <div class="drug-name">
+                        <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        <span id="title-buAy">Bu Ayki Özet</span>
+                    </div>
+                    <div class="badge badge-wait" id="thisMonthBadge">%-- <span class="exp-arrow">▲</span></div>
+                </div>
+                <div class="meds-container stat-details" id="thisMonthDetails">
+                    <div class="stat-row"><span class="stat-info">Hesaplanıyor...</span></div>
+                </div>
+            </div>
+
+            <div class="premium-card card collapsed stat-card" id="card-stat-last-month" onclick="this.classList.toggle('collapsed'); markStatAsRead('gecenAy', 'card-stat-last-month')">
+                <div class="card-header">
+                    <div class="drug-name">
+                        <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 22v-6h6"/></svg>
+                        <span id="title-gecenAy">Geçen Ayın Özeti</span>
+                    </div>
+                    <div class="badge badge-wait" id="lastMonthBadge">%-- <span class="exp-arrow">▲</span></div>
+                </div>
+                <div class="meds-container stat-details" id="lastMonthDetails">
+                    <div class="stat-row"><span class="stat-info">Hesaplanıyor...</span></div>
+                </div>
+            </div>
+
+            <div class="premium-card card collapsed stat-card" id="card-stat-yearly" onclick="this.classList.toggle('collapsed'); markStatAsRead('yillik', 'card-stat-yearly')">
+                <div class="card-header">
+                    <div class="drug-name">
+                        <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                        <span id="title-yillik">Yıllık Karne (<span id="currentYearText"></span>)</span>
+                    </div>
+                    <div class="badge badge-wait" id="yearlyBadge">%-- <span class="exp-arrow">▲</span></div>
+                </div>
+                <div class="meds-container stat-details" id="yearlyDetails">
+                    <div class="stat-row"><span class="stat-info">Hesaplanıyor...</span></div>
+                </div>
+            </div>
+            
+            <button onclick="doktorRaporuOlustur()" class="rapor-btn" style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Doktor Raporu (PDF Çıktısı Al)
+            </button>
+        </div>
+    </div>
+
+    <div id="print-report-area"></div>
+
+    <script src="script.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('Nurten PWA: Servis Kaydı Başarılı.');
+                }).catch(err => {
+                    console.log('Nurten PWA: Servis Kaydı Hatası: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
