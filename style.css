@@ -221,54 +221,66 @@ body {
 .dot.pain { background-color: #F43F5E; } 
 .dot.sleep { background-color: #3B82F6; } 
 
-/* --- BASKIN BİLDİRİM SİSTEMİ (FULL CARD PULSE) --- */
+/* --- ULTRA-PREMIUM "LIVING GLOW" SİSTEMİ --- */
 .unread-premium-card {
     position: relative;
-    /* Kartın kenarlığını daha belirgin mor yapıyoruz */
-    border: 2px solid rgba(139, 92, 246, 0.6) !important;
-    /* Kartın tamamını kapsayan renk animasyonu */
-    animation: purpleFlash 2.5s infinite ease-in-out;
-    transition: all 0.3s ease;
+    z-index: 1;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    background: #FFFFFF;
+    /* Kartın kendisi çok hafif ve lüks bir şekilde nefes alır */
+    animation: premiumPulse 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    transition: all 0.5s ease;
 }
 
-@keyframes purpleFlash {
-    0% {
-        background-color: var(--card); /* Orijinal Beyaz */
-        box-shadow: var(--card-shadow);
+/* Kartın arkasındaki "Sihirli" Işık Halesi */
+.unread-premium-card::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    z-index: -1;
+    /* Mordan Maviye lüks bir gradyan */
+    background: linear-gradient(45deg, #8B5CF6, #3B82F6, #D8B4FE, #8B5CF6);
+    background-size: 400% 400%;
+    border-radius: 30px; /* Karttan biraz daha geniş bir yuvarlaklık */
+    filter: blur(12px); /* Işığı yumuşatıp aura efekti verir */
+    opacity: 0;
+    animation: magicGlow 4s ease infinite;
+}
+
+@keyframes magicGlow {
+    0% { opacity: 0.1; background-position: 0% 50%; }
+    50% { opacity: 0.45; background-position: 100% 50%; }
+    100% { opacity: 0.1; background-position: 0% 50%; }
+}
+
+@keyframes premiumPulse {
+    0% { 
+        transform: scale(1);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.04);
     }
-    50% {
-        /* Kartın tamamı belirgin bir mora bürünür */
-        background-color: rgba(139, 92, 246, 0.15); 
-        /* Dışarıya mor bir enerji yayar */
-        box-shadow: 0 0 25px rgba(139, 92, 246, 0.3);
+    50% { 
+        transform: scale(1.015); /* Çok hafif büyüme, kalite hissi verir */
+        /* Kartın altına derin bir mor gölge ekler */
+        box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15);
+        background-color: #FDFBFF; /* Çok uçuk bir lila tonu */
     }
-    100% {
-        background-color: var(--card); /* Orijinal Beyaz */
-        box-shadow: var(--card-shadow);
+    100% { 
+        transform: scale(1);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.04);
     }
 }
 
-/* Okunmamış kartın içindeki metnin daha net okunması için */
-.unread-premium-card .diary-title, 
-.unread-premium-card .drug-name {
-    color: #5B21B6; /* Daha koyu, okunaklı bir mor */
-}
-}
-
-/* Zarif "YENİ" Rozeti */
+/* Yeni rozet tasarımı - Siri stili */
 .premium-new-badge {
-    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+    background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
     color: white;
-    padding: 4px 10px;
-    border-radius: 8px;
+    padding: 5px 12px;
+    border-radius: 100px; /* Tam yuvarlak (pill) rozet */
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.5px;
-    margin-left: 8px;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
+    letter-spacing: 0.8px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    border: 1px solid rgba(255,255,255,0.3);
 }
 
 /* Rozetin içindeki nefes alan (nabız) zarif nokta */
