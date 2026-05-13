@@ -548,7 +548,9 @@ function ekraniCiz() {
         });
     });
     const alertsEl = document.getElementById('alertsArea'); if(alertsEl) alertsEl.innerHTML = alertsHTML;
-    let timelineHTML = "";
+    let pendingHTML = "";
+    let completedHTML = "";
+
     todayProg.forEach((s) => {
         let sTC = 0; let medsHTML = "";
         s.meds.forEach(m => { 
@@ -568,9 +570,21 @@ function ekraniCiz() {
         let bText = isAllDone ? `TAMAMLANDI <span class="exp-arrow">▲</span>` : isLate ? "🚨 İÇİLMEYEN İLAÇ VAR" : "BEKLİYOR";
         let cClass = isAllDone ? "done-card" : isLate ? "late-card" : "";
         const colClass = isAllDone ? "collapsed" : "";
-        timelineHTML += `<div class="premium-card card ${cClass} ${colClass}" onclick="this.classList.toggle('collapsed')"><div class="card-header"><div class="drug-name">${s.icon} ${s.title}</div><div class="badge ${bClass}">${bText}</div></div><div class="meds-container">${medsHTML}</div></div>`;
+        
+        // Kartın HTML yapısını bir değişkene alıyoruz
+        let cardHTML = `<div class="premium-card card ${cClass} ${colClass}" onclick="this.classList.toggle('collapsed')"><div class="card-header"><div class="drug-name">${s.icon} ${s.title}</div><div class="badge ${bClass}">${bText}</div></div><div class="meds-container">${medsHTML}</div></div>`;
+
+        // EĞER TAMAMLANDIYSA "completedHTML" kutusuna, DEĞİLSE "pendingHTML" kutusuna ekle
+        if (isAllDone) {
+            completedHTML += cardHTML;
+        } else {
+            pendingHTML += cardHTML;
+        }
     });
-    const tArea = document.getElementById('timelineArea'); if(tArea) tArea.innerHTML = timelineHTML;
+
+    // Önce bekleyenleri, sonra tamamlananları ekrana basıyoruz
+    const tArea = document.getElementById('timelineArea'); 
+    if(tArea) tArea.innerHTML = pendingHTML + completedHTML;
 }
 
 veriCek();
