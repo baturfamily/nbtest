@@ -154,69 +154,38 @@ function manuelYenile() {
 }
 
 async function fetchWeather() {
-    const tempEl = document.getElementById('wTempText');
-    const mainIconEl = document.getElementById('wMainIcon');
-    const humEl = document.getElementById('wHumText');
-    const advIconEl = document.getElementById('wAdvIcon');
-    const adviceEl = document.getElementById('wAdvice');
+    const tEl = document.getElementById('wTempText');
+    const mEl = document.getElementById('wMainIcon');
+    const hEl = document.getElementById('wHumText');
+    const aIEl = document.getElementById('wAdvIcon');
+    const aTEl = document.getElementById('wAdvice');
 
     try {
-        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.07&longitude=28.64&current=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=uv_index_max&timezone=auto');
-        if (!response.ok) throw new Error('Hava durumu servisi yanıt vermiyor');
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.07&longitude=28.64&current=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=uv_index_max&timezone=auto');
+        if (!res.ok) throw new Error('Hata');
+        const data = await res.json();
         
-        const data = await response.json();
         const t = Math.round(data.current.temperature_2m); 
         const h = data.current.relative_humidity_2m;
         const w = data.current.wind_speed_10m;
-        const uv = data.daily.uv_index_max[0]; 
+        const uv = (data.daily && data.daily.uv_index_max) ? data.daily.uv_index_max[0] : 0; 
+        const isDay = (new Date().getHours() >= 7 && new Date().getHours() < 19);
 
-        const currentHour = new Date().getHours();
-        const isDaytime = (currentHour >= 7 && currentHour < 19);
+        let icon = "🌥️", advI = "🩺", advC = "var(--accent)", advice = "Hava bugün senin için gayet güzel. Keyfini çıkar!";
 
-        let icon = "🌥️", advIcon = "🩺", advColor = "var(--accent)", advice = "";
+        if (isDay && uv > 5) { advI = "🕶️"; advC = "var(--warning)"; advice = "Güneş dik geliyor, koruyucu sür ve gölgede kal."; } 
+        else if (w > 20) { icon = "🌬️"; advI = "💧"; advC = "var(--early)"; advice = "Dışarısı rüzgarlı, Sjögren için damlanı yanına al."; } 
+        else if (h > 70 && t < 15) { icon = "🌧️"; advI = "⚠️"; advC = "var(--danger)"; advice = `Hava nemli (%${h}), eklemlerini sıcak tut.`; } 
+        else if (t < 12) { icon = "🥶"; advI = "🧣"; advC = "var(--warning)"; advice = "Dışarısı soğuk, kat kat giyinmeyi unutma."; } 
+        else if (!isDay) { icon = "🌙"; advice = `Hava ${t}°C. İlaçlarını alıp dinlenme vakti Nurten Hanım.`; }
 
-        // Mantık Kontrolleri
-        if (isDaytime && uv > 5) { 
-            advIcon = "🕶️"; advColor = "var(--warning)"; 
-            advice = "Güneş bugün çok dik geliyor. Koruyucu sürmeyi ve gölgede kalmayı unutma."; 
-        } 
-        else if (w > 20) { 
-            icon = "🌬️"; advIcon = "💧"; advColor = "var(--early)"; 
-            advice = "Dışarıda esintili bir hava var. Göz kuruluğu için damlanı yanına almayı unutma."; 
-        } 
-        else if (h > 70 && t < 15) { 
-            icon = "🌧️"; advIcon = "⚠️"; advColor = "var(--danger)";
-            advice = `Hava soğuk ve nemli (%${h}). Dizlerini ve eklemlerini mutlaka sıcak tut.`; 
-        } 
-        else if (t < 12) { 
-            icon = "🥶"; advIcon = "🧣"; advColor = "var(--warning)"; 
-            advice = "Dışarısı oldukça soğuk. Eklemlerin sertleşmemesi için kat kat giyinmelisin."; 
-        } 
-        else if (t > 28) { 
-            icon = "☀️"; advIcon = "🥤"; advColor = "var(--warning)"; 
-            advice = "Hava oldukça sıcak. Sıvı kaybı kuruluğu artırır, bol bol su içmeyi unutma."; 
-        } 
-        else if (!isDaytime) {
-            icon = "🌙";
-            advice = `Hava dışarıda ${t}°C. İlaçlarını alıp dinlenme vakti, iyi geceler Nurten Hanım.`; 
-        }
-        else { 
-            advice = `Hava bugün senin için gayet güzel (${t}°C). Keyfini çıkar Nurten Sultan!`; 
-        }
-
-        // Verileri Ekrana Bas
-        if(tempEl) tempEl.innerText = t + "°";
-        if(mainIconEl) mainIconEl.innerText = icon;
-        if(humEl) humEl.innerText = "%" + h + " Nem";
-        if(advIconEl) {
-            advIconEl.innerText = advIcon;
-            advIconEl.style.color = advColor;
-        }
-        if(adviceEl) adviceEl.innerText = advice;
-
-    } catch(error) { 
-        console.error("Hava durumu hatası:", error); 
-        if(adviceEl) adviceEl.innerText = "Hava durumu şu an güncellenemedi, lütfen sonra tekrar deneyin.";
+        if(tEl) tEl.innerText = t + "°";
+        if(mEl) mEl.innerText = icon;
+        if(hEl) hEl.innerText = "%" + h + " Nem";
+        if(aIEl) { aIEl.innerText = advI; aIEl.style.color = advC; }
+        if(aTEl) aTEl.innerText = advice;
+    } catch(e) { 
+        if(aTEl) aTEl.innerText = "Hava durumu şu an alınamıyor, ancak ilaç takibiniz aktif.";
     }
 }
 
@@ -531,23 +500,24 @@ async function veriCek() {
     if (fetchDevamEdiyor) return;
     fetchDevamEdiyor = true;
     const todayStr = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + now.getFullYear();
+    
     try {
-    const res = await fetch(`${API_URL}?tarih=${todayStr}`);
-    if (!res.ok) throw new Error("Ağ Hatası");
-    apiData = await res.json();
-    sonBasariZamani = Date.now();
-    
-    // Her fonksiyonu güvenli çağır
-    if(typeof ekraniCiz === 'function') ekraniCiz(); 
-    if(typeof istatistikleriCiz === 'function') istatistikleriCiz(); 
-    if(typeof renderHealthDiary === 'function') renderHealthDiary(); 
-    
-    // Grafiği çizmeden önce bir nefes al (Sizing hatasını önler)
-    setTimeout(() => {
-        if(typeof grafikCiz === 'function') grafikCiz();
-    }, 100);
+        const res = await fetch(`${API_URL}?tarih=${todayStr}`);
+        if (!res.ok) throw new Error("Ağ Hatası");
+        apiData = await res.json();
+        sonBasariZamani = Date.now();
+        
+        if(typeof ekraniCiz === 'function') ekraniCiz(); 
+        if(typeof istatistikleriCiz === 'function') istatistikleriCiz(); 
+        if(typeof renderHealthDiary === 'function') renderHealthDiary(); 
+        
+        setTimeout(() => {
+            if(typeof grafikCiz === 'function') grafikCiz();
+        }, 150);
 
-} catch(e) { console.error("Veri çekme hatası:", e); }
+    } catch(e) { 
+        console.error("Veri çekme hatası:", e); 
+    } finally {
         fetchDevamEdiyor = false; 
         const uText = document.getElementById('update-text');
         if(uText) uText.innerHTML = `Güncellemek İçin Aşağı Kaydırın`;
