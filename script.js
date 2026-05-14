@@ -304,6 +304,7 @@ function renderHealthDiary() {
     let finalHTML = `
         <div class="diary-card ${pulseClass} ${isCollapsed ? 'collapsed' : ''}" 
              id="aiDiaryCard" 
+             data-new-text="${isNew ? aiMsg : ''}" 
              onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.classList.toggle('collapsed');" 
              style="cursor:pointer;">
             
