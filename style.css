@@ -61,22 +61,12 @@
 
 html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
 * { box-sizing: border-box; font-family: 'Inter', sans-serif !important; }
-/* body kısmını tam olarak bununla değiştir */
 body { 
-    margin: 0; 
-    background: var(--bg); 
-    background-image: var(--bg-mesh); 
-    color: var(--text); 
-    padding: 0; 
-    height: 100dvh; 
-    width: 100vw; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
-    -webkit-font-smoothing: antialiased;
-    -webkit-user-select: none; 
-    user-select: none; 
-    overscroll-behavior-y: none;
+    margin: 0; background: var(--bg); background-image: var(--bg-mesh); color: var(--text); 
+    padding: 0; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+    height: 100dvh; width: 100vw; display: flex; flex-direction: column; overflow: hidden; 
+    -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s;
+    -webkit-user-select: none; user-select: none; overscroll-behavior-y: none;
 }
 
 /* --- SEKME SİSTEMİ --- */
@@ -93,25 +83,23 @@ body {
 .tab-content.active { display: flex; }
 @keyframes spatialZoom { from { opacity: 0; transform: scale(0.98) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
+/* --- ALT NAVİGASYON (YAPIŞIK TASARIM) --- */
 .bottom-nav {
     position: fixed !important;
-    bottom: 0 !important; 
+    bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
     margin: 0 !important;
     width: 100% !important;
     height: auto !important;
-    /* İkonları aşağı itip ortalamak için üstten 18px boşluk verdik */
-    padding-top: 18px !important;
-    /* Alttaki 12px'i sildik, sadece iPhone'un kendi çentiğini (safe area) bıraktık */
-    padding-bottom: env(safe-area-inset-bottom) !important; 
+    padding-top: 18px !important; 
+    padding-bottom: env(safe-area-inset-bottom) !important;
     background: rgba(255, 255, 255, 0.96) !important;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    /* Alt köşeler SIFIR (0) olmalı ki boşluk kalmasın */
-    border-radius: 28px 28px 0 0 !important; 
-    display: flex !important; 
-    justify-content: space-around !important; 
+    border-radius: 28px 28px 0 0 !important;
+    display: flex !important;
+    justify-content: space-around !important;
     align-items: center !important;
     border: none !important;
     border-top: 1px solid rgba(0,0,0,0.05) !important;
@@ -128,7 +116,6 @@ body {
     position: relative; 
     z-index: 100; 
     flex-shrink: 0; 
-    /* KRİTİK EKLEME: Üst bölgeyi uygulamanın ana rengiyle doldurur */
     background: var(--bg); 
     padding: max(12px, env(safe-area-inset-top)) 16px 8px 16px; 
     transition: background 0.3s ease;
@@ -136,7 +123,8 @@ body {
 .header-compact { text-align: center; background: var(--vip-bg); padding: 18px 16px; border-radius: 24px; border: 1px solid var(--line); box-shadow: var(--vip-shadow); user-select: none; transition: transform 0.15s ease; }
 .header-compact:active { transform: scale(0.98); }
 .app-title { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
-.app-title .greeting { font-size: 18px; font-weight: 500; opacity: 0.9; }
+/* GÜNÜM YAZISINI KALINLAŞTIRAN KOD BURADA */
+.app-title .greeting { font-size: 18px; font-weight: 800 !important; opacity: 1 !important; color: #FFFFFF !important; }
 .app-title .name-tag { font-size: 21px; font-weight: 700; white-space: nowrap; color: #fff; }
 .header-sub { font-size: 13px; color: rgba(255, 255, 255, 0.8); font-weight: 500; margin-bottom: 12px; }
 .header-info { display: flex; justify-content: center; align-items: center; gap: 12px; }
@@ -151,7 +139,7 @@ body {
 /* --- HAVA DURUMU --- */
 .ios-weather-card { 
     padding: 22px; 
-    transition: background-color 0.8s ease; /* Zemin rengi değişirken yumuşak geçiş yapar */
+    transition: background-color 0.8s ease; 
 }
 .ios-w-top { display: flex; justify-content: space-between; align-items: center; }
 .ios-w-city { font-size: 13px; font-weight: 700; color: var(--muted); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; width: 85px; line-height: 1.4; }
@@ -185,7 +173,6 @@ body {
     position: relative;
     z-index: 1;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    /* KRİTİK: Başlık ve Metnin alt alta gelmesini garantiliyoruz */
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
@@ -228,7 +215,6 @@ body {
     font-weight: 500; 
     color: var(--text); 
     line-height: 1.65;
-    /* KRİTİK: Metnin tam genişlik kaplamasını sağlıyoruz */
     width: 100% !important;
     display: block !important;
 }
@@ -236,15 +222,15 @@ body {
 
 /* --- İSTATİSTİK ÖZETİ BAŞLIKLARI --- */
 .stat-ai-summary { 
-    padding: 14px 14px 14px 18px; /* Rengin içinde yazının ferah durması için boşlukları artırdık */
+    padding: 14px 14px 14px 18px; 
     font-size: 17px; 
     font-weight: 500; 
     line-height: 1.6; 
     color: var(--text); 
     margin-bottom: 16px; 
     border-left: 4px solid var(--purple); 
-    background: rgba(139, 92, 246, 0.04); /* İşte o sevdiğin hafif pembe/mor arka plan rengi */
-    border-radius: 0 12px 12px 0; /* Sağ köşeleri modern bir şekilde yuvarlattık */
+    background: rgba(139, 92, 246, 0.04); 
+    border-radius: 0 12px 12px 0; 
 }
 .stat-ai-summary strong { color: var(--purple); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
 
@@ -447,47 +433,52 @@ body {
     }
 }
 
-/* --- DOSYANIN EN SONUNA BU BLOĞU YAPIŞTIRIN (ESKİ DARK MODE BLOĞUNU SİLEREK) --- */
+/* --- DARK MODE: TAM UYUM VE PREMIUM DOKUNUŞLAR --- */
 @media (prefers-color-scheme: dark) {
-    /* 1. Alt Sekmeler (Navbar) - Alta Tam Yapışan Tasarım */
+    /* 1. Alt Sekmeler (Navbar) - Aşağıya Tam Oturan Tasarım */
     .bottom-nav {
-        background: rgba(15, 23, 42, 0.98) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: rgba(15, 23, 42, 0.98) !important; /* Derin gece mavisi */
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        border-radius: 28px 28px 0 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        border-radius: 28px 28px 0 0 !important; 
         padding-bottom: env(safe-area-inset-bottom) !important;
+        border: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
     }
     
     .nav-item { color: #94A3B8 !important; }
     .nav-item.active { color: #A78BFA !important; }
 
-    /* 2. Arşiv ve Analiz Kutuları */
-    .stat-ai-summary, .diary-ai-box {
-        background-color: rgba(139, 92, 246, 0.12) !important;
-        color: #E2E8F0 !important;
-        border-left: 4px solid #8B5CF6 !important;
+    /* 2. Okunmamış Arşiv Kartları */
+    .unread-premium-card {
+        background: #1E293B !important;
+        border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
+        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
+        animation: premiumPulseDark 4s infinite !important;
     }
 
-    /* 3. Doktor Raporu Butonu */
+    /* 3. DOKTOR RAPORU BUTONU */
     .rapor-btn {
         background: #1E293B !important;
         color: #FFFFFF !important;
         border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
     }
     .rapor-btn svg { stroke: #A78BFA !important; }
 
-    /* 4. Okunmamış Premium Kartlar */
-    .unread-premium-card {
-        background: #1E293B !important;
-        border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
-        animation: premiumPulseDark 4s infinite !important;
-    }
-    .unread-premium-card .drug-name, .unread-premium-card .diary-title {
+    /* 4. Genel Kart Başlıkları */
+    .unread-premium-card .drug-name, 
+    .unread-premium-card .diary-title {
         color: #FFFFFF !important;
     }
 
+    /* Karanlık Mod İçin Özel Nabız Animasyonu */
     @keyframes premiumPulseDark {
         0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
         50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
