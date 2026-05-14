@@ -554,11 +554,9 @@ function grafikCiz() {
     const sonYediGun = tarihler.slice(-7);
     const labels = sonYediGun.map(t => t.substring(0,5));
 
-    // VERİ KONTROLÜ (Crash Koruması)
-    const agriMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || "") : ""));
-    const uykuMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || "") : ""));
-    const enerjiMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Bugün enerji seviyen nasıldı?"] || apiData.tumVeriler[t]["Enerji Seviyesi"] || "") : ""));
-    const beslenmeMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Kortizonun oyununa gelip bugün tatlı veya hamur işi kaçamağı yaptın mı?"] || apiData.tumVeriler[t]["Beslenme Kaçamak"] || "") : ""));
+    // 1. SADECE UYKU VE AĞRI: Log dosyasındaki (EKLEM_AGRISI ve UYKU) tam isimleriyle çekiyoruz
+    const agriMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["EKLEM_AGRISI"] || "") : ""));
+    const uykuMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["UYKU"] || "") : ""));
 
     const ctx = document.getElementById('healthChart').getContext('2d');
     if (healthChartInstance) healthChartInstance.destroy();
@@ -568,29 +566,63 @@ function grafikCiz() {
         data: {
             labels: labels,
             datasets: [
-                { label: 'Ağrı', data: agriMetinleri.map(m => puanla.agri(m)), metinler: agriMetinleri, borderColor: '#F43F5E', backgroundColor: 'rgba(244, 63, 94, 0.05)', borderWidth: 3, tension: 0.4, pointRadius: 4 },
-                { label: 'Uyku', data: uykuMetinleri.map(m => puanla.uyku(m)), metinler: uykuMetinleri, borderColor: '#3B82F6', borderWidth: 3, tension: 0.4, pointRadius: 4 },
-                { label: 'Enerji', data: enerjiMetinleri.map(m => puanla.enerji(m)), metinler: enerjiMetinleri, borderColor: '#F59E0B', borderWidth: 3, tension: 0.4, pointRadius: 4 },
-                { label: 'Kaçamak', data: beslenmeMetinleri.map(m => puanla.beslenme(m)), metinler: beslenmeMetinleri, borderColor: '#8B5CF6', borderWidth: 3, borderDash: [5, 5], tension: 0.4, pointRadius: 4 }
+                { 
+                    label: 'Ağrı', 
+                    data: agriMetinleri.map(m => puanla.agri(m)), 
+                    metinler: agriMetinleri, 
+                    borderColor: '#F43F5E', 
+                    backgroundColor: 'rgba(244, 63, 94, 0.05)', 
+                    borderWidth: 3, 
+                    tension: 0.4, 
+                    pointRadius: 4 
+                },
+                { 
+                    label: 'Uyku', 
+                    data: uykuMetinleri.map(m => puanla.uyku(m)), 
+                    metinler: uykuMetinleri, 
+                    borderColor: '#3B82F6', 
+                    backgroundColor: 'transparent',
+                    borderWidth: 3, 
+                    tension: 0.4, 
+                    pointRadius: 4 
+                }
             ]
         },
         options: {
-            responsive: true, maintainAspectRatio: false,
+            responsive: true, 
+            maintainAspectRatio: false,
             plugins: { 
                 legend: { display: false },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
                     callbacks: {
+                        // 2. SKOR YAZMAZ: Ekrana dokunulduğunda sadece log dosyasındaki birebir metni gösterir
                         label: function(context) {
                             const metin = context.dataset.metinler[context.dataIndex];
-                            return context.dataset.label + ": " + (metin || "Veri Yok");
+                            return context.dataset.label + ": " + (metin || "Kayıt Yok");
                         }
                     }
                 }
             },
             scales: { 
-                y: { beginAtZero: true, max: 3.5, ticks: { stepSize: 1, callback: (v) => v <= 3 ? ["Yok/Az", "Hafif", "Orta", "Yüksek"][v] : "", font: { size: 10, weight: '700' } } }
+                y: { 
+                    beginAtZero: true, 
+                    max: 3.5, 
+                    ticks: { 
+                        // 3. YAN EKSENDEKİ SKORLARI GİZLEDİK: Sadece temiz bir trend çizgisi görünecek.
+                        display: false 
+                    },
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
             }
         }
     });
