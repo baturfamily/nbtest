@@ -1,23 +1,16 @@
-const CACHE_NAME = 'nurten-saglik-v80';
+const CACHE_NAME = 'nurten-saglik-v100'; // Numarayı 100 yaptık
+
 const ASSETS = [
   'index.html',
   'style.css',
   'script.js',
-  'manifest.json',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
+  'manifest.json'
 ];
 
-// Dosyaları ilk açılışta hafızaya al
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
-  );
-  self.skipWaiting();
+  self.skipWaiting(); // Beklemeyi reddet, hemen kurul
 });
 
-// Eski önbelleği temizle
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -26,22 +19,25 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  self.clients.claim(); // Anında kontrolü ele al
 });
 
-// İstekleri yönet (Tasarımı hafızadan, Verileri internetten getir)
+// KESİN ÇÖZÜM: AĞ ÖNCELİKLİ (NETWORK-FIRST) STRATEJİSİ
 self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-
-  // Google Scripts (API) ve Hava Durumu asla cache'e girmez, daima tazedir.
-  if (url.hostname.includes('script.google.com') || url.hostname.includes('api.open-meteo.com')) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-
-  // CSS, JS ve HTML gibi iskelet dosyaları önce hafızadan (Cache) bakılır.
+  if (event.request.method !== 'GET') return;
+  
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request)
+      .then((response) => {
+        // İnternet varsa ve başarılıysa, yenisini getirip hafızayı da günceller
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, response.clone());
+          return response;
+        });
+      })
+      .catch(() => {
+        // İnternet yoksa hafızadakini gösterir
+        return caches.match(event.request);
+      })
   );
 });
