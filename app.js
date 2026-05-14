@@ -18,8 +18,6 @@ window.switchTab = function(tabId, btn) {
         btn.classList.add('active');
     }
 
-    // BOŞ SAYFAYI ENGELLEYEN KRİTİK KONTROL:
-    // HTML'deki id "tab-today" olduğu için burada "tab-today" kontrolü yapmalıyız
     if(tabId === 'tab-today' || tabId === 'tab-day') {
         if(typeof ekraniCiz === 'function') ekraniCiz();
     }
@@ -37,25 +35,21 @@ window.switchTab = function(tabId, btn) {
 const now = new Date();
 const hour = now.getHours();
 let gMsg = "İyi Geceler"; 
-/* Gece: Sakin ve derin bir gece mavisi */
 let vipBg = "linear-gradient(135deg, #334155 0%, #0F172A 100%)";
 let greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
 
 if (hour >= 5 && hour < 12) { 
     gMsg = "Günaydın"; 
-    /* Sabah: Uçuk şeftali ve gün doğumu pembesi (Huzur verir) */
     vipBg = "linear-gradient(135deg, #FDBA74 0%, #F472B6 100%)"; 
     greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="m20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg>';
 } 
 else if (hour >= 12 && hour < 17) { 
     gMsg = "Tünaydın"; 
-    /* Öğle: Açık gökyüzü ve ferah mavi */
     vipBg = "linear-gradient(135deg, #7DD3FC 0%, #3B82F6 100%)"; 
     greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
 } 
 else if (hour >= 17 && hour < 22) { 
     gMsg = "İyi Akşamlar"; 
-    /* Akşam: Sakin bir okyanus laciverti/mor */
     vipBg = "linear-gradient(135deg, #818CF8 0%, #4F46E5 100%)"; 
     greetingIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
 }
@@ -174,7 +168,7 @@ function manuelYenile() {
     if(fetchDevamEdiyor) return;
     const uText = document.getElementById('update-text');
     if(uText) { uText.innerHTML = `${svgWait} Veriler Tazeleniyor...`; uText.style.color = "#4ade80"; }
-    sonBasariZamani = 0; // Bu sıfırlama, otomatik olarak saniyeTiktak'taki dönen ikonu tetikler
+    sonBasariZamani = 0; 
     veriCek();
     fetchWeather();
 }
@@ -198,7 +192,6 @@ async function fetchWeather() {
         const uv = (data.daily && data.daily.uv_index_max) ? data.daily.uv_index_max[0] : 0; 
         const isDay = (new Date().getHours() >= 7 && new Date().getHours() < 19);
 
-        // Şık, minimal SVG İkon Setleri
         const icons = {
             sun: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`,
             cloud: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>`,
@@ -216,46 +209,42 @@ async function fetchWeather() {
             heart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
         };
 
-        // Varsayılan Değerler
         let icon = icons.cloud, advI = advIcons.heart;
         let advice = "Hava bugün senin için gayet dengeli. Keyfini çıkar Nurten Hanım!";
-        let bgColor = "var(--card)"; // Varsayılan temiz zemin
+        let bgColor = "var(--card)"; 
 
-        // Tıbbi ve Dinamik Şartlar
         if (!isDay) { 
             icon = icons.moon; advI = advIcons.bed;
-            bgColor = "rgba(139, 92, 246, 0.04)"; // Çok uçuk gece moru
+            bgColor = "rgba(139, 92, 246, 0.04)"; 
             advice = `Gün yavaş yavaş bitiyor. İlaçlarını zamanında alıp eklemlerini dinlendirme vakti.`; 
         } 
         else if (isDay && uv > 5) { 
             icon = icons.sun; advI = advIcons.shield;
-            bgColor = "rgba(245, 158, 11, 0.05)"; // Çok uçuk şeftali/güneş rengi
+            bgColor = "rgba(245, 158, 11, 0.05)"; 
             advice = "Güneş ışınları dik açıyla geliyor. Plaquenil cildini hassaslaştırdığı için 50 faktör güneş kremini ve şapkanı almadan çıkma."; 
         } 
         else if ((h < 40 && t > 25) || w > 20) { 
             icon = (w > 20) ? icons.wind : icons.sun; advI = advIcons.drop;
-            bgColor = "rgba(59, 130, 246, 0.04)"; // Uçuk rüzgar mavisi
+            bgColor = "rgba(59, 130, 246, 0.04)"; 
             advice = "Hava bugün kurumaya çok müsait. Sjögren için göz damlanı yanından ayırma ve bol bol su yudumla."; 
         } 
         else if (h > 65 && t < 15) { 
             icon = icons.rain; advI = advIcons.alert;
-            bgColor = "rgba(244, 63, 94, 0.03)"; // Uçuk kırmızı (Romatizma Uyarısı)
+            bgColor = "rgba(244, 63, 94, 0.03)"; 
             advice = `Dışarısı soğuk ve oldukça nemli (%${h}). Sabah tutukluğunu kırmak için dışarı çıkmadan önce kalın giyin ve ellerini sıcak tut.`; 
         } 
         else if (t < 12) { 
             icon = icons.rain; advI = advIcons.cold;
-            bgColor = "rgba(14, 165, 233, 0.05)"; // Uçuk buz mavisi
+            bgColor = "rgba(14, 165, 233, 0.05)"; 
             advice = "Hava epey soğuk. Eklemlerini üşütmemek için rüzgar geçirmeyen kıyafetler tercih etmelisin."; 
         }
 
-        // Değerleri HTML'e yazdır
         if(tEl) tEl.innerText = t + "°";
         if(mEl) mEl.innerHTML = icon;
         if(hEl) hEl.innerText = "%" + h + " Nem";
         if(aIEl) aIEl.innerHTML = advI;
         if(aTEl) aTEl.innerText = advice;
         
-        // Dinamik arka plan rengini uygula
         if(cardEl) cardEl.style.backgroundColor = bgColor;
 
     } catch(e) { 
@@ -275,7 +264,6 @@ function saniyeTiktak() {
     
     if (!statusEl) return;
 
-    // YENİ TURUNCU DÖNEN HALKA (OK İŞARETİ KALDIRILDI)
     if (fetchDevamEdiyor || sonBasariZamani === 0) {
         statusEl.innerHTML = `
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" class="spin">
@@ -346,7 +334,7 @@ function renderHealthDiary() {
             <div class="diary-ai-box">
                 ${aiMsg}
                 <div style='font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 12px; margin-top: 14px;'>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Her gün 10:00 ve 22:00'da Tıbbi Konsey günceller.
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg Her gün 10:00 ve 22:00'da Tıbbi Konsey günceller.
                 </div>
             </div>
         </div>`;
@@ -369,7 +357,6 @@ window.markStatAsRead = function(statType, cardId) {
             }
         }
     }
-    // Gecikme olmadan hemen kontrol et
     updateTabGlows(); 
 };
 
@@ -379,10 +366,9 @@ function analyzeMonth(year, month) {
     const isCurrentMonth = (year === dNow.getFullYear() && month === dNow.getMonth());
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const maxDay = isCurrentMonth ? dNow.getDate() : daysInMonth;
-    const START_DATE = new Date(2026, 2, 7); // 7 Mart 2026
+    const START_DATE = new Date(2026, 2, 7); 
 for (let d = maxDay; d >= 1; d--) { 
     let currentDay = new Date(year, month, d);
-    // Milattan önceki günleri hesaba katma
     if (currentDay < START_DATE) continue; 
         let dateStr = String(d).padStart(2, '0') + '.' + String(month + 1).padStart(2, '0') + '.' + year;
         let prog = getDailyProgram(currentDay);
@@ -467,9 +453,8 @@ function renderMonthStat(prefix, data, statType, cardId) {
                 if (lastRead !== aiText) {
           cardEl.classList.add('unread-premium-card');
           if(titleSpan && !titleSpan.innerHTML.includes('YENİ')) { 
-    // Rozeti başlığın hemen altına, temiz bir şekilde ekler
-    titleSpan.innerHTML += `<div style="margin-top:5px;"><span class="premium-new-badge">YENİ</span></div>`; 
-}
+            titleSpan.innerHTML += `<div style="margin-top:5px;"><span class="premium-new-badge">YENİ</span></div>`; 
+          }
           cardEl.setAttribute('data-new-text', aiText); 
       } else {
           cardEl.classList.remove('unread-premium-card');
@@ -477,8 +462,6 @@ function renderMonthStat(prefix, data, statType, cardId) {
               titleSpan.innerHTML = titleSpan.innerHTML.replace(/\s*<span class="premium-new-badge[^>]*>.*?<\/span>/gi, '');
           }
       }
-      // KRİTİK DÜZELTME: setTimeout'u if/else bloğunun DIŞINA aldık. 
-      // Böylece kart yeni olsa da olmasa da sekmelerdeki noktalar güncellenir.
       setTimeout(updateTabGlows, 250); 
     }
 }
@@ -503,8 +486,8 @@ function istatistikleriCiz() {
                         if (lastRead !== yillikText) {
                 cardYillik.classList.add('unread-premium-card');
                 if(titleYillik && !titleYillik.innerHTML.includes('YENİ')) { 
-    titleYillik.innerHTML += `<div style="margin-top:5px;"><span class="premium-new-badge">YENİ</span></div>`; 
-}
+                    titleYillik.innerHTML += `<div style="margin-top:5px;"><span class="premium-new-badge">YENİ</span></div>`; 
+                }
                 cardYillik.setAttribute('data-new-text', yillikText);
             } else {
                 cardYillik.classList.remove('unread-premium-card');
@@ -580,7 +563,6 @@ function grafikCiz() {
     const sonYediGun = tarihler.slice(-7);
     const labels = sonYediGun.map(t => t.substring(0,5));
 
-    // SADECE AĞRI VE UYKU VERİSİ
     const agriMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || "") : ""));
     const uykuMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || "") : ""));
 
@@ -672,11 +654,11 @@ async function veriCek() {
         apiData = await res.json();
         sonBasariZamani = Date.now();
         
-                if(typeof ekraniCiz === 'function') ekraniCiz(); 
+        if(typeof ekraniCiz === 'function') ekraniCiz(); 
         if(typeof istatistikleriCiz === 'function') istatistikleriCiz(); 
         if(typeof renderHealthDiary === 'function') renderHealthDiary(); 
         
-        setTimeout(updateTabGlows, 500); // Buraya eklendi
+        setTimeout(updateTabGlows, 500);
         
         setTimeout(() => {
             if(typeof grafikCiz === 'function') grafikCiz();
@@ -729,15 +711,13 @@ function ekraniCiz() {
         let bText = isAllDone ? `TAMAMLANDI <span class="exp-arrow">▲</span>` : isLate ? "🚨 İÇİLMEYEN İLAÇ VAR" : "BEKLİYOR";
         let cClass = isAllDone ? "done-card" : isLate ? "late-card" : "";
         
-        // 2. HAFIZA: Timeline ilaç kartlarının durumunu koru
-        let isCardCollapsed = isAllDone; // Bitenler kapalı, bekleyenler açık başlar
+        let isCardCollapsed = isAllDone; 
         const existingCard = document.getElementById(`timeline-card-${s.id}`);
         if (existingCard) {
             isCardCollapsed = existingCard.classList.contains('collapsed');
         }
         const colClass = isCardCollapsed ? "collapsed" : "";
         
-        // Kartlara benzersiz bir ID eklendi (id="timeline-card-${s.id}")
         let cardHTML = `<div class="premium-card card ${cClass} ${colClass}" id="timeline-card-${s.id}"><div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;"><div class="drug-name">${s.icon} ${s.title}</div><div class="badge ${bClass}">${bText}</div></div><div class="meds-container">${medsHTML}</div></div>`;
 
         if (isAllDone) {
@@ -751,25 +731,14 @@ function ekraniCiz() {
     if(tArea) tArea.innerHTML = pendingHTML + completedHTML;
 }
 
-// --- ZAMANLAYICILAR VE OTOMATİK GÜNCELLEME ---
-
-// 1. Uygulama açılır açılmaz ilk verileri çek
 veriCek();
 fetchWeather(); 
-
-// 2. Verileri her 30 saniyede bir otomatik tazele (30000 ms = 30 saniye)
 setInterval(veriCek, 30000); 
-
-// 3. Hava durumunu saatte bir yenile (3600000 ms = 1 saat)
 setInterval(fetchWeather, 3600000); 
-
-// 4. Saati ve bağlantı durumunu her saniye kontrol et
 setInterval(saniyeTiktak, 1000);
 
-// 5. Uygulama arka plana atılıp tekrar açıldığında (Ekran uyanınca) kontrol et
 document.addEventListener("visibilitychange", () => { 
     if (document.visibilityState === 'visible') { 
-        // Eğer son başarılı güncellemeden bu yana 30 saniyeden fazla geçmişse hemen yenile
         if (sonBasariZamani === 0 || (Date.now() - sonBasariZamani > 30000)) { 
             veriCek(); 
             fetchWeather(); 
@@ -782,7 +751,7 @@ document.addEventListener('touchstart', (e) => {
     const activeTab = document.querySelector('.tab-content.active');
     if (activeTab && activeTab.scrollTop <= 0) { 
         pStartY = e.touches[0].clientY; 
-        pCurrentY = pStartY; // <-- KRİTİK EKLEME: Dokunduğun an eski koordinatları siler
+        pCurrentY = pStartY; 
         pIsPulling = true; 
     }
 }, {passive: true});
@@ -798,7 +767,6 @@ document.addEventListener('touchend', (e) => {
 });
 
 function updateTabGlows() {
-    // 1. ANALİZ SEKMESİ (Günün Analizi kartı bu sekmede yer alıyor)
     const gununAnalizi = document.getElementById('aiDiaryCard');
     const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
     if(tabAnaliz) {
@@ -806,7 +774,6 @@ function updateTabGlows() {
         tabAnaliz.classList.toggle('unread-indicator', !!isDayNew);
     }
 
-    // 2. ARŞİV SEKMESİ (Bu Ay, Geçen Ay ve Yıllık özet kartları bu sekmede)
     const arsivKartlari = ['card-stat-this-month', 'card-stat-last-month', 'card-stat-yearly'];
     const tabArsiv = document.querySelector('button[onclick*="tab-archive"]');
     if(tabArsiv) {
