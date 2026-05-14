@@ -59,110 +59,118 @@
   }
 }
 
-html { 
-    scroll-behavior: smooth; 
-    -webkit-tap-highlight-color: transparent;
-    height: -webkit-fill-available; /* iOS Tam Ekran Kilidi */
-}
+/* ========================================================================= */
+/* 🌟 iPHONE PWA MÜHÜRLEME & KAYDIRMA MİMARİSİ (ÇAKIŞMALAR TEMİZLENDİ)       */
+/* ========================================================================= */
 
 * { box-sizing: border-box; font-family: 'Inter', sans-serif !important; }
 
-body {
+html, body {
     margin: 0;
     padding: 0;
-    height: 100dvh;
-    width: 100vw;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Dış ekran asla kaymaz, kilitlidir! */
+    position: fixed; /* iOS Safari arka planını mühürler */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    background-image: var(--bg-mesh);
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    overscroll-behavior: none; /* Ekranın yaylanmasını önler */
+}
+
+.vertical-list {
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Ana ekran kaymasın, sadece içerik kaysın */
-    background: var(--bg);
+    flex: 1;
+    height: 100%; /* Kalan tüm alanı kaplar */
+    overflow: hidden; /* Sadece tab-content kayar */
+    position: relative;
 }
 
-/* --- SEKME SİSTEMİ --- */
 .tab-content {
-    display: none; /* Varsayılan olarak gizli */
+    display: none;
     flex-direction: column;
+    flex: 1;
     padding: 16px;
-    /* ÖNEMLİ: Navigasyonun altında içerik kalmaması için boşluk */
-    padding-bottom: calc(100px + env(safe-area-inset-bottom)); 
-    overflow-y: auto !important; /* Kaydırma artık body'de değil, burada olacak */
-    -webkit-overflow-scrolling: touch; /* iPhone'da yağ gibi kayması için */
-    flex: 1; /* Ekranın geri kalanını doldurur */
+    padding-bottom: calc(100px + env(safe-area-bottom)); /* Menü için boşluk */
+    overflow-y: auto !important; /* HER SEKME KENDİ İÇİNDE KAYAR */
+    -webkit-overflow-scrolling: touch; /* iPhone'da yağ gibi kayma */
+    height: 100%;
 }
 .tab-content.active { display: flex; }
-@keyframes spatialZoom { from { opacity: 0; transform: scale(0.98) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-/* --- ALT NAVİGASYON (YAPIŞIK TASARIM) --- */
+/* 🌟 MENÜYÜ EN ALTA MÜHÜRLEME */
 .bottom-nav {
     position: fixed !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    margin: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    padding-top: 18px !important; 
-    padding-bottom: env(safe-area-inset-bottom) !important;
+    margin: 0 !important;
+    z-index: 99999 !important;
     background: rgba(255, 255, 255, 0.96) !important;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
     border-radius: 28px 28px 0 0 !important;
+    padding: 14px 5px env(safe-area-inset-bottom) !important; /* Boşluk tam ayarlandı */
+    height: auto !important;
+    
     display: flex !important;
     justify-content: space-around !important;
     align-items: center !important;
     border: none !important;
     border-top: 1px solid rgba(0,0,0,0.05) !important;
     box-shadow: 0 -10px 40px rgba(0,0,0,0.05) !important;
-    z-index: 99999 !important;
-    /* iOS'un objeleri havada bırakma bug'ını sıfırlar */
+    
+    transform: translateZ(0) !important; /* Donanım sabitlemesi */
     -webkit-transform: translateZ(0) !important;
-    transform: translateZ(0) !important; 
 }
+
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%; position: relative; }
 .nav-item.active { color: var(--purple); }
 .nav-item.active svg { transform: scale(1.15) translateY(-2px); }
-.nav-item span { font-size: 12px; font-weight: 700; letter-spacing: -0.2px; }
+/* Menü isimlerini kalınlaştır */
+.nav-item span { font-size: 12px; font-weight: 800; letter-spacing: -0.2px; }
 
-/* --- HEADER SİSTEMİ --- */
+/* 🌟 BAŞLIK DARALMASI VE İSİM KAYMASI ÇÖZÜMÜ */
 .sticky-top-wrapper { 
     position: relative; 
     z-index: 100; 
     flex-shrink: 0; 
     background: var(--bg); 
-    padding: max(12px, env(safe-area-inset-top)) 16px 8px 16px; 
-    transition: background 0.3s ease;
+    padding: max(12px, env(safe-area-inset-top)) 10px 8px 10px !important; 
 }
-.header-compact { text-align: center; background: var(--vip-bg); padding: 18px 16px; border-radius: 24px; border: 1px solid var(--line); box-shadow: var(--vip-shadow); user-select: none; transition: transform 0.15s ease; }
-.header-compact:active { transform: scale(0.98); }
-.app-title { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
-
-#greetingText {
-    font-weight: 900 !important;
-    display: inline-block;
+.header-compact { 
+    text-align: center; background: var(--vip-bg); 
+    padding: 16px 10px !important; border-radius: 24px; 
+    border: 1px solid var(--line); box-shadow: var(--vip-shadow); 
+}
+.app-title { 
+    display: flex !important; justify-content: center !important; 
+    align-items: center !important; flex-wrap: nowrap !important; /* Asla alt satıra geçmez */
+    font-size: 18px !important; gap: 5px !important; color: #fff; margin-bottom: 6px; 
 }
 
-.app-title .name-tag { font-size: 21px; font-weight: 700; white-space: nowrap; color: #fff; }
+/* Günüm Yazısını Kalın Yap */
+#greetingText, .greeting { font-weight: 900 !important; white-space: nowrap !important; font-size: 18px !important; }
+.name-tag { font-weight: 700; white-space: nowrap !important; font-size: 18px !important; color: #fff; }
+
 .header-sub { font-size: 13px; color: rgba(255, 255, 255, 0.8); font-weight: 500; margin-bottom: 12px; }
 .header-info { display: flex; justify-content: center; align-items: center; gap: 12px; }
 .clock-text { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.95); letter-spacing: 0.2px; }
 #connection-status { display: flex; align-items: center; justify-content: center; margin-left: 2px; }
 
-/* --- KARTLAR --- */
+/* ========================================================================= */
+/* KARTLAR, İSTATİSTİKLER VE GRAFİKLER (ORİJİNAL KODLAR KORUNDU)             */
+/* ========================================================================= */
+
 .premium-card { background: var(--card); border-radius: 24px; padding: 20px; border: 1px solid var(--card-border); margin-bottom: 14px; box-shadow: var(--card-shadow); transition: transform 0.2s ease, box-shadow 0.2s ease; flex-shrink: 0; }
-.vertical-list {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden; /* Buradaki auto/scroll ayarını hidden yap */
-    position: relative;
-}
-.vertical-list::-webkit-scrollbar { display: none; }
 
 /* --- HAVA DURUMU --- */
-.ios-weather-card { 
-    padding: 22px; 
-    transition: background-color 0.8s ease; 
-}
+.ios-weather-card { padding: 22px; transition: background-color 0.8s ease; }
 .ios-w-top { display: flex; justify-content: space-between; align-items: center; }
 .ios-w-city { font-size: 13px; font-weight: 700; color: var(--muted); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; width: 85px; line-height: 1.4; }
 .ios-w-right-group { display: flex; align-items: center; gap: 12px; }
@@ -183,84 +191,27 @@ body {
 .shield-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); animation: pulse-soft 3s ease-in-out infinite; }
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.92; } }
 
-/* --- ASİSTAN GÜNLÜĞÜ (KRİTİK DÜZELTME YAPILDI) --- */
-.diary-card { 
-    padding: 22px 24px; 
-    border-radius: 28px; 
-    margin-bottom: 16px; 
-    cursor: pointer; 
-    background: #FFFFFF; 
-    border: 1px solid rgba(139, 92, 246, 0.12); 
-    box-shadow: 0 12px 36px rgba(139, 92, 246, 0.08), 0 4px 12px rgba(0,0,0,0.02);
-    position: relative;
-    z-index: 1;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    overflow: visible !important;
-}
-.diary-ai-box { 
-    width: 100% !important;
-    margin-top: 18px; 
-    padding: 14px 14px 14px 18px;
-    border-left: 4px solid var(--purple);
-    background: rgba(139, 92, 246, 0.04);
-    border-radius: 0 12px 12px 0;
-    font-size: 17.5px; 
-    font-weight: 500; 
-    color: var(--text); 
-    line-height: 1.65;
-    text-align: left;
-    display: block !important;
-}
+/* --- ASİSTAN GÜNLÜĞÜ --- */
+.diary-card { padding: 22px 24px; border-radius: 28px; margin-bottom: 16px; cursor: pointer; background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.12); box-shadow: 0 12px 36px rgba(139, 92, 246, 0.08), 0 4px 12px rgba(0,0,0,0.02); position: relative; z-index: 1; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex !important; flex-direction: column !important; align-items: stretch !important; overflow: visible !important; }
+.diary-ai-box { width: 100% !important; margin-top: 18px; padding: 14px 14px 14px 18px; border-left: 4px solid var(--purple); background: rgba(139, 92, 246, 0.04); border-radius: 0 12px 12px 0; font-size: 17.5px; font-weight: 500; color: var(--text); line-height: 1.65; text-align: left; display: block !important; }
 .diary-card.collapsed::before { display: none; }
 .diary-card:active { transform: scale(0.98); }
-
-.diary-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    gap: 8px;
-    width: 100%;
-}
+.diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; }
 .diary-title { font-size: 20px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
 .diary-title svg { color: var(--purple); }
 .diary-toggle-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #F1F5F9; font-size: 11px; color: var(--muted); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s; }
 .diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); background: rgba(139, 92, 246, 0.1); color: var(--purple); } 
-
-.diary-ai-box { 
-    margin-top: 18px; 
-    padding-top: 18px; 
-    border-top: 1px solid var(--line); 
-    font-size: 17.5px; 
-    font-weight: 500; 
-    color: var(--text); 
-    line-height: 1.65;
-    width: 100% !important;
-    display: block !important;
-}
+.diary-ai-box { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 17.5px; font-weight: 500; color: var(--text); line-height: 1.65; width: 100% !important; display: block !important; }
 .diary-card.collapsed .diary-ai-box { display: none !important; }
 
 /* --- İSTATİSTİK ÖZETİ BAŞLIKLARI --- */
-.stat-ai-summary { 
-    padding: 14px 14px 14px 18px; 
-    font-size: 17px; 
-    font-weight: 500; 
-    line-height: 1.6; 
-    color: var(--text); 
-    margin-bottom: 16px; 
-    border-left: 4px solid var(--purple); 
-    background: rgba(139, 92, 246, 0.04); 
-    border-radius: 0 12px 12px 0; 
-}
+.stat-ai-summary { padding: 14px 14px 14px 18px; font-size: 17px; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--purple); background: rgba(139, 92, 246, 0.04); border-radius: 0 12px 12px 0; }
 .stat-ai-summary strong { color: var(--purple); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
 
 /* --- İLAÇ KARTI (OKUMA PANELİ) --- */
 .card { display: flex; flex-direction: column; padding: 20px; margin-bottom: 14px; cursor: pointer;} 
 .card.done-card { border-color: var(--done-border); background: var(--done-bg); box-shadow: none; }
 .card-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 16px; width: 100%; padding: 4px 0; }
-
 .drug-name { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 12px; margin: 0; color: var(--text); letter-spacing: -0.3px;}
 .drug-name svg, .card-icon { background: rgba(100, 116, 139, 0.08); padding: 6px; border-radius: 12px; color: var(--muted); width: 34px; height: 34px; box-sizing: border-box; }
 .done-card .drug-name svg { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
@@ -282,14 +233,12 @@ body {
 .history-item:last-child { border-bottom: none; }
 .history-item.is-done .drug-title { text-decoration: line-through; color: var(--muted); }
 .history-item.is-done .drug-purpose { color: var(--muted); opacity: 0.6; }
-
 .med-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
 .drug-title { font-size: 19px; font-weight: 600; color: var(--text); line-height: 1.3; } 
 .drug-purpose { font-size: 16px; color: var(--muted); font-weight: 400; line-height: 1.5; margin-top: 2px; }
 
 .card.collapsed .meds-container { display: none; } 
 .card.collapsed .card-header { margin-bottom: 0; }
-
 .late-card { border-color: rgba(244, 63, 94, 0.3) !important; animation: latePulse-soft 3s infinite; }
 @keyframes latePulse-soft { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.1); } 70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
 
@@ -304,7 +253,6 @@ body {
 /* --- BUTON VE RAPOR ALANI --- */
 .rapor-btn { background: var(--text); color: var(--card); padding: 18px 20px; border: none; border-radius: 20px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 8px; margin-bottom: 24px; width: 100%; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); flex-shrink:0; transition: transform 0.2s ease;}
 .rapor-btn:active { transform: scale(0.97); }
-
 #print-report-area { display: none; }
 
 /* --- DOKTOR RAPORU YAZDIRMA CSS --- */
@@ -336,75 +284,28 @@ body {
 
 /* --- ULTRA-PREMIUM "LIVING GLOW" SİSTEMİ --- */
 .unread-premium-card {
-    position: relative;
-    z-index: 1;
-    border: 1px solid rgba(139, 92, 246, 0.4) !important;
-    background: #FFFFFF;
-    animation: premiumPulse 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    transition: all 0.5s ease;
-    overflow: visible !important; 
+    position: relative; z-index: 1; border: 1px solid rgba(139, 92, 246, 0.4) !important;
+    background: #FFFFFF; animation: premiumPulse 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    transition: all 0.5s ease; overflow: visible !important; 
 }
-
 .unread-premium-card::after {
-    content: '';
-    position: absolute;
-    top: -10px; left: -10px; right: -10px; bottom: -10px;
-    z-index: -1; 
-    background: linear-gradient(45deg, #8B5CF6, #3B82F6, #D8B4FE, #8B5CF6);
-    background-size: 400% 400%;
-    border-radius: 40px; 
-    filter: blur(16px); 
-    opacity: 0;
-    animation: magicGlow 4s ease infinite;
-    pointer-events: none;
-    display: block !important;
+    content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+    z-index: -1; background: linear-gradient(45deg, #8B5CF6, #3B82F6, #D8B4FE, #8B5CF6);
+    background-size: 400% 400%; border-radius: 40px; filter: blur(16px); opacity: 0;
+    animation: magicGlow 4s ease infinite; pointer-events: none; display: block !important;
 }
 
-@keyframes magicGlow {
-    0% { opacity: 0.1; background-position: 0% 50%; }
-    50% { opacity: 0.5; background-position: 100% 50%; }
-    100% { opacity: 0.1; background-position: 0% 50%; }
-}
-
-@keyframes premiumPulse {
-    0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
-    50% { 
-        transform: scale(1.015); 
-        box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15);
-        background-color: #FDFBFF; 
-    }
-    100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
-}
+@keyframes magicGlow { 0% { opacity: 0.1; background-position: 0% 50%; } 50% { opacity: 0.5; background-position: 100% 50%; } 100% { opacity: 0.1; background-position: 0% 50%; } }
+@keyframes premiumPulse { 0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); } 50% { transform: scale(1.015); box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15); background-color: #FDFBFF; } 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); } }
 
 /* Rozetler */
 .premium-new-badge {
-    background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-    color: white;
-    padding: 5px 12px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%); color: white; padding: 5px 12px;
+    border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 0.8px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); border: 1px solid rgba(255,255,255,0.3);
 }
-
-.premium-new-badge::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: #fff;
-    border-radius: 50%;
-    margin-right: 5px;
-    animation: dotPulse 2s infinite ease-in-out;
-}
-
-@keyframes dotPulse {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-    100% { opacity: 1; transform: scale(1); }
-}
+.premium-new-badge::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #fff; border-radius: 50%; margin-right: 5px; animation: dotPulse 2s infinite ease-in-out; }
+@keyframes dotPulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
 /* SYNC İKONU */
 @keyframes spin-anim { 100% { transform: rotate(360deg); } }
@@ -412,214 +313,36 @@ body {
 
 /* --- ALT SEKME BİLDİRİM NOKTASI --- */
 .nav-item.unread-indicator::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
-    animation: dotBreath 2s infinite ease-in-out;
+    content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+    width: 6px; height: 6px; background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+    border-radius: 50%; box-shadow: 0 0 8px rgba(139, 92, 246, 0.6); animation: dotBreath 2s infinite ease-in-out;
 }
-
-@keyframes dotBreath {
-    0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(0.8); }
-    50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
-}
-
-/* --- GÜNÜN ANALİZİ KARTI KARANLIK MOD DÜZELTMELERİ --- */
-.diary-card { 
-    background-color: var(--card) !important; 
-    color: var(--text) !important;
-}
-.diary-title { 
-    color: var(--text) !important; 
-}
-.diary-ai-box { 
-    background-color: rgba(139, 92, 246, 0.04); 
-    color: var(--text) !important; 
-}
+@keyframes dotBreath { 0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(0.8); } 50% { opacity: 1; transform: translateX(-50%) scale(1.2); } }
 
 /* --- DARK MODE: TAM UYUM VE PREMIUM DOKUNUŞLAR --- */
 @media (prefers-color-scheme: dark) {
-    /* 1. Alt Sekmeler (Navbar) - Aşağıya Tam Oturan Tasarım */
+    .diary-card { background-color: var(--card) !important; color: var(--text) !important; }
+    .diary-title { color: var(--text) !important; }
+    .diary-ai-box { background-color: rgba(139, 92, 246, 0.04); color: var(--text) !important; }
+
     .bottom-nav {
-        background: rgba(15, 23, 42, 0.98) !important; /* Derin gece mavisi */
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        border-radius: 28px 28px 0 0 !important; 
-        padding-bottom: env(safe-area-inset-bottom) !important;
-        border: none !important;
+        background: rgba(15, 23, 42, 0.98) !important; 
         border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
-        /* Karanlık modda da havada asılı kalmayı önler */
-        -webkit-transform: translateZ(0) !important;
-        transform: translateZ(0) !important;
     }
     
     .nav-item { color: #94A3B8 !important; }
     .nav-item.active { color: #A78BFA !important; }
 
-    /* Analiz Kutuları */
-    .diary-ai-box, .stat-ai-summary { 
-        background-color: rgba(139, 92, 246, 0.12) !important; 
-        color: #F1F5F9 !important; 
-    }
+    .diary-ai-box, .stat-ai-summary { background-color: rgba(139, 92, 246, 0.12) !important; color: #F1F5F9 !important; }
 
-    /* 2. Okunmamış Arşiv Kartları */
     .unread-premium-card {
-        background: #1E293B !important;
-        border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
-        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
-        animation: premiumPulseDark 4s infinite !important;
+        background: #1E293B !important; border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
+        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important; animation: premiumPulseDark 4s infinite !important;
     }
 
-    /* 3. DOKTOR RAPORU BUTONU */
-    .rapor-btn {
-        background: #1E293B !important;
-        color: #FFFFFF !important;
-        border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
-    }
+    .rapor-btn { background: #1E293B !important; color: #FFFFFF !important; border: 1.5px solid rgba(139, 92, 246, 0.4) !important; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important; }
     .rapor-btn svg { stroke: #A78BFA !important; }
+    .unread-premium-card .drug-name, .unread-premium-card .diary-title { color: #FFFFFF !important; }
 
-    /* 4. Genel Kart Başlıkları */
-    .unread-premium-card .drug-name, 
-    .unread-premium-card .diary-title {
-        color: #FFFFFF !important;
-    }
-
-    /* Karanlık Mod İçin Özel Nabız Animasyonu */
-    @keyframes premiumPulseDark {
-        0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
-        50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
-    }
-}
-
-/* Navigasyonu tüm sekmelerde en alta çiviler */
-.bottom-nav {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    margin: 0 !important;
-    z-index: 99999 !important; /* Diğer her şeyin üzerinde kalması için */
-    background: rgba(255, 255, 255, 0.96) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: 28px 28px 0 0 !important;
-    padding-top: 18px !important;
-    /* iPhone alt çubuğu boşluğu */
-    padding-bottom: env(safe-area-inset-bottom) !important;
-    /* iOS'un objeyi havada bırakma hatasını ezen nükleer kod: */
-    -webkit-transform: translate3d(0, 0, 0) !important;
-    transform: translate3d(0, 0, 0) !important;
-    border-top: 1px solid rgba(0,0,0,0.05) !important;
-}
-
-/* Tüm sekmelerin (Analiz, Arşiv) kaydırılabilir olmasını sağlar */
-.tab-content {
-    height: 100%;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch; /* iPhone'da akıcı kaydırma */
-}
-
-/* Günüm yazısını her koşulda kalın yapar */
-#greetingText, .greeting {
-    font-weight: 900 !important;
-    font-style: normal !important;
-}
-
-/* ========================================================================= */
-/* 🌟 FİNANS PROJESİNDEN ALINAN "DOĞAL KAYDIRMA" VE YAPIŞMA MİMARİSİ         */
-/* ========================================================================= */
-
-/* 1. DIŞ ÇENTİK VE GÖVDE (FİNANS PROJESİNDEKİ GİBİ) */
-html {
-    background-color: #0B0B0E !important; /* Dış boşlukların rengi */
-}
-
-body {
-    margin: 0 !important;
-    padding: 0 !important;
-    /* İŞTE SIR BURADA: 100vh ve hidden kısıtlamaları çöpe atıldı! */
-    height: auto !important; 
-    min-height: 100% !important;
-    overflow-y: auto !important; 
-    overscroll-behavior-y: contain !important;
-    
-    /* Finans projesindeki gibi menü altında boşluk bırakma */
-    padding-bottom: calc(env(safe-area-inset-bottom) + 120px) !important;
-}
-
-/* 2. İÇERİK ALANLARININ KİLİDİNİ AÇMA */
-.vertical-list {
-    display: block !important; 
-    height: auto !important;
-    overflow: visible !important; /* Kaydırmayı body'ye devrettik */
-}
-
-.tab-content {
-    display: none;
-    height: auto !important; 
-    overflow-y: visible !important; /* Kutu içi kaydırma iptal */
-    padding-bottom: 0 !important; 
-}
-.tab-content.active {
-    display: block !important;
-}
-
-/* 3. ALT MENÜYÜ FİNANS PROJESİ GİBİ ÇİVİLEME */
-.bottom-nav {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    margin: 0 !important;
-    border-radius: 28px 28px 0 0 !important;
-    
-    /* İŞTE BURASI: Ekstra 16px boşluğu sildik! 
-       Sadece üstten 14px boşluk verdik, alt tarafı direkt iPhone çizgisine (safe-area) yasladık */
-    padding: 14px 5px env(safe-area-inset-bottom) !important;
-    height: auto !important;
-    
-    z-index: 99999 !important;
-    transform: translateZ(0) !important; 
-}
-
-/* 4. BAŞLIK KAYMASINI VE KALINLIĞI ÇÖZME */
-.sticky-top-wrapper {
-    /* Kenar boşluklarını daraltıp isme yer açıyoruz */
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-}
-
-.app-title {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-wrap: nowrap !important; /* ASLA ALT SATIRA GEÇME EMRİ */
-    font-size: 18px !important;
-    gap: 5px !important;
-}
-
-#greetingText {
-    font-weight: 900 !important; /* Günüm kapkalın */
-    white-space: nowrap !important;
-    font-size: 18px !important;
-}
-
-.name-tag {
-    white-space: nowrap !important; /* İsim tek satırda kalır */
-    font-size: 18px !important;
+    @keyframes premiumPulseDark { 0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.2); } 50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); } }
 }
