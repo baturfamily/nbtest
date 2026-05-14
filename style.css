@@ -83,13 +83,27 @@ body {
 .tab-content.active { display: flex; }
 @keyframes spatialZoom { from { opacity: 0; transform: scale(0.98) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-/* --- ALT NAVİGASYON --- */
+/* --- ALT NAVİGASYON: YAPIŞIK (DOCKED) TASARIM --- */
 .bottom-nav {
-    position: fixed; bottom: 25px; left: 20px; right: 20px; height: 76px;
+    position: fixed; 
+    bottom: 0; /* En alta sıfırladık */
+    left: 0;   /* Kenar boşluklarını kaldırdık */
+    right: 0; 
+    height: auto; /* Yüksekliği içeriğe ve paddinge bıraktık */
+    padding-top: 12px;
+    /* iPhone alt çizgisi için güvenli alan (Safe Area) ekledik */
+    padding-bottom: calc(12px + env(safe-area-inset-bottom)); 
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-    border-radius: 38px; display: flex; justify-content: space-around; align-items: center;
-    border: var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* Sadece üst köşeleri yuvarlatarak bütünlük sağladık */
+    border-radius: 24px 24px 0 0; 
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center;
+    border-top: var(--glass-border); 
+    box-shadow: 0 -5px 30px rgba(0,0,0,0.06); 
+    z-index: 1000;
 }
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%; position: relative; }
 .nav-item.active { color: var(--purple); }
@@ -422,13 +436,28 @@ body {
 
 /* --- DARK MODE: TAM UYUM VE PREMIUM DOKUNUŞLAR --- */
 @media (prefers-color-scheme: dark) {
-    /* 1. Alt Sekmeler (Navbar) */
+    /* 1. Alt Sekmeler (Navbar) - Aşağıya Tam Oturan Tasarım */
     .bottom-nav {
-        background: rgba(15, 23, 42, 0.8) !important;
+        background: rgba(15, 23, 42, 0.95) !important; /* Daha dolgun bir koyuluk */
         backdrop-filter: blur(20px) saturate(180%);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+        
+        /* Kenar boşluklarını sıfırlayıp alta yapıştırıyoruz */
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        
+        /* Sadece üst köşeler kavisli, alt düz */
+        border-radius: 24px 24px 0 0 !important; 
+        
+        /* iPhone alt çizgisi için güvenli alan */
+        padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        
+        border: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
     }
     
     .nav-item {
@@ -454,16 +483,16 @@ body {
         border-left: 4px solid #8B5CF6 !important;
     }
 
-    /* 3. DOKTOR RAPORU BUTONU (Sınıf ismi rapor-btn olarak düzeltildi) */
+    /* 3. DOKTOR RAPORU BUTONU */
     .rapor-btn {
-        background: #1E293B !important; /* Koyu lacivert zemin */
-        color: #FFFFFF !important; /* Beyaz yazı */
+        background: #1E293B !important;
+        color: #FFFFFF !important;
         border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
     }
     
     .rapor-btn svg {
-        stroke: #A78BFA !important; /* Mor ikon */
+        stroke: #A78BFA !important;
     }
 
     .rapor-btn:active {
