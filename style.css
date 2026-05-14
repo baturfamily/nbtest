@@ -500,3 +500,26 @@ body {
         50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
     }
 }
+
+/* Navigasyonu tüm sekmelerde en alta çiviler */
+.bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 99999 !important; /* Diğer her şeyin üstünde kalması için */
+    transform: translateZ(0); /* iOS kaydırma hatalarını önlemek için */
+}
+
+/* Tüm sekmelerin (Analiz, Arşiv) kaydırılabilir olmasını sağlar */
+.tab-content {
+    height: 100%;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch; /* iPhone'da akıcı kaydırma */
+}
+
+/* Günüm yazısını her koşulda kalın yapar */
+#greetingText, .greeting {
+    font-weight: 900 !important;
+    font-style: normal !important;
+}
