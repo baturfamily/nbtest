@@ -171,7 +171,7 @@ body {
     width: 100% !important;
     display: block !important;
 }
-.diary-card.collapsed .diary-ai-box { display: none; }
+.diary-card.collapsed .diary-ai-box { display: none !important; }
 
 /* --- İSTATİSTİK ÖZETİ BAŞLIKLARI --- */
 .stat-ai-summary { padding: 4px; font-size: 17px; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--purple); padding-left: 14px; }
