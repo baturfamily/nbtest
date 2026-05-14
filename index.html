@@ -161,15 +161,29 @@
     <script src="script.js"></script>
 
     <script>
-        function switchTab(tabId, btn) {
+                function switchTab(tabId, btn) {
+            // 1. Tüm sekmelerin ve butonların aktifliğini kaldır
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             
-            document.getElementById(tabId).classList.add('active');
+            // 2. Tıklanan sekmeyi ve butonu aktif yap
+            const target = document.getElementById(tabId);
+            if(target) target.classList.add('active');
             btn.classList.add('active');
             
-            if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
-                setTimeout(grafikCiz, 100);
+            // 3. Sekmelere geri dönüldüğünde içerikleri zorla tekrar çizdir
+            if(tabId === 'tab-day') {
+                // Günüm sekmesine dönünce ilaç listesini tazele
+                if(typeof ekraniCiz === 'function') ekraniCiz();
+            } 
+            else if(tabId === 'tab-analysis') {
+                // Analiz sekmesine dönünce raporu ve grafiği tazele
+                if(typeof renderHealthDiary === 'function') renderHealthDiary();
+                if(typeof grafikCiz === 'function') setTimeout(grafikCiz, 100);
+            } 
+            else if(tabId === 'tab-archive') {
+                // Arşiv sekmesine dönünce özet kartlarını tazele
+                if(typeof istatistikleriCiz === 'function') istatistikleriCiz();
             }
         }
 
