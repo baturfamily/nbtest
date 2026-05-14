@@ -146,7 +146,13 @@ body {
 
 /* --- KARTLAR --- */
 .premium-card { background: var(--card); border-radius: 24px; padding: 20px; border: 1px solid var(--card-border); margin-bottom: 14px; box-shadow: var(--card-shadow); transition: transform 0.2s ease, box-shadow 0.2s ease; flex-shrink: 0; }
-.vertical-list { display: flex; flex-direction: column; gap: 10px; flex: 1; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; -webkit-overflow-scrolling: touch; } 
+.vertical-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Header ve Nav arasında kalan tüm alanı kaplar */
+    min-height: 0; /* Flexbox içinde kaydırma için kritik satır */
+    overflow: hidden; /* Dışarıdan taşmayı engeller, içindeki sekmeler kayar */
+} 
 .vertical-list::-webkit-scrollbar { display: none; }
 
 /* --- HAVA DURUMU --- */
