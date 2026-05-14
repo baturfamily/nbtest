@@ -510,10 +510,20 @@ body {
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    z-index: 99999 !important; /* En üstte kalmasını garanti eder */
-    /* iOS'un render hatasını önlemek için donanım hızlandırmayı zorla: */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    width: 100% !important;
+    margin: 0 !important;
+    z-index: 99999 !important; /* Diğer her şeyin üzerinde kalması için */
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 28px 28px 0 0 !important;
+    padding-top: 18px !important;
+    /* iPhone alt çubuğu boşluğu */
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    /* iOS'un objeyi havada bırakma hatasını ezen nükleer kod: */
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
 }
 
 /* Tüm sekmelerin (Analiz, Arşiv) kaydırılabilir olmasını sağlar */
