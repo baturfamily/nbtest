@@ -59,14 +59,20 @@
   }
 }
 
-html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+html { 
+    scroll-behavior: smooth; 
+    -webkit-tap-highlight-color: transparent;
+    height: -webkit-fill-available; /* iOS Tam Ekran Kilidi */
+}
+
 * { box-sizing: border-box; font-family: 'Inter', sans-serif !important; }
+
 body { 
     margin: 0; background: var(--bg); background-image: var(--bg-mesh); color: var(--text); 
     padding: 0; 
-    /* LANET OLASI POSITION: FIXED SATIRI BURADAN SİLİNDİ! */
-    min-height: -webkit-fill-available; /* iOS Tam Ekran Kilidi Eklendi */
-    height: 100dvh; width: 100vw; display: flex; flex-direction: column; overflow: hidden; 
+    min-height: 100vh;
+    min-height: -webkit-fill-available; /* iOS Tam Ekran Kilidi (Havada asılı kalmayı önler) */
+    width: 100vw; display: flex; flex-direction: column; overflow: hidden; 
     -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s;
     -webkit-user-select: none; user-select: none; overscroll-behavior-y: none;
 }
@@ -76,10 +82,10 @@ body {
     display: none; 
     flex-direction: column; 
     padding: 16px; 
-    padding-bottom: 160px; /* Alttaki navbara çarpmaması için boşluk */
+    padding-bottom: 160px;
     overflow-y: auto; 
-    flex: 1; /* Yüksekliği dinamik doldurması için */
-    -webkit-overflow-scrolling: touch; /* iOS'ta akıcı kaydırma için */
+    flex: 1; 
+    -webkit-overflow-scrolling: touch; 
     animation: spatialZoom 0.3s ease-out; 
 }
 .tab-content.active { display: flex; }
@@ -106,7 +112,10 @@ body {
     border: none !important;
     border-top: 1px solid rgba(0,0,0,0.05) !important;
     box-shadow: 0 -10px 40px rgba(0,0,0,0.05) !important;
-    z-index: 9999 !important;
+    z-index: 99999 !important;
+    /* iOS'un objeleri havada bırakma bug'ını sıfırlar */
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important; 
 }
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%; position: relative; }
 .nav-item.active { color: var(--purple); }
@@ -125,13 +134,10 @@ body {
 .header-compact { text-align: center; background: var(--vip-bg); padding: 18px 16px; border-radius: 24px; border: 1px solid var(--line); box-shadow: var(--vip-shadow); user-select: none; transition: transform 0.15s ease; }
 .header-compact:active { transform: scale(0.98); }
 .app-title { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
-/* GÜNÜM YAZISINI KALINLAŞTIRAN KOD BURADA */
-.app-title .greeting { 
-    font-size: 18px; 
-    font-weight: 900 !important; /* En kalın ayar */
-    opacity: 1 !important;
-    color: #FFFFFF !important;
-}
+
+/* GÜNÜM YAZISINI DİREKT ID İLE KALINLAŞTIRAN KOD (KESİN ÇÖZÜM) */
+#greetingText { font-size: 18px !important; font-weight: 900 !important; opacity: 1 !important; color: #FFFFFF !important; }
+
 .app-title .name-tag { font-size: 21px; font-weight: 700; white-space: nowrap; color: #fff; }
 .header-sub { font-size: 13px; color: rgba(255, 255, 255, 0.8); font-weight: 500; margin-bottom: 12px; }
 .header-info { display: flex; justify-content: center; align-items: center; gap: 12px; }
@@ -428,18 +434,6 @@ body {
     color: var(--text) !important; 
 }
 
-/* Telefon Karanlık Moda Geçtiğinde Çalışacak Özel Renkler */
-@media (prefers-color-scheme: dark) {
-    .diary-ai-box { 
-        background-color: rgba(139, 92, 246, 0.12) !important; /* Karanlıkta daha belirgin, şık mor arka plan */
-        color: #F1F5F9 !important; /* Yazılar karanlıkta daha parlak ve okunabilir beyaz */
-    }
-    .stat-ai-summary {
-        background-color: rgba(139, 92, 246, 0.12) !important; /* Arşiv kartlarındaki kutuyu da karanlığa uyarladık */
-        color: #F1F5F9 !important;
-    }
-}
-
 /* --- DARK MODE: TAM UYUM VE PREMIUM DOKUNUŞLAR --- */
 @media (prefers-color-scheme: dark) {
     /* 1. Alt Sekmeler (Navbar) - Aşağıya Tam Oturan Tasarım */
@@ -457,10 +451,19 @@ body {
         border: none !important;
         border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
+        /* Karanlık modda da havada asılı kalmayı önler */
+        -webkit-transform: translateZ(0) !important;
+        transform: translateZ(0) !important;
     }
     
     .nav-item { color: #94A3B8 !important; }
     .nav-item.active { color: #A78BFA !important; }
+
+    /* Analiz Kutuları */
+    .diary-ai-box, .stat-ai-summary { 
+        background-color: rgba(139, 92, 246, 0.12) !important; 
+        color: #F1F5F9 !important; 
+    }
 
     /* 2. Okunmamış Arşiv Kartları */
     .unread-premium-card {
