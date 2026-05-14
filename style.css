@@ -83,26 +83,28 @@ body {
 .tab-content.active { display: flex; }
 @keyframes spatialZoom { from { opacity: 0; transform: scale(0.98) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-/* --- ALT NAVİGASYON: YAPIŞIK (DOCKED) TASARIM --- */
 .bottom-nav {
     position: fixed; 
-    bottom: 0; /* En alta sıfırladık */
-    left: 0;   /* Kenar boşluklarını kaldırdık */
-    right: 0; 
-    height: auto; /* Yüksekliği içeriğe ve paddinge bıraktık */
+    bottom: 0 !important; /* Kesinlikle en alt */
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto; 
     padding-top: 12px;
-    /* iPhone alt çizgisi için güvenli alan (Safe Area) ekledik */
+    /* iPhone alt çizgisi için güvenli boşluk */
     padding-bottom: calc(12px + env(safe-area-inset-bottom)); 
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    /* Sadece üst köşeleri yuvarlatarak bütünlük sağladık */
-    border-radius: 24px 24px 0 0; 
+    /* Sadece üst köşeler kavisli, alt taraf dümdüz ve yapışık */
+    border-radius: 28px 28px 0 0 !important; 
     display: flex; 
     justify-content: space-around; 
     align-items: center;
-    border-top: var(--glass-border); 
-    box-shadow: 0 -5px 30px rgba(0,0,0,0.06); 
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.05); 
     z-index: 1000;
 }
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%; position: relative; }
@@ -434,25 +436,26 @@ body {
     }
 }
 
-/* --- DARK MODE: TAM UYUM VE PREMIUM DOKUNUŞLAR --- */
+/* --- STYLE-8.CSS DOSYASININ EN SONUNA BU BLOĞU YAPIŞTIRIN --- */
+
 @media (prefers-color-scheme: dark) {
-    /* 1. Alt Sekmeler (Navbar) - Aşağıya Tam Oturan Tasarım */
+    /* 1. Alt Sekmeler (Navbar) - Alta Tam Yapışan Tasarım */
     .bottom-nav {
-        background: rgba(15, 23, 42, 0.95) !important; /* Daha dolgun bir koyuluk */
+        background: rgba(15, 23, 42, 0.98) !important; /* Derin gece mavisi */
         backdrop-filter: blur(20px) saturate(180%);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
         
-        /* Kenar boşluklarını sıfırlayıp alta yapıştırıyoruz */
+        /* Ekranın en altına ve yanlarına sıfırlama */
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
         margin: 0 !important;
         width: 100% !important;
         
-        /* Sadece üst köşeler kavisli, alt düz */
+        /* Alt köşeler düz, sadece üst köşeler kavisli */
         border-radius: 24px 24px 0 0 !important; 
         
-        /* iPhone alt çizgisi için güvenli alan */
+        /* iPhone'un alt çizgisi için güvenli boşluk */
         padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
         
         border: none !important;
@@ -461,22 +464,14 @@ body {
     }
     
     .nav-item {
-        color: #94A3B8 !important;
+        color: #94A3B8 !important; /* Sönük gri mavi */
     }
     
     .nav-item.active {
-        color: #A78BFA !important;
+        color: #A78BFA !important; /* Canlı lavanta moru */
     }
 
-    /* 2. Okunmamış Arşiv Kartları */
-    .unread-premium-card {
-        background: #1E293B !important;
-        border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
-        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
-        animation: premiumPulseDark 4s infinite !important;
-    }
-
-    /* Arşiv ve Analiz Kutularının İçeriği */
+    /* 2. Arşiv ve Analiz Kartları İçeriği */
     .stat-ai-summary, .diary-ai-box {
         background-color: rgba(139, 92, 246, 0.12) !important;
         color: #E2E8F0 !important;
@@ -495,18 +490,20 @@ body {
         stroke: #A78BFA !important;
     }
 
-    .rapor-btn:active {
-        background: #0F172A !important;
-        transform: scale(0.96);
+    /* 4. Okunmamış Premium Kart Stili */
+    .unread-premium-card {
+        background: #1E293B !important;
+        border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
+        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
+        animation: premiumPulseDark 4s infinite !important;
     }
 
-    /* 4. Genel Kart Başlıkları */
+    /* 5. Yazı Renkleri */
     .unread-premium-card .drug-name, 
     .unread-premium-card .diary-title {
         color: #FFFFFF !important;
     }
 
-    /* Karanlık Mod İçin Özel Nabız Animasyonu */
     @keyframes premiumPulseDark {
         0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
         50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
