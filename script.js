@@ -161,12 +161,8 @@ function rastgeleAciklama(ilacAdi) {
 function manuelYenile() {
     if(fetchDevamEdiyor) return;
     const uText = document.getElementById('update-text');
-    const syncI = document.getElementById('sync-icon');
     if(uText) { uText.innerHTML = `${svgWait} Veriler Tazeleniyor...`; uText.style.color = "#4ade80"; }
-    if(syncI) syncI.classList.add("spin");
-    const syncElement = document.getElementById('last-sync');
-    if(syncElement) { syncElement.innerHTML = `${svgSync} Tazeleniyor...`; syncElement.style.color = "var(--vip-gold)"; }
-    sonBasariZamani = 0;
+    sonBasariZamani = 0; // Bu sıfırlama, otomatik olarak saniyeTiktak'taki dönen ikonu tetikler
     veriCek();
     fetchWeather();
 }
@@ -679,9 +675,7 @@ async function veriCek() {
     } finally {
         fetchDevamEdiyor = false; 
         const uText = document.getElementById('update-text');
-        if(uText) uText.innerHTML = `Güncellemek İçin Aşağı Kaydırın`;
-        const syncI = document.getElementById('sync-icon');
-        if(syncI) syncI.classList.remove("spin");
+        if(uText) { uText.innerHTML = `Güncellemek İçin Aşağı Kaydırın`; uText.style.color = "rgba(255, 255, 255, 0.8)"; }
     }
 }
 
