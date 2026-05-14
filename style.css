@@ -74,29 +74,30 @@ body {
     display: none; 
     flex-direction: column; 
     padding: 16px; 
-    padding-bottom: 180px; 
+    padding-bottom: 160px; /* Alttaki navbara çarpmaması için boşluk */
     overflow-y: auto; 
-    flex: 1; 
-    -webkit-overflow-scrolling: touch; 
+    flex: 1; /* Yüksekliği dinamik doldurması için */
+    -webkit-overflow-scrolling: touch; /* iOS'ta akıcı kaydırma için */
     animation: spatialZoom 0.3s ease-out; 
 }
 .tab-content.active { display: flex; }
 @keyframes spatialZoom { from { opacity: 0; transform: scale(0.98) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-/* --- ALT MENÜ (BOTTOM NAV) - DÜZELTİLMİŞ HALİ --- */
 .bottom-nav {
-    position: fixed !important; 
-    bottom: 0 !important; 
+    position: fixed; 
+    bottom: 0 !important; /* Kesinlikle en alt */
     left: 0 !important;
     right: 0 !important;
     margin: 0 !important;
     width: 100% !important;
     height: auto; 
     padding-top: 12px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important; 
+    /* iPhone alt çizgisi için güvenli boşluk */
+    padding-bottom: calc(12px + env(safe-area-inset-bottom)); 
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* Sadece üst köşeler kavisli, alt taraf dümdüz ve yapışık */
     border-radius: 28px 28px 0 0 !important; 
     display: flex; 
     justify-content: space-around; 
@@ -116,6 +117,7 @@ body {
     position: relative; 
     z-index: 100; 
     flex-shrink: 0; 
+    /* KRİTİK EKLEME: Üst bölgeyi uygulamanın ana rengiyle doldurur */
     background: var(--bg); 
     padding: max(12px, env(safe-area-inset-top)) 16px 8px 16px; 
     transition: background 0.3s ease;
@@ -138,7 +140,7 @@ body {
 /* --- HAVA DURUMU --- */
 .ios-weather-card { 
     padding: 22px; 
-    transition: background-color 0.8s ease; 
+    transition: background-color 0.8s ease; /* Zemin rengi değişirken yumuşak geçiş yapar */
 }
 .ios-w-top { display: flex; justify-content: space-between; align-items: center; }
 .ios-w-city { font-size: 13px; font-weight: 700; color: var(--muted); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; width: 85px; line-height: 1.4; }
@@ -160,7 +162,7 @@ body {
 .shield-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); animation: pulse-soft 3s ease-in-out infinite; }
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.92; } }
 
-/* --- ASİSTAN GÜNLÜĞÜ --- */
+/* --- ASİSTAN GÜNLÜĞÜ (KRİTİK DÜZELTME YAPILDI) --- */
 .diary-card { 
     padding: 22px 24px; 
     border-radius: 28px; 
@@ -172,6 +174,7 @@ body {
     position: relative;
     z-index: 1;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* KRİTİK: Başlık ve Metnin alt alta gelmesini garantiliyoruz */
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
@@ -180,7 +183,7 @@ body {
 .diary-ai-box { 
     width: 100% !important;
     margin-top: 18px; 
-    padding: 14px 18px;
+    padding: 14px 14px 14px 18px;
     border-left: 4px solid var(--purple);
     background: rgba(139, 92, 246, 0.04);
     border-radius: 0 12px 12px 0;
@@ -191,44 +194,96 @@ body {
     text-align: left;
     display: block !important;
 }
-.diary-card.collapsed .diary-ai-box { display: none !important; }
+.diary-card.collapsed::before { display: none; }
 .diary-card:active { transform: scale(0.98); }
 
-.diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; }
+.diary-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 8px;
+    width: 100%;
+}
 .diary-title { font-size: 20px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
 .diary-title svg { color: var(--purple); }
 .diary-toggle-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #F1F5F9; font-size: 11px; color: var(--muted); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s; }
 .diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); background: rgba(139, 92, 246, 0.1); color: var(--purple); } 
 
-/* --- İSTATİSTİK VE İLAÇLAR --- */
+.diary-ai-box { 
+    margin-top: 18px; 
+    padding-top: 18px; 
+    border-top: 1px solid var(--line); 
+    font-size: 17.5px; 
+    font-weight: 500; 
+    color: var(--text); 
+    line-height: 1.65;
+    /* KRİTİK: Metnin tam genişlik kaplamasını sağlıyoruz */
+    width: 100% !important;
+    display: block !important;
+}
+.diary-card.collapsed .diary-ai-box { display: none !important; }
+
+/* --- İSTATİSTİK ÖZETİ BAŞLIKLARI --- */
 .stat-ai-summary { 
-    padding: 14px 18px;
+    padding: 14px 14px 14px 18px; /* Rengin içinde yazının ferah durması için boşlukları artırdık */
     font-size: 17px; 
     font-weight: 500; 
     line-height: 1.6; 
     color: var(--text); 
     margin-bottom: 16px; 
     border-left: 4px solid var(--purple); 
-    background: rgba(139, 92, 246, 0.04);
-    border-radius: 0 12px 12px 0;
+    background: rgba(139, 92, 246, 0.04); /* İşte o sevdiğin hafif pembe/mor arka plan rengi */
+    border-radius: 0 12px 12px 0; /* Sağ köşeleri modern bir şekilde yuvarlattık */
 }
 .stat-ai-summary strong { color: var(--purple); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
 
+/* --- İLAÇ KARTI (OKUMA PANELİ) --- */
 .card { display: flex; flex-direction: column; padding: 20px; margin-bottom: 14px; cursor: pointer;} 
-.card.done-card { border-color: var(--done-border); background: var(--done-bg); }
-.card-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 16px; width: 100%; }
+.card.done-card { border-color: var(--done-border); background: var(--done-bg); box-shadow: none; }
+.card-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 16px; width: 100%; padding: 4px 0; }
 
 .drug-name { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 12px; margin: 0; color: var(--text); letter-spacing: -0.3px;}
-.badge { padding: 6px 14px; border-radius: 100px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.drug-name svg, .card-icon { background: rgba(100, 116, 139, 0.08); padding: 6px; border-radius: 12px; color: var(--muted); width: 34px; height: 34px; box-sizing: border-box; }
+.done-card .drug-name svg { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
+
+.badge { padding: 6px 14px; border-radius: 100px; font-weight: 600; font-size: 13px; margin: 0; display: flex; align-items: center; gap: 6px; letter-spacing: 0; }
 .badge-safe { background: rgba(16, 185, 129, 0.12); color: var(--accent); } 
+.badge-wait { background: var(--wait-badge-bg); color: var(--wait-badge-text); } 
+.badge-warning { background: rgba(245, 158, 11, 0.12); color: var(--warning); } 
+.badge-danger { background: rgba(251, 113, 133, 0.15); color: var(--danger); } 
+.exp-arrow { transition: transform 0.3s ease; display: inline-block; font-size: 10px; } 
+.card.collapsed .exp-arrow { transform: rotate(180deg); } 
+
+.check-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--muted); flex-shrink: 0; background: var(--card); opacity: 0.6; }
 .check-icon.done { background-color: var(--accent); border-color: var(--accent); color: white; opacity: 1; }
+.check-icon svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
 
+.meds-container { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 0; transition: opacity 0.3s; }
 .history-item { display: flex; align-items: flex-start; padding: 16px 0; border-bottom: 1px dashed var(--line); gap: 14px;} 
-.drug-title { font-size: 19px; font-weight: 600; color: var(--text); } 
-.drug-purpose { font-size: 16px; color: var(--muted); font-weight: 400; }
+.history-item:last-child { border-bottom: none; }
+.history-item.is-done .drug-title { text-decoration: line-through; color: var(--muted); }
+.history-item.is-done .drug-purpose { color: var(--muted); opacity: 0.6; }
 
-/* --- RAPOR VE BUTON --- */
-.rapor-btn { background: var(--text); color: var(--card); padding: 18px 20px; border: none; border-radius: 20px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 8px; margin-bottom: 24px; width: 100%; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); transition: transform 0.2s ease;}
+.med-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.drug-title { font-size: 19px; font-weight: 600; color: var(--text); line-height: 1.3; } 
+.drug-purpose { font-size: 16px; color: var(--muted); font-weight: 400; line-height: 1.5; margin-top: 2px; }
+
+.card.collapsed .meds-container { display: none; } 
+.card.collapsed .card-header { margin-bottom: 0; }
+
+.late-card { border-color: rgba(244, 63, 94, 0.3) !important; animation: latePulse-soft 3s infinite; }
+@keyframes latePulse-soft { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.1); } 70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
+
+/* İstatistik Satırları */
+.stat-row { padding: 12px 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between;}
+.stat-row:last-child { border-bottom: none; }
+.stat-date { font-weight: 700; font-size: 14px; width: 65px; color: var(--text); }
+.stat-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.stat-status { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+.stat-missed-list { font-size: 12.5px; font-weight: 500; opacity: 0.9; }
+
+/* --- BUTON VE RAPOR ALANI --- */
+.rapor-btn { background: var(--text); color: var(--card); padding: 18px 20px; border: none; border-radius: 20px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 8px; margin-bottom: 24px; width: 100%; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); flex-shrink:0; transition: transform 0.2s ease;}
 .rapor-btn:active { transform: scale(0.97); }
 
 #print-report-area { display: none; }
@@ -238,19 +293,37 @@ body {
   @page { margin: 10mm; } 
   html, body { position: static !important; overflow: visible !important; height: auto !important; width: auto !important; display: block !important; background: white !important; padding: 0 !important; margin: 0 !important; }
   body > :not(#print-report-area) { display: none !important; }
-  #print-report-area { display: block !important; width: 100% !important; padding: 10px !important; color: #000 !important; }
+  #print-report-area { display: block !important; position: relative !important; width: 100% !important; padding: 10px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; color: #000 !important; font-size: 12px !important; }
+  .rap-baslik { font-size: 20px; font-weight: bold; text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 16px; color: #111; }
+  .rap-bolum { margin-bottom: 16px; } 
+  .rap-bolum h3 { font-size: 15px; border-bottom: 2px solid #ccc; padding-bottom: 4px; margin-bottom: 8px; color: #222; }
+  .rap-tablo { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 4px; } 
+  .rap-tablo th, .rap-tablo td { border: 1px solid #000; padding: 5px; text-align: center; }
+  .rap-tablo th { background-color: #eaeaea; font-weight: bold; } 
+  .ai-rapor-kutu { background-color: #f8f9fa; border-left: 4px solid #007aff; padding: 10px; margin-top: 8px; font-size: 12px; line-height: 1.5; border-radius: 4px; text-align: left !important; }
+  .ai-rapor-kutu * { text-align: left !important; }
 }
 
-/* --- SAĞLIK TREND GRAFİĞİ --- */
+/* --- SAĞLIK TREND GRAFİĞİ STİLLERİ --- */
 .chart-container-wrapper { padding: 22px; margin-bottom: 14px; background: var(--card); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
+.chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.chart-title { font-size: 18px; font-weight: 700; color: var(--text); margin: 0; display: flex; align-items: center; letter-spacing: -0.3px; }
 .chart-area { width: 100%; height: 240px; position: relative; } 
+.chart-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--line); }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.pain { background-color: #F43F5E; } 
+.dot.sleep { background-color: #3B82F6; } 
 
 /* --- ULTRA-PREMIUM "LIVING GLOW" SİSTEMİ --- */
 .unread-premium-card {
     position: relative;
     z-index: 1;
     border: 1px solid rgba(139, 92, 246, 0.4) !important;
+    background: #FFFFFF;
     animation: premiumPulse 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    transition: all 0.5s ease;
+    overflow: visible !important; 
 }
 
 .unread-premium-card::after {
@@ -264,59 +337,175 @@ body {
     filter: blur(16px); 
     opacity: 0;
     animation: magicGlow 4s ease infinite;
+    pointer-events: none;
     display: block !important;
 }
 
-@keyframes magicGlow { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.5; } }
-@keyframes premiumPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015); background-color: #FDFBFF; } }
+@keyframes magicGlow {
+    0% { opacity: 0.1; background-position: 0% 50%; }
+    50% { opacity: 0.5; background-position: 100% 50%; }
+    100% { opacity: 0.1; background-position: 0% 50%; }
+}
 
+@keyframes premiumPulse {
+    0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
+    50% { 
+        transform: scale(1.015); 
+        box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15);
+        background-color: #FDFBFF; 
+    }
+    100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
+}
+
+/* Rozetler */
 .premium-new-badge {
     background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-    color: white; padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 800;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    border: 1px solid rgba(255,255,255,0.3);
 }
+
+.premium-new-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: dotPulse 2s infinite ease-in-out;
+}
+
+@keyframes dotPulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* SYNC İKONU */
+@keyframes spin-anim { 100% { transform: rotate(360deg); } }
+.spin { display: inline-block; animation: spin-anim 1s linear infinite; }
 
 /* --- ALT SEKME BİLDİRİM NOKTASI --- */
 .nav-item.unread-indicator::after {
-    content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-    width: 6px; height: 6px; background: #8B5CF6; border-radius: 50%;
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
     animation: dotBreath 2s infinite ease-in-out;
 }
-@keyframes dotBreath { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
 
-/* --- KARANLIK MOD (FINAL DOKUNUŞLAR) --- */
+@keyframes dotBreath {
+    0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(0.8); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+}
+
+/* --- GÜNÜN ANALİZİ KARTI KARANLIK MOD DÜZELTMELERİ --- */
+.diary-card { 
+    background-color: var(--card) !important; 
+    color: var(--text) !important;
+}
+.diary-title { 
+    color: var(--text) !important; 
+}
+.diary-ai-box { 
+    background-color: rgba(139, 92, 246, 0.04); 
+    color: var(--text) !important; 
+}
+
+/* Telefon Karanlık Moda Geçtiğinde Çalışacak Özel Renkler */
 @media (prefers-color-scheme: dark) {
+    .diary-ai-box { 
+        background-color: rgba(139, 92, 246, 0.12) !important; /* Karanlıkta daha belirgin, şık mor arka plan */
+        color: #F1F5F9 !important; /* Yazılar karanlıkta daha parlak ve okunabilir beyaz */
+    }
+    .stat-ai-summary {
+        background-color: rgba(139, 92, 246, 0.12) !important; /* Arşiv kartlarındaki kutuyu da karanlığa uyarladık */
+        color: #F1F5F9 !important;
+    }
+}
+
+/* --- STYLE-8.CSS DOSYASININ EN SONUNA BU BLOĞU YAPIŞTIRIN --- */
+
+@media (prefers-color-scheme: dark) {
+    /* 1. Alt Sekmeler (Navbar) - Alta Tam Yapışan Tasarım */
     .bottom-nav {
-        background: rgba(15, 23, 42, 0.98) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: rgba(15, 23, 42, 0.98) !important; /* Derin gece mavisi */
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        
+        /* Ekranın en altına ve yanlarına sıfırlama */
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        border-radius: 28px 28px 0 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        
+        /* Alt köşeler düz, sadece üst köşeler kavisli */
+        border-radius: 24px 24px 0 0 !important; 
+        
+        /* iPhone'un alt çizgisi için güvenli boşluk */
         padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        
+        border: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
     }
     
-    .nav-item { color: #94A3B8 !important; }
-    .nav-item.active { color: #A78BFA !important; }
+    .nav-item {
+        color: #94A3B8 !important; /* Sönük gri mavi */
+    }
+    
+    .nav-item.active {
+        color: #A78BFA !important; /* Canlı lavanta moru */
+    }
 
-    .diary-ai-box, .stat-ai-summary { 
+    /* 2. Arşiv ve Analiz Kartları İçeriği */
+    .stat-ai-summary, .diary-ai-box {
         background-color: rgba(139, 92, 246, 0.12) !important;
-        color: #F1F5F9 !important;
+        color: #E2E8F0 !important;
         border-left: 4px solid #8B5CF6 !important;
     }
 
+    /* 3. DOKTOR RAPORU BUTONU */
     .rapor-btn {
         background: #1E293B !important;
         color: #FFFFFF !important;
         border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
     }
-    .rapor-btn svg { stroke: #A78BFA !important; }
+    
+    .rapor-btn svg {
+        stroke: #A78BFA !important;
+    }
 
+    /* 4. Okunmamış Premium Kart Stili */
     .unread-premium-card {
         background: #1E293B !important;
         border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
+        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
         animation: premiumPulseDark 4s infinite !important;
     }
-    @keyframes premiumPulseDark { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); } }
-    
-    .unread-premium-card .drug-name, .unread-premium-card .diary-title { color: #FFFFFF !important; }
+
+    /* 5. Yazı Renkleri */
+    .unread-premium-card .drug-name, 
+    .unread-premium-card .diary-title {
+        color: #FFFFFF !important;
+    }
+
+    @keyframes premiumPulseDark {
+        0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+        50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
+    }
 }
