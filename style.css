@@ -539,41 +539,29 @@ body {
     font-style: normal !important;
 }
 
-/* --- SADECE HATALARI DÜZELTEN EK KODLAR (HİÇBİR ŞEY SİLMEYİN) --- */
+/* --- iPHONE PWA KESİN DÜZELTME PAKETİ --- */
 
-/* 1. iPhone PWA Modunda Ekranın Tam Oturması İçin */
-html, body {
-    height: 100% !important;
-    min-height: 100% !important;
-    overflow: hidden !important; /* Dış ekranın kaymasını engeller */
-}
-
-/* 2. Günüm Yazısını Her Koşulda Kalın Yap */
+/* 1. Günüm Yazısını Kapkalın Yapma */
 #greetingText, .greeting {
     font-weight: 900 !important;
-    opacity: 1 !important;
-    color: #FFFFFF !important;
     -webkit-font-smoothing: antialiased;
+    display: inline-block !important;
 }
 
-/* 3. "Nurten Hanım" Yazısının Aşağı Kaymasını Engelle (Genişletme) */
-.sticky-top-wrapper {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-}
-
-.header-compact {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-}
-
+/* 2. Nurten Hanım Yazısının Kaymasını Engelleme */
 .app-title {
-    font-size: 19px !important; /* Yazıyı çok hafif küçülterek sığdırıyoruz */
-    flex-wrap: nowrap !important; /* Yan yana kalmaya zorlar */
-    white-space: nowrap !important;
+    flex-wrap: nowrap !important; /* Alt satıra geçmeyi yasaklar */
+    justify-content: center !important;
+    gap: 4px !important;
+    width: 100% !important;
 }
 
-/* 4. Alt Sekmeleri En Alta Mühürle (PWA Havada Kalma Sorunu) */
+.name-tag {
+    white-space: nowrap !important; /* İsmi tek satırda tutar */
+    font-size: 19px !important; /* Sığması için çok hafif küçültme */
+}
+
+/* 3. Sekmeleri En Alta Mühürleme (Okyanus Boşluğunu Kapatma) */
 .bottom-nav {
     position: fixed !important;
     bottom: 0 !important;
@@ -581,21 +569,27 @@ html, body {
     right: 0 !important;
     width: 100% !important;
     margin: 0 !important;
-    /* Alt köşeler düz olmalı ki boşluk kalmasın */
-    border-radius: 28px 28px 0 0 !important; 
+    /* Alt köşeler 0 olmalı ki ekranın dibine tam otursun */
+    border-radius: 24px 24px 0 0 !important; 
+    /* iPhone alt çentiği için pay bırakır */
     padding-bottom: env(safe-area-inset-bottom) !important;
-    /* iOS'un render hatasını ezen grafik hızlandırma: */
-    -webkit-transform: translate3d(0, 0, 0) !important;
-    transform: translate3d(0, 0, 0) !important;
-    z-index: 99999 !important;
+    height: calc(65px + env(safe-area-inset-bottom)) !important;
+    /* iOS'un objeyi havada bırakma bug'ını ezer */
+    -webkit-transform: translate3d(0,0,0) !important;
+    transform: translate3d(0,0,0) !important;
+    z-index: 999999 !important;
 }
 
-/* 5. Karanlık Modda Yapışıklığı Koru */
+/* 4. Sayfayı Kaydırılabilir Yapma (Body Kilitliyken İçerik Aksın) */
+.tab-content {
+    -webkit-overflow-scrolling: touch !important; /* Yağ gibi kayma */
+    padding-bottom: 150px !important; /* Navigasyonun altında kalmasın */
+}
+
+/* 5. Karanlık Modda Yapışıklığı Garantileme */
 @media (prefers-color-scheme: dark) {
     .bottom-nav {
         bottom: 0 !important;
         background: rgba(15, 23, 42, 0.98) !important;
-        -webkit-transform: translate3d(0, 0, 0) !important;
-        transform: translate3d(0, 0, 0) !important;
     }
 }
