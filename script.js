@@ -246,17 +246,15 @@ function renderHealthDiary() {
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
     let isNew = (aiMsg && !aiMsg.includes("değerlendiriliyor") && !aiMsg.includes("güncellenemiyor") && lastReadReport !== aiMsg);
     let pulseClass = isNew ? "unread-premium-card" : "";
-    
-    // Rozeti alt satıra alan yapı
     let badgeHTML = isNew ? `<div style="margin-top:8px;"><span class="premium-new-badge">YENİ</span></div>` : "";
     
     let finalHTML = `
         <div class="diary-card ${pulseClass} collapsed" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}">
             <div class="diary-header" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); document.getElementById('aiDiaryCard').classList.toggle('collapsed');" style="cursor:pointer;">
-                <h3 class="diary-title" id="title-gunluk" style="display: flex; align-items: flex-start; gap: 10px;">
+                <h3 class="diary-title" id="title-gunluk" style="display:flex; align-items:flex-start; gap:10px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                    <div style="display: flex; flex-direction: column;">
-                        <span>Günün Analizi</span>
+                    <div style="display:flex; flex-direction:column;">
+                        Günün Analizi
                         ${badgeHTML}
                     </div>
                 </h3>
@@ -271,7 +269,7 @@ function renderHealthDiary() {
         </div>`;
     const diaryArea = document.getElementById('healthDiaryArea');
     if(diaryArea) diaryArea.innerHTML = finalHTML;
-    setTimeout(updateTabGlows, 100);
+    setTimeout(updateTabGlows, 100); 
 }
 
 window.markStatAsRead = function(statType, cardId) {
