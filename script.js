@@ -610,12 +610,11 @@ function grafikCiz() {
                     beginAtZero: true, 
                     max: 3.2, 
                     ticks: { 
-                        display: true, // Yazıları tekrar açtık
+                        display: true, 
                         stepSize: 1,
-                        color: '#94A3B8', // Çok hafif ve şık bir gri
+                        color: '#94A3B8', 
                         font: { size: 11, weight: '600' },
                         callback: function(value) {
-                            // Rakamları metne çeviren kısım
                             if (value === 0) return 'Yok';
                             if (value === 1) return 'Düşük';
                             if (value === 2) return 'Orta';
@@ -633,6 +632,7 @@ function grafikCiz() {
                     }
                 }
             }
+        }
     });
 }
 
