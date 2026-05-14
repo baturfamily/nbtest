@@ -539,29 +539,44 @@ body {
     font-style: normal !important;
 }
 
-/* --- iPHONE PWA KESİN DÜZELTME PAKETİ --- */
+/* --- iPHONE 14 PRO & iOS PWA ÖZEL UYUMLULUK --- */
 
-/* 1. Günüm Yazısını Kapkalın Yapma */
-#greetingText, .greeting {
-    font-weight: 900 !important;
-    -webkit-font-smoothing: antialiased;
-    display: inline-block !important;
+/* 1. Ekran Boyutunu ve Kaydırmayı Sabitleme */
+html, body {
+    height: 100% !important;
+    min-height: -webkit-fill-available !important;
+    overflow: hidden !important;
+    position: relative;
 }
 
-/* 2. Nurten Hanım Yazısının Kaymasını Engelleme */
+/* 2. Başlık Daralmasını ve İsim Kaymasını Engelleme */
+.sticky-top-wrapper {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.header-compact {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
 .app-title {
-    flex-wrap: nowrap !important; /* Alt satıra geçmeyi yasaklar */
+    font-size: 18px !important; /* 14 Pro genişliğine tam sığması için */
+    flex-wrap: nowrap !important;
     justify-content: center !important;
-    gap: 4px !important;
-    width: 100% !important;
+    white-space: nowrap !important;
+}
+
+#greetingText {
+    font-weight: 900 !important; /* Günüm yazısını kalınlaştırır */
 }
 
 .name-tag {
-    white-space: nowrap !important; /* İsmi tek satırda tutar */
-    font-size: 19px !important; /* Sığması için çok hafif küçültme */
+    font-size: 18px !important;
+    white-space: nowrap !important;
 }
 
-/* 3. Sekmeleri En Alta Mühürleme (Okyanus Boşluğunu Kapatma) */
+/* 3. Alt Sekmeleri 14 Pro Çentiğine Yapıştırma */
 .bottom-nav {
     position: fixed !important;
     bottom: 0 !important;
@@ -569,27 +584,22 @@ body {
     right: 0 !important;
     width: 100% !important;
     margin: 0 !important;
-    /* Alt köşeler 0 olmalı ki ekranın dibine tam otursun */
+    
+    /* Alt köşeleri SIFIR yapıyoruz ki ekrana tam otursun */
     border-radius: 24px 24px 0 0 !important; 
-    /* iPhone alt çentiği için pay bırakır */
+    
+    /* iPhone 14 Pro'nun derin alt boşluğu için dinamik ayar */
     padding-bottom: env(safe-area-inset-bottom) !important;
     height: calc(65px + env(safe-area-inset-bottom)) !important;
-    /* iOS'un objeyi havada bırakma bug'ını ezer */
-    -webkit-transform: translate3d(0,0,0) !important;
-    transform: translate3d(0,0,0) !important;
-    z-index: 999999 !important;
+    
+    /* Havada asılı kalmayı önleyen donanım hızlandırma */
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    z-index: 99999 !important;
 }
 
-/* 4. Sayfayı Kaydırılabilir Yapma (Body Kilitliyken İçerik Aksın) */
+/* 4. Sekme İçeriklerinin Kaydırma Alanını Kilitleme */
 .tab-content {
-    -webkit-overflow-scrolling: touch !important; /* Yağ gibi kayma */
-    padding-bottom: 150px !important; /* Navigasyonun altında kalmasın */
-}
-
-/* 5. Karanlık Modda Yapışıklığı Garantileme */
-@media (prefers-color-scheme: dark) {
-    .bottom-nav {
-        bottom: 0 !important;
-        background: rgba(15, 23, 42, 0.98) !important;
-    }
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 160px !important; /* Menünün altında kalmaması için */
 }
