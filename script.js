@@ -11,12 +11,16 @@ const svgWait = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" str
 window.switchTab = function(tabId, btn) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    const targetTab = document.getElementById(tabId);
-    if(targetTab) targetTab.classList.add('active');
-    btn.classList.add('active');
     
-    // tab-today kontrolü burada da olmalı
-    if(tabId === 'tab-today') {
+    const targetTab = document.getElementById(tabId);
+    if(targetTab) {
+        targetTab.classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // BOŞ SAYFAYI ENGELLEYEN KRİTİK KONTROL:
+    // HTML'deki id "tab-today" olduğu için burada "tab-today" kontrolü yapmalıyız
+    if(tabId === 'tab-today' || tabId === 'tab-day') {
         if(typeof ekraniCiz === 'function') ekraniCiz();
     }
     else if(tabId === 'tab-analysis') {
@@ -26,6 +30,7 @@ window.switchTab = function(tabId, btn) {
     else if(tabId === 'tab-archive') {
         if(typeof istatistikleriCiz === 'function') istatistikleriCiz();
     }
+
     setTimeout(updateTabGlows, 50); 
 };
 
