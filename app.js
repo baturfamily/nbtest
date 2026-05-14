@@ -15,6 +15,10 @@ window.switchTab = function(tabId, btn) {
     const targetTab = document.getElementById(tabId);
     if(targetTab) {
         targetTab.classList.add('active');
+        
+        // --- KRİTİK EKLENTİ: Sekme değişince o sekmenin içini en tepeye kaydırır ---
+        targetTab.scrollTop = 0; 
+        
         btn.classList.add('active');
     }
 
@@ -747,17 +751,15 @@ document.addEventListener("visibilitychange", () => {
 });
 
 let pStartY = 0; let pCurrentY = 0; let pIsPulling = false;
+
 document.addEventListener('touchstart', (e) => {
-    // Hangi sekme aktifse onun içindeki kaydırma miktarını kontrol et
     const activeTab = document.querySelector('.tab-content.active');
-    
-    // Sadece sekme en tepedeyse (scrollTop <= 0) güncelleme hazırlığı yap
+    // activeTab'in içindeki kaydırma miktarına bakar
     if (activeTab && activeTab.scrollTop <= 0) { 
         pStartY = e.touches[0].clientY; 
         pCurrentY = pStartY; 
         pIsPulling = true; 
     } else {
-        // Sayfa zaten aşağı kaydırılmışsa güncelleme modunu devre dışı bırak
         pIsPulling = false; 
     }
 }, {passive: true});
@@ -768,7 +770,6 @@ document.addEventListener('touchmove', (e) => {
     pCurrentY = e.touches[0].clientY;
     let diff = pCurrentY - pStartY;
 
-    // EĞER PARMAK YUKARI GİDİYORSA (SAYFAYI AŞAĞI KAYDIRIYORSAN) GÜNCELLEMEYİ İPTAL ET
     if (diff < 0) {
         pIsPulling = false;
         const uText = document.getElementById('update-text');
@@ -776,12 +777,11 @@ document.addEventListener('touchmove', (e) => {
         return;
     }
 
-    // SADECE PARMAK AŞAĞI ÇEKİLİYORSA (YENİLEME İSTEĞİ)
     if (diff > 70) { 
         const uText = document.getElementById('update-text');
         if(uText) {
             uText.innerHTML = `Bırakın Güncellensin ${svgSync}`;
-            uText.style.color = "#4ade80"; // Yeşil renk ile geri bildirim ver
+            uText.style.color = "#4ade80"; 
         }
     }
 }, {passive: true});
@@ -792,11 +792,9 @@ document.addEventListener('touchend', (e) => {
     let diff = pCurrentY - pStartY;
     pIsPulling = false;
 
-    // Eğer yeterince çekildiyse (70px) yenilemeyi başlat
     if (diff > 70) {
         manuelYenile();
     } else {
-        // Çekme işlemi yetersizse yazıyı eski haline döndür
         const uText = document.getElementById('update-text');
         if(uText) uText.innerHTML = `Güncellemek İçin Aşağı Kaydırın`;
     }
