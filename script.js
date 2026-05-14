@@ -605,18 +605,34 @@ function grafikCiz() {
                     }
                 }
             },
-            scales: { 
+                        scales: { 
                 y: { 
                     beginAtZero: true, 
-                    max: 3.5, 
-                    ticks: { display: false }, // Yandaki sayılar kapatıldı
+                    max: 3.2, 
+                    ticks: { 
+                        display: true, // Yazıları tekrar açtık
+                        stepSize: 1,
+                        color: '#94A3B8', // Çok hafif ve şık bir gri
+                        font: { size: 11, weight: '600' },
+                        callback: function(value) {
+                            // Rakamları metne çeviren kısım
+                            if (value === 0) return 'Yok';
+                            if (value === 1) return 'Düşük';
+                            if (value === 2) return 'Orta';
+                            if (value === 3) return 'Yüksek';
+                            return '';
+                        }
+                    },
                     grid: { drawBorder: false, color: 'rgba(0,0,0,0.05)' }
                 },
                 x: {
-                    grid: { display: false }
+                    grid: { display: false },
+                    ticks: { 
+                        color: '#94A3B8', 
+                        font: { size: 11, weight: '600' } 
+                    }
                 }
             }
-        }
     });
 }
 
