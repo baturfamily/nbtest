@@ -145,6 +145,7 @@ body {
     overflow: visible !important;
 }
 .diary-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #8B5CF6 0%, #3B82F6 100%); opacity: 0.8; }
+.diary-card.collapsed::before { display: none; }
 .diary-card:active { transform: scale(0.98); }
 
 .diary-header { 
