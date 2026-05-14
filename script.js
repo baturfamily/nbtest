@@ -242,14 +242,23 @@ function getDailyProgram(dateObj) {
 
 function renderHealthDiary() {
     if (!apiData || !apiData.ai) return;
+    
+    // 1. HAFIZA: Kart yenilenmeden önce mevcut durumunu oku
+    let isCollapsed = true; // Varsayılan kapalı
+    const existingCard = document.getElementById('aiDiaryCard');
+    if (existingCard) {
+        isCollapsed = existingCard.classList.contains('collapsed');
+    }
+
     let aiMsg = apiData.ai.gunluk || "Veriler değerlendiriliyor...";
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
     let isNew = (aiMsg && !aiMsg.includes("değerlendiriliyor") && !aiMsg.includes("güncellenemiyor") && lastReadReport !== aiMsg);
     let pulseClass = isNew ? "unread-premium-card" : "";
     let badgeHTML = isNew ? `<div style="margin-top:8px;"><span class="premium-new-badge">YENİ</span></div>` : "";
     
+    // finalHTML içindeki collapsed durumunu isCollapsed değişkenine bağladık
     let finalHTML = `
-        <div class="diary-card ${pulseClass} collapsed" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}">
+        <div class="diary-card ${pulseClass} ${isCollapsed ? 'collapsed' : ''}" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}">
             <div class="diary-header" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); document.getElementById('aiDiaryCard').classList.toggle('collapsed');" style="cursor:pointer;">
                 <h3 class="diary-title" id="title-gunluk" style="display:flex; align-items:flex-start; gap:10px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
@@ -262,14 +271,14 @@ function renderHealthDiary() {
             </div>
             <div class="diary-ai-box">
                 ${aiMsg}
-                <div style='font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 12px; margin-top: 14px;'>
+                <div style='font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.08);'>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Her gün 10:00 ve 22:00'da Tıbbi Konsey günceller.
                 </div>
             </div>
         </div>`;
     const diaryArea = document.getElementById('healthDiaryArea');
     if(diaryArea) diaryArea.innerHTML = finalHTML;
-    setTimeout(updateTabGlows, 100); 
+    setTimeout(updateTabGlows, 100);
 }
 
 window.markStatAsRead = function(statType, cardId) {
@@ -608,19 +617,18 @@ function ekraniCiz() {
         let bClass = isAllDone ? "badge-safe" : isLate ? "badge-danger" : "badge-wait";
         let bText = isAllDone ? `TAMAMLANDI <span class="exp-arrow">▲</span>` : isLate ? "🚨 İÇİLMEYEN İLAÇ VAR" : "BEKLİYOR";
         let cClass = isAllDone ? "done-card" : isLate ? "late-card" : "";
-        const colClass = isAllDone ? "collapsed" : "";
         
-        // Kartın HTML yapısını bir değişkene alıyoruz
-        let cardHTML = `
-    <div class="premium-card card ${cClass} ${colClass}">
-        <div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;">
-            <div class="drug-name">${s.icon} ${s.title}</div>
-            <div class="badge ${bClass}">${bText}</div>
-        </div>
-        <div class="meds-container">${medsHTML}</div>
-    </div>`;
+        // 2. HAFIZA: Timeline ilaç kartlarının durumunu koru
+        let isCardCollapsed = isAllDone; // Bitenler kapalı, bekleyenler açık başlar
+        const existingCard = document.getElementById(`timeline-card-${s.id}`);
+        if (existingCard) {
+            isCardCollapsed = existingCard.classList.contains('collapsed');
+        }
+        const colClass = isCardCollapsed ? "collapsed" : "";
+        
+        // Kartlara benzersiz bir ID eklendi (id="timeline-card-${s.id}")
+        let cardHTML = `<div class="premium-card card ${cClass} ${colClass}" id="timeline-card-${s.id}"><div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;"><div class="drug-name">${s.icon} ${s.title}</div><div class="badge ${bClass}">${bText}</div></div><div class="meds-container">${medsHTML}</div></div>`;
 
-        // EĞER TAMAMLANDIYSA "completedHTML" kutusuna, DEĞİLSE "pendingHTML" kutusuna ekle
         if (isAllDone) {
             completedHTML += cardHTML;
         } else {
@@ -628,7 +636,6 @@ function ekraniCiz() {
         }
     });
 
-    // Önce bekleyenleri, sonra tamamlananları ekrana basıyoruz
     const tArea = document.getElementById('timelineArea'); 
     if(tArea) tArea.innerHTML = pendingHTML + completedHTML;
 }
