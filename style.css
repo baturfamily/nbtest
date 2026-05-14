@@ -126,7 +126,7 @@ body {
 .shield-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); animation: pulse-soft 3s ease-in-out infinite; }
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.92; } }
 
-/* --- ASİSTAN GÜNLÜĞÜ (APPLE HEALTH MESAJ BALONU) --- */
+/* --- ASİSTAN GÜNLÜĞÜ (DÜZELTİLMİŞ YAPI) --- */
 .diary-card { 
     padding: 22px 24px; 
     border-radius: 28px; 
@@ -136,9 +136,27 @@ body {
     border: 1px solid rgba(139, 92, 246, 0.12); 
     box-shadow: 0 12px 36px rgba(139, 92, 246, 0.08), 0 4px 12px rgba(0,0,0,0.02);
     position: relative;
-    /* overflow: hidden; SİLİNDİ - Işığın dışarı taşması için */
-    z-index: 1; /* EKLENDİ - Işık halesinin kartın arkasında kalması için */
+    z-index: 1;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+    
+    /* KRİTİK DÜZELTME: Başlık ve Metnin alt alta gelmesini sağlar */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    overflow: visible !important; 
+}
+
+/* Metin kutusunun tam genişlik kaplamasını garanti edelim */
+.diary-ai-box { 
+    width: 100% !important;
+    margin-top: 18px; 
+    padding-top: 18px; 
+    border-top: 1px solid var(--line); 
+    font-size: 17.5px; 
+    font-weight: 500; 
+    color: var(--text); 
+    line-height: 1.65;
+    text-align: left; /* Yazıyı sola yasla */
 }
 .diary-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #8B5CF6 0%, #3B82F6 100%); opacity: 0.8; }
 .diary-card:active { transform: scale(0.98); }
