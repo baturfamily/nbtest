@@ -126,7 +126,7 @@ body {
 .shield-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); animation: pulse-soft 3s ease-in-out infinite; }
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.92; } }
 
-/* --- GÜNÜN ANALİZİ (GÜNCELLENMİŞ VE DÜZELTİLMİŞ) --- */
+/* --- GÜNÜN ANALİZİ (TEK VE DÜZELTİLMİŞ BLOK) --- */
 .diary-card { 
     padding: 22px 24px; 
     border-radius: 28px; 
@@ -194,7 +194,7 @@ body {
 
 .check-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--muted); flex-shrink: 0; background: var(--card); opacity: 0.6; }
 .check-icon.done { background-color: var(--accent); border-color: var(--accent); color: white; opacity: 1; }
-.check-icon svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin_round; }
+.check-icon svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
 
 .meds-container { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 0; transition: opacity 0.3s; }
 .history-item { display: flex; align-items: flex-start; padding: 16px 0; border-bottom: 1px dashed var(--line); gap: 14px;} 
@@ -236,7 +236,7 @@ body {
 .dot.pain { background-color: #F43F5E; } 
 .dot.sleep { background-color: #3B82F6; } 
 
-/* --- ULTRA-PREMIUM "LIVING GLOW" SİSTEMİ (4 KART İÇİN KESİN ÇÖZÜM) --- */
+/* --- ULTRA-PREMIUM "LIVING GLOW" SİSTEMİ (4 KART İÇİN) --- */
 .unread-premium-card {
     position: relative;
     z-index: 1;
@@ -246,7 +246,6 @@ body {
     transition: all 0.5s ease;
     overflow: visible !important; 
 }
-
 .unread-premium-card::after {
     content: '';
     position: absolute;
@@ -261,41 +260,20 @@ body {
     pointer-events: none;
     display: block !important;
 }
-
-@keyframes magicGlow {
-    0% { opacity: 0.1; background-position: 0% 50%; }
-    50% { opacity: 0.5; background-position: 100% 50%; }
-    100% { opacity: 0.1; background-position: 0% 50%; }
-}
-
-@keyframes premiumPulse {
-    0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
-    50% { 
-        transform: scale(1.015); 
-        box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15);
-        background-color: #FDFBFF; 
-    }
-    100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
-}
+@keyframes magicGlow { 0% { opacity: 0.1; background-position: 0% 50%; } 50% { opacity: 0.5; background-position: 100% 50%; } 100% { opacity: 0.1; background-position: 0% 50%; } }
+@keyframes premiumPulse { 0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); } 50% { transform: scale(1.015); box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15); background-color: #FDFBFF; } 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); } }
 
 .premium-new-badge {
     background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-    color: white;
-    padding: 5px 12px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-    border: 1px solid rgba(255,255,255,0.3);
+    color: white; padding: 5px 12px; border-radius: 100px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.8px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); border: 1px solid rgba(255,255,255,0.3);
 }
-
 .premium-new-badge::before {
     content: ''; display: inline-block; width: 6px; height: 6px; background: #fff;
     border-radius: 50%; margin-right: 5px; animation: dotPulse 2s infinite ease-in-out;
 }
-
-@keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+@keyframes dotPulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
 /* SYNC İKONU */
 @keyframes spin-anim { 100% { transform: rotate(360deg); } }
@@ -315,8 +293,4 @@ body {
     box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
     animation: dotBreath 2s infinite ease-in-out;
 }
-
-@keyframes dotBreath {
-    0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(0.8); }
-    50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
-}
+@keyframes dotBreath { 0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(0.8); } 50% { opacity: 1; transform: translateX(-50%) scale(1.2); } }
