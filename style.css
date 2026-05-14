@@ -84,28 +84,28 @@ body {
 @keyframes spatialZoom { from { opacity: 0; transform: scale(0.98) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
 .bottom-nav {
-    position: fixed; 
-    bottom: 0 !important; /* Kesinlikle en alt */
+    position: fixed !important;
+    bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
     margin: 0 !important;
     width: 100% !important;
-    height: auto; 
-    padding-top: 12px;
-    /* iPhone alt çizgisi için güvenli boşluk */
-    padding-bottom: calc(12px + env(safe-area-inset-bottom)); 
-    background: rgba(255, 255, 255, 0.96);
+    height: auto !important;
+    padding-top: 12px !important;
+    /* iPhone alt çizgisi (Safe Area) için tam uyum */
+    padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important; 
+    background: rgba(255, 255, 255, 0.96) !important;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    /* Sadece üst köşeler kavisli, alt taraf dümdüz ve yapışık */
+    /* Alt köşeler SIFIR (Yapışık), üst köşeler kavisli */
     border-radius: 28px 28px 0 0 !important; 
-    display: flex; 
-    justify-content: space-around; 
-    align-items: center;
-    border: none;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    box-shadow: 0 -8px 30px rgba(0,0,0,0.05); 
-    z-index: 1000;
+    display: flex !important; 
+    justify-content: space-around !important; 
+    align-items: center !important;
+    border: none !important;
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.05) !important;
+    z-index: 9999 !important;
 }
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%; position: relative; }
 .nav-item.active { color: var(--purple); }
@@ -436,71 +436,50 @@ body {
     }
 }
 
-/* --- STYLE-8.CSS DOSYASININ EN SONUNA BU BLOĞU YAPIŞTIRIN --- */
-
+/* --- DOSYANIN EN SONUNA BU BLOĞU YAPIŞTIRIN (ESKİ DARK MODE BLOĞUNU SİLEREK) --- */
 @media (prefers-color-scheme: dark) {
     /* 1. Alt Sekmeler (Navbar) - Alta Tam Yapışan Tasarım */
     .bottom-nav {
-        background: rgba(15, 23, 42, 0.98) !important; /* Derin gece mavisi */
+        background: rgba(15, 23, 42, 0.98) !important;
         backdrop-filter: blur(20px) saturate(180%);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
-        
-        /* Ekranın en altına ve yanlarına sıfırlama */
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
         margin: 0 !important;
         width: 100% !important;
-        
-        /* Alt köşeler düz, sadece üst köşeler kavisli */
-        border-radius: 24px 24px 0 0 !important; 
-        
-        /* iPhone'un alt çizgisi için güvenli boşluk */
+        border-radius: 28px 28px 0 0 !important; 
         padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
-        
         border: none !important;
         border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
     }
     
-    .nav-item {
-        color: #94A3B8 !important; /* Sönük gri mavi */
-    }
-    
-    .nav-item.active {
-        color: #A78BFA !important; /* Canlı lavanta moru */
-    }
+    .nav-item { color: #94A3B8 !important; }
+    .nav-item.active { color: #A78BFA !important; }
 
-    /* 2. Arşiv ve Analiz Kartları İçeriği */
+    /* 2. Arşiv ve Analiz Kutuları */
     .stat-ai-summary, .diary-ai-box {
         background-color: rgba(139, 92, 246, 0.12) !important;
         color: #E2E8F0 !important;
         border-left: 4px solid #8B5CF6 !important;
     }
 
-    /* 3. DOKTOR RAPORU BUTONU */
+    /* 3. Doktor Raporu Butonu */
     .rapor-btn {
         background: #1E293B !important;
         color: #FFFFFF !important;
         border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
     }
-    
-    .rapor-btn svg {
-        stroke: #A78BFA !important;
-    }
+    .rapor-btn svg { stroke: #A78BFA !important; }
 
-    /* 4. Okunmamış Premium Kart Stili */
+    /* 4. Okunmamış Premium Kartlar */
     .unread-premium-card {
         background: #1E293B !important;
         border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
-        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
         animation: premiumPulseDark 4s infinite !important;
     }
-
-    /* 5. Yazı Renkleri */
-    .unread-premium-card .drug-name, 
-    .unread-premium-card .diary-title {
+    .unread-premium-card .drug-name, .unread-premium-card .diary-title {
         color: #FFFFFF !important;
     }
 
