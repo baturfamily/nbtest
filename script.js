@@ -554,9 +554,9 @@ function grafikCiz() {
     const sonYediGun = tarihler.slice(-7);
     const labels = sonYediGun.map(t => t.substring(0,5));
 
-    // 1. SADECE UYKU VE AĞRI: Log dosyasındaki (EKLEM_AGRISI ve UYKU) tam isimleriyle çekiyoruz
-    const agriMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["EKLEM_AGRISI"] || "") : ""));
-    const uykuMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["UYKU"] || "") : ""));
+    // SADECE AĞRI VE UYKU VERİSİ
+    const agriMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Eklem Ağrısı"] || apiData.tumVeriler[t]["EKLEM_AGRISI"] || "") : ""));
+    const uykuMetinleri = sonYediGun.map(t => (apiData.tumVeriler[t] ? (apiData.tumVeriler[t]["Uyku Kalitesi"] || apiData.tumVeriler[t]["UYKU"] || "") : ""));
 
     const ctx = document.getElementById('healthChart').getContext('2d');
     if (healthChartInstance) healthChartInstance.destroy();
@@ -597,7 +597,6 @@ function grafikCiz() {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     padding: 12,
                     callbacks: {
-                        // 2. SKOR YAZMAZ: Ekrana dokunulduğunda sadece log dosyasındaki birebir metni gösterir
                         label: function(context) {
                             const metin = context.dataset.metinler[context.dataIndex];
                             return context.dataset.label + ": " + (metin || "Kayıt Yok");
@@ -609,19 +608,11 @@ function grafikCiz() {
                 y: { 
                     beginAtZero: true, 
                     max: 3.5, 
-                    ticks: { 
-                        // 3. YAN EKSENDEKİ SKORLARI GİZLEDİK: Sadece temiz bir trend çizgisi görünecek.
-                        display: false 
-                    },
-                    grid: {
-                        drawBorder: false,
-                        color: 'rgba(0,0,0,0.05)'
-                    }
+                    ticks: { display: false }, // Yandaki sayılar kapatıldı
+                    grid: { drawBorder: false, color: 'rgba(0,0,0,0.05)' }
                 },
                 x: {
-                    grid: {
-                        display: false
-                    }
+                    grid: { display: false }
                 }
             }
         }
