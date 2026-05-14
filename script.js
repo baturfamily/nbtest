@@ -9,16 +9,28 @@ const svgSync = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" str
 const svgWait = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
 
 window.switchTab = function(tabId, btn) {
+    // 1. Tüm içerikleri ve aktif butonları temizle
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    
+    // 2. Tıklanan sekmeyi aktif yap
     const targetTab = document.getElementById(tabId);
     if(targetTab) targetTab.classList.add('active');
     btn.classList.add('active');
     
-    if(tabId === 'tab-analysis' && typeof grafikCiz === 'function') {
-        setTimeout(grafikCiz, 150);
+    // 3. SEKMEYE GÖRE İÇERİĞİ ZORLA YENİLE (Sayfanın boş gelmemesi için)
+    if(tabId === 'tab-today') {
+        if(typeof ekraniCiz === 'function') ekraniCiz();
     }
-    // Her sekme geçişinde noktaları tekrar kontrol et
+    else if(tabId === 'tab-analysis') {
+        if(typeof renderHealthDiary === 'function') renderHealthDiary();
+        if(typeof grafikCiz === 'function') setTimeout(grafikCiz, 150);
+    }
+    else if(tabId === 'tab-archive') {
+        if(typeof istatistikleriCiz === 'function') istatistikleriCiz();
+    }
+
+    // Alt noktaları hemen kontrol et
     setTimeout(updateTabGlows, 50); 
 };
 
@@ -747,7 +759,11 @@ setInterval(saniyeTiktak, 1000);
 
 document.addEventListener("visibilitychange", () => { 
     if (document.visibilityState === 'visible') { 
-        if (sonBasariZamani === 0 || (Date.now() - sonBasariZamani > 600000)) { veriCek(); fetchWeather(); }
+        // 30 saniyeden fazla zaman geçtiyse ekran açılır açılmaz güncelle
+        if (sonBasariZamani === 0 || (Date.now() - sonBasariZamani > 30000)) { 
+            veriCek(); 
+            fetchWeather(); 
+        }
     }
 });
 
