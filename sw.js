@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nurten-saglik-v61';
+const CACHE_NAME = 'nurten-saglik-v80';
 const ASSETS = [
   'index.html',
   'style.css',
