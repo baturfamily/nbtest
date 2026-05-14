@@ -19,6 +19,45 @@
     
     <meta name="theme-color" content="#F4F5F8" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0B0B0E" media="(prefers-color-scheme: dark)">
+
+        <style>
+        /* 1. iOS Zemin Boşluğu Kapatıcı */
+        body {
+            min-height: -webkit-fill-available !important;
+        }
+
+        /* 2. Günüm Yazısı (Class değil, direkt ID'yi vuruyoruz) */
+        #greetingText {
+            font-weight: 900 !important;
+            color: #FFFFFF !important;
+            opacity: 1 !important;
+        }
+
+        /* 3. Menüyü Ekrana Çivileme (translateZ ile iOS hatasını ezer) */
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            border-radius: 28px 28px 0 0 !important;
+            padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+            -webkit-transform: translateZ(0) !important;
+            transform: translateZ(0) !important;
+            z-index: 99999 !important;
+        }
+
+        /* 4. Karanlık Mod Sabitleyici */
+        @media (prefers-color-scheme: dark) {
+            .bottom-nav {
+                background: rgba(15, 23, 42, 0.98) !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+                bottom: 0 !important;
+                border-radius: 28px 28px 0 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
