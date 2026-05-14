@@ -730,14 +730,15 @@ function updateTabGlows() {
         tabGunum.classList.toggle('unread-indicator', !!isDayNew);
     }
 
-    // 2. ANALİZ SEKMESİ (Bu Ay, Geçen Ay ve Yıllık Arşiv Kartları Burada)
+    // 2. ARŞİV SEKMESİ (Bu Ay, Geçen Ay ve Yıllık Arşiv Kartları Burada)
     const arsivKartlari = ['card-stat-this-month', 'card-stat-last-month', 'card-stat-yearly'];
-    const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
-    if(tabAnaliz) {
+    // KRİTİK DÜZELTME: Burası tab-analysis'den tab-archive'e çevrildi!
+    const tabArsiv = document.querySelector('button[onclick*="tab-archive"]'); 
+    if(tabArsiv) {
         let hasUnreadArchive = arsivKartlari.some(id => {
             let el = document.getElementById(id);
             return el && el.classList.contains('unread-premium-card');
         });
-        tabAnaliz.classList.toggle('unread-indicator', hasUnreadArchive);
+        tabArsiv.classList.toggle('unread-indicator', hasUnreadArchive);
     }
 }
