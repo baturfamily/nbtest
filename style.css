@@ -412,41 +412,49 @@ body {
     }
 }
 
-/* --- DARK MODE: ALT MENÜ VE OKUNMAMIŞ KART DÜZELTMELERİ --- */
+/* --- DARK MODE: TAM UYUM VE PREMIUM DOKUNUŞLAR --- */
 @media (prefers-color-scheme: dark) {
-    /* 1. Alt Sekmeler (Navbar) Uyumu */
-    .nav-bar {
-        background: rgba(22, 22, 30, 0.85) !important; /* Koyu cam efekti */
-        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-        backdrop-filter: blur(25px); /* Daha derin bir cam hissi */
+    /* 1. Alt Sekmeler (Navbar) - Artık bembeyaz değil, derin ve şeffaf bir koyulukta */
+    .bottom-nav {
+        background: rgba(15, 23, 42, 0.8) !important; /* Slate-900 tonunda şeffaf zemin */
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
     }
     
     .nav-item {
-        color: var(--muted) !important;
+        color: #94A3B8 !important; /* Sönük gri/mavi tonu */
     }
     
     .nav-item.active {
-        color: #A78BFA !important; /* Aktif sekme için daha yumuşak, parlak bir mor */
+        color: #A78BFA !important; /* Aktif sekme için canlı lavanta moru */
     }
 
-    /* 2. Okunmamış Arşiv ve Analiz Kartları (Günün Analizi ile Aynı Dil) */
+    /* 2. Okunmamış Arşiv Kartları - "Günün Analizi" stiliyle %100 uyumlu */
     .unread-premium-card {
-        /* Beyaz degradeler yerine koyu ve derin premium geçişler */
-        background: linear-gradient(135deg, #1C1C26 0%, #16161E 100%) !important;
-        border: 2px solid rgba(139, 92, 246, 0.6) !important;
-        box-shadow: 0 0 25px rgba(139, 92, 246, 0.12) !important;
+        background: #1E293B !important; /* Koyu kart rengi */
+        border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
+        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
+        animation: premiumPulseDark 4s infinite !important;
     }
 
-    /* 3. Kart İçindeki Metin Kutuları (Arşiv Özetleri) */
+    /* Arşiv ve Analiz Kutularının İçeriği */
     .stat-ai-summary, .diary-ai-box {
         background-color: rgba(139, 92, 246, 0.12) !important;
-        color: #F1F5F9 !important; /* Saf beyaz değil, göz yormayan açık gri/mavi */
+        color: #E2E8F0 !important; /* Göz yormayan açık gri yazı */
         border-left: 4px solid #8B5CF6 !important;
     }
 
-    /* Kart Başlıkları Karanlık Modda Daha Belirgin */
-    .diary-card.unread-premium-card .diary-title,
-    .premium-card.unread-premium-card .card-header .drug-name {
+    /* 3. Genel Kart Başlıkları */
+    .unread-premium-card .drug-name, 
+    .unread-premium-card .diary-title {
         color: #FFFFFF !important;
+    }
+
+    /* Karanlık Mod İçin Özel Nabız Animasyonu */
+    @keyframes premiumPulseDark {
+        0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+        50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
     }
 }
