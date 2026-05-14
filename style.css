@@ -586,15 +586,15 @@ body {
     right: 0 !important;
     width: 100% !important;
     margin: 0 !important;
-    
-    /* Alt köşelerin yuvarlaklığını sıfırladık ki boşluktan okyanus sızmasın */
     border-radius: 28px 28px 0 0 !important;
     
-    /* Finans projesinin kusursuz padding matematiği */
-    padding: 16px 5px calc(16px + env(safe-area-inset-bottom)) !important;
+    /* İŞTE BURASI: Ekstra 16px boşluğu sildik! 
+       Sadece üstten 14px boşluk verdik, alt tarafı direkt iPhone çizgisine (safe-area) yasladık */
+    padding: 14px 5px env(safe-area-inset-bottom) !important;
+    height: auto !important;
     
     z-index: 99999 !important;
-    transform: translateZ(0) !important; /* Donanım sabitlemesi */
+    transform: translateZ(0) !important; 
 }
 
 /* 4. BAŞLIK KAYMASINI VE KALINLIĞI ÇÖZME */
