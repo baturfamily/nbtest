@@ -386,3 +386,28 @@ body {
     0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(0.8); }
     50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
 }
+
+/* --- GÜNÜN ANALİZİ KARTI KARANLIK MOD DÜZELTMELERİ --- */
+.diary-card { 
+    background-color: var(--card) !important; 
+    color: var(--text) !important;
+}
+.diary-title { 
+    color: var(--text) !important; 
+}
+.diary-ai-box { 
+    background-color: rgba(139, 92, 246, 0.04); 
+    color: var(--text) !important; 
+}
+
+/* Telefon Karanlık Moda Geçtiğinde Çalışacak Özel Renkler */
+@media (prefers-color-scheme: dark) {
+    .diary-ai-box { 
+        background-color: rgba(139, 92, 246, 0.12) !important; /* Karanlıkta daha belirgin, şık mor arka plan */
+        color: #F1F5F9 !important; /* Yazılar karanlıkta daha parlak ve okunabilir beyaz */
+    }
+    .stat-ai-summary {
+        background-color: rgba(139, 92, 246, 0.12) !important; /* Arşiv kartlarındaki kutuyu da karanlığa uyarladık */
+        color: #F1F5F9 !important;
+    }
+}
