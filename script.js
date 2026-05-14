@@ -290,13 +290,10 @@ function getDailyProgram(dateObj) {
 
 function renderHealthDiary() {
     if (!apiData || !apiData.ai) return;
-    
-    // 1. HAFIZA: Kart yenilenmeden önce mevcut durumunu oku
-    let isCollapsed = true; // Varsayılan kapalı
+
+    let isCollapsed = true; 
     const existingCard = document.getElementById('aiDiaryCard');
-    if (existingCard) {
-        isCollapsed = existingCard.classList.contains('collapsed');
-    }
+    if (existingCard) { isCollapsed = existingCard.classList.contains('collapsed'); }
 
     let aiMsg = apiData.ai.gunluk || "Veriler değerlendiriliyor...";
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
@@ -304,10 +301,13 @@ function renderHealthDiary() {
     let pulseClass = isNew ? "unread-premium-card" : "";
     let badgeHTML = isNew ? `<div style="margin-top:8px;"><span class="premium-new-badge">YENİ</span></div>` : "";
     
-    // finalHTML içindeki collapsed durumunu isCollapsed değişkenine bağladık
     let finalHTML = `
-        <div class="diary-card ${pulseClass} ${isCollapsed ? 'collapsed' : ''}" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}">
-            <div class="diary-header" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); document.getElementById('aiDiaryCard').classList.toggle('collapsed');" style="cursor:pointer;">
+        <div class="diary-card ${pulseClass} ${isCollapsed ? 'collapsed' : ''}" 
+             id="aiDiaryCard" 
+             onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.classList.toggle('collapsed');" 
+             style="cursor:pointer;">
+            
+            <div class="diary-header">
                 <h3 class="diary-title" id="title-gunluk" style="display:flex; align-items:flex-start; gap:10px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                     <div style="display:flex; flex-direction:column;">
@@ -319,7 +319,7 @@ function renderHealthDiary() {
             </div>
             <div class="diary-ai-box">
                 ${aiMsg}
-                <div style='font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.08);'>
+                <div style='font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 12px; margin-top: 14px;'>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Her gün 10:00 ve 22:00'da Tıbbi Konsey günceller.
                 </div>
             </div>
