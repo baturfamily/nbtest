@@ -466,3 +466,25 @@ body {
         50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
     }
 }
+
+/* --- DOKTOR RAPORU BUTONU KARANLIK MOD UYUMU --- */
+@media (prefers-color-scheme: dark) {
+    /* Butonun genel görünümü */
+    .report-btn {
+        background: #1E293B !important; /* Derin gece mavisi/lacivert */
+        color: #FFFFFF !important;
+        border: 1.5px solid rgba(139, 92, 246, 0.4) !important; /* Hafif mor çerçeve */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Butonun içindeki simge (SVG) rengi */
+    .report-btn svg {
+        stroke: #A78BFA !important; /* Parlak lavanta moru simge */
+    }
+
+    /* Butona tıklandığında veya basılı tutulduğunda */
+    .report-btn:active {
+        background: #0F172A !important;
+        transform: scale(0.96);
+    }
+}
