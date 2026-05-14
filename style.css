@@ -422,9 +422,9 @@ body {
 
 /* --- DARK MODE: TAM UYUM VE PREMIUM DOKUNUŞLAR --- */
 @media (prefers-color-scheme: dark) {
-    /* 1. Alt Sekmeler (Navbar) - Artık bembeyaz değil, derin ve şeffaf bir koyulukta */
+    /* 1. Alt Sekmeler (Navbar) */
     .bottom-nav {
-        background: rgba(15, 23, 42, 0.8) !important; /* Slate-900 tonunda şeffaf zemin */
+        background: rgba(15, 23, 42, 0.8) !important;
         backdrop-filter: blur(20px) saturate(180%);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -432,16 +432,16 @@ body {
     }
     
     .nav-item {
-        color: #94A3B8 !important; /* Sönük gri/mavi tonu */
+        color: #94A3B8 !important;
     }
     
     .nav-item.active {
-        color: #A78BFA !important; /* Aktif sekme için canlı lavanta moru */
+        color: #A78BFA !important;
     }
 
-    /* 2. Okunmamış Arşiv Kartları - "Günün Analizi" stiliyle %100 uyumlu */
+    /* 2. Okunmamış Arşiv Kartları */
     .unread-premium-card {
-        background: #1E293B !important; /* Koyu kart rengi */
+        background: #1E293B !important;
         border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
         box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
         animation: premiumPulseDark 4s infinite !important;
@@ -450,11 +450,26 @@ body {
     /* Arşiv ve Analiz Kutularının İçeriği */
     .stat-ai-summary, .diary-ai-box {
         background-color: rgba(139, 92, 246, 0.12) !important;
-        color: #E2E8F0 !important; /* Göz yormayan açık gri yazı */
+        color: #E2E8F0 !important;
         border-left: 4px solid #8B5CF6 !important;
     }
 
-    /* 3. Genel Kart Başlıkları */
+    /* 3. DOKTOR RAPORU BUTONU (Yeni Eklenen Kısım Burası) */
+    .report-btn {
+        background: #1E293B !important;
+        color: #FFFFFF !important;
+        border: 1.5px solid rgba(139, 92, 246, 0.4) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+    .report-btn svg {
+        stroke: #A78BFA !important;
+    }
+    .report-btn:active {
+        background: #0F172A !important;
+        transform: scale(0.96);
+    }
+
+    /* 4. Genel Kart Başlıkları */
     .unread-premium-card .drug-name, 
     .unread-premium-card .diary-title {
         color: #FFFFFF !important;
@@ -464,27 +479,5 @@ body {
     @keyframes premiumPulseDark {
         0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
         50% { transform: scale(1.01); box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2); }
-    }
-}
-
-/* --- DOKTOR RAPORU BUTONU KARANLIK MOD UYUMU --- */
-@media (prefers-color-scheme: dark) {
-    /* Butonun genel görünümü */
-    .report-btn {
-        background: #1E293B !important; /* Derin gece mavisi/lacivert */
-        color: #FFFFFF !important;
-        border: 1.5px solid rgba(139, 92, 246, 0.4) !important; /* Hafif mor çerçeve */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-    }
-
-    /* Butonun içindeki simge (SVG) rengi */
-    .report-btn svg {
-        stroke: #A78BFA !important; /* Parlak lavanta moru simge */
-    }
-
-    /* Butona tıklandığında veya basılı tutulduğunda */
-    .report-btn:active {
-        background: #0F172A !important;
-        transform: scale(0.96);
     }
 }
