@@ -748,33 +748,58 @@ document.addEventListener("visibilitychange", () => {
 
 let pStartY = 0; let pCurrentY = 0; let pIsPulling = false;
 document.addEventListener('touchstart', (e) => {
+    // Hangi sekme aktifse onun içindeki kaydırma miktarını kontrol et
     const activeTab = document.querySelector('.tab-content.active');
+    
+    // Sadece sekme en tepedeyse (scrollTop <= 0) güncelleme hazırlığı yap
     if (activeTab && activeTab.scrollTop <= 0) { 
         pStartY = e.touches[0].clientY; 
         pCurrentY = pStartY; 
         pIsPulling = true; 
+    } else {
+        // Sayfa zaten aşağı kaydırılmışsa güncelleme modunu devre dışı bırak
+        pIsPulling = false; 
     }
 }, {passive: true});
-// touchmove olayını bu şekilde değiştir (app.js içinde ara)
+
 document.addEventListener('touchmove', (e) => {
     if (!pIsPulling || fetchDevamEdiyor) return;
     
     pCurrentY = e.touches[0].clientY;
     let diff = pCurrentY - pStartY;
 
-    // Sadece PARMAK AŞAĞI çekiliyorsa ve mesafe 60px'den fazlaysa tetikle
-    if (diff > 60) { 
+    // EĞER PARMAK YUKARI GİDİYORSA (SAYFAYI AŞAĞI KAYDIRIYORSAN) GÜNCELLEMEYİ İPTAL ET
+    if (diff < 0) {
+        pIsPulling = false;
         const uText = document.getElementById('update-text');
-        if(uText) uText.innerHTML = `Bırakın Güncellensin ${svgSync}`;
-    } else {
-        // Eğer yukarı kaydırılıyorsa güncelleme modundan çık
-        pIsPulling = (diff > 0); 
+        if(uText) uText.innerHTML = `Güncellemek İçin Aşağı Kaydırın`;
+        return;
+    }
+
+    // SADECE PARMAK AŞAĞI ÇEKİLİYORSA (YENİLEME İSTEĞİ)
+    if (diff > 70) { 
+        const uText = document.getElementById('update-text');
+        if(uText) {
+            uText.innerHTML = `Bırakın Güncellensin ${svgSync}`;
+            uText.style.color = "#4ade80"; // Yeşil renk ile geri bildirim ver
+        }
     }
 }, {passive: true});
+
 document.addEventListener('touchend', (e) => {
     if (!pIsPulling) return;
+    
+    let diff = pCurrentY - pStartY;
     pIsPulling = false;
-    if (pCurrentY - pStartY > 60) manuelYenile();
+
+    // Eğer yeterince çekildiyse (70px) yenilemeyi başlat
+    if (diff > 70) {
+        manuelYenile();
+    } else {
+        // Çekme işlemi yetersizse yazıyı eski haline döndür
+        const uText = document.getElementById('update-text');
+        if(uText) uText.innerHTML = `Güncellemek İçin Aşağı Kaydırın`;
+    }
 });
 
 function updateTabGlows() {
