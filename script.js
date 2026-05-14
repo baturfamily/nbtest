@@ -254,19 +254,36 @@ async function fetchWeather() {
         if(aTEl) aTEl.innerText = "Hava durumu şu an alınamıyor, ancak ilaç takibiniz aktif.";
     }
 }
-
 function saniyeTiktak() {
-    const syncElement = document.getElementById('last-sync');
     const clockElement = document.getElementById('clock');
+    const statusEl = document.getElementById('connection-status');
     const simdi = Date.now();
     const dNow = new Date();
-    if(clockElement) clockElement.textContent = dNow.getDate() + " " + dNow.toLocaleDateString('tr-TR', {month:'short'}) + " • " + String(dNow.getHours()).padStart(2,'0') + ':' + String(dNow.getMinutes()).padStart(2,'0');
-    if(fetchDevamEdiyor || !syncElement) return;
-    const farkSaniye = sonBasariZamani > 0 ? Math.floor((simdi - sonBasariZamani) / 1000) : 999;
-    if (sonBasariZamani === 0) { syncElement.innerHTML = `${svgSync} Bağlanıyor...`; syncElement.style.color = "var(--vip-gold)"; } 
-    else if (farkSaniye < 20) { const d = new Date(sonBasariZamani); syncElement.innerHTML = `🟢 Canlı (${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')})`; syncElement.style.color = "#4ADE80"; } 
-    else if (farkSaniye < 60) { syncElement.innerHTML = `🟡 Gecikme: ${farkSaniye} sn`; syncElement.style.color = "var(--vip-gold)"; } 
-    else { syncElement.innerHTML = `🔴 Bağlantı Yok`; syncElement.style.color = "#FF453A"; }
+    const gunler = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+    
+    // Tarih formatı genişletildi: "14 Mayıs Perşembe • 11:31"
+    if(clockElement) {
+        clockElement.textContent = dNow.getDate() + " " + dNow.toLocaleDateString('tr-TR', {month:'long'}) + " " + gunler[dNow.getDay()] + " • " + String(dNow.getHours()).padStart(2,'0') + ':' + String(dNow.getMinutes()).padStart(2,'0');
+    }
+    
+    if (!statusEl) return;
+
+    // Veri yüklenirken turuncu dönen şık sembol
+    if (fetchDevamEdiyor || sonBasariZamani === 0) {
+        statusEl.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="spin"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>`;
+        return;
+    }
+
+    const farkSaniye = Math.floor((simdi - sonBasariZamani) / 1000);
+    
+    // Veri başarıyla çekildiyse iOS stili minimal yeşil tik
+    if (farkSaniye < 3600) { 
+        statusEl.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    } 
+    // İnternet kesilirse kırmızı ünlem
+    else { 
+        statusEl.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+    }
 }
 
 function getDailyProgram(dateObj) {
