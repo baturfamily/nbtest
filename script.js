@@ -246,18 +246,22 @@ function renderHealthDiary() {
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
     let isNew = (aiMsg && !aiMsg.includes("değerlendiriliyor") && !aiMsg.includes("güncellenemiyor") && lastReadReport !== aiMsg);
     let pulseClass = isNew ? "unread-premium-card" : "";
-    let badgeHTML = isNew ? `<span class="premium-new-badge">YENİ</span>` : "";
+    
+    // Rozeti alt satıra almak için bir div içine koyduk
+    let badgeHTML = isNew ? `<div style="margin-top:8px;"><span class="premium-new-badge">YENİ</span></div>` : "";
     
     let finalHTML = `
         <div class="diary-card ${pulseClass} collapsed" id="aiDiaryCard" data-new-text="${isNew ? aiMsg : ''}">
             <div class="diary-header" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;">
                 <h3 class="diary-title" id="title-gunluk">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                    Günün Analizi ${badgeHTML}
+                    <div>
+                        Günün Analizi
+                        ${badgeHTML}
+                    </div>
                 </h3>
                 <div class="diary-toggle-icon">▲</div>
             </div>
-            
             <div class="diary-ai-box">
                 ${aiMsg}
                 <div style='font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 12px; margin-top: 14px;'>
@@ -265,7 +269,6 @@ function renderHealthDiary() {
                 </div>
             </div>
         </div>`;
-        
     const diaryArea = document.getElementById('healthDiaryArea');
     if(diaryArea) diaryArea.innerHTML = finalHTML;
     setTimeout(updateTabGlows, 100);
@@ -383,8 +386,9 @@ function renderMonthStat(prefix, data, statType, cardId) {
                 if (lastRead !== aiText) {
           cardEl.classList.add('unread-premium-card');
           if(titleSpan && !titleSpan.innerHTML.includes('YENİ')) { 
-              titleSpan.innerHTML += ` <span class="premium-new-badge">YENİ</span>`; 
-          }
+    // Rozeti başlığın hemen altına, temiz bir şekilde ekler
+    titleSpan.innerHTML += `<div style="margin-top:5px;"><span class="premium-new-badge">YENİ</span></div>`; 
+}
           cardEl.setAttribute('data-new-text', aiText); 
       } else {
           cardEl.classList.remove('unread-premium-card');
@@ -417,7 +421,9 @@ function istatistikleriCiz() {
             let lastRead = localStorage.getItem('lastRead_yillik');
                         if (lastRead !== yillikText) {
                 cardYillik.classList.add('unread-premium-card');
-                if(titleYillik && !titleYillik.innerHTML.includes('YENİ')) { titleYillik.innerHTML += ` <span class="premium-new-badge">YENİ</span>`; }
+                if(titleYillik && !titleYillik.innerHTML.includes('YENİ')) { 
+    titleYillik.innerHTML += `<div style="margin-top:5px;"><span class="premium-new-badge">YENİ</span></div>`; 
+}
                 cardYillik.setAttribute('data-new-text', yillikText);
             } else {
                 cardYillik.classList.remove('unread-premium-card');
