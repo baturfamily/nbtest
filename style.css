@@ -82,7 +82,7 @@ body {
     border-radius: 38px; display: flex; justify-content: space-around; align-items: center;
     border: var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
 }
-.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; transition: all 0.3s ease; width: 30%; position: relative; }
 .nav-item.active { color: var(--purple); }
 .nav-item.active svg { transform: scale(1.15) translateY(-2px); }
 .nav-item span { font-size: 12px; font-weight: 700; letter-spacing: -0.2px; }
@@ -126,7 +126,7 @@ body {
 .shield-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); animation: pulse-soft 3s ease-in-out infinite; }
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.92; } }
 
-/* --- ASİSTAN GÜNLÜĞÜ (DÜZELTİLMİŞ YAPI) --- */
+/* --- GÜNÜN ANALİZİ (GÜNCELLENMİŞ VE DÜZELTİLMİŞ) --- */
 .diary-card { 
     padding: 22px 24px; 
     border-radius: 28px; 
@@ -145,8 +145,18 @@ body {
     align-items: stretch !important;
     overflow: visible !important; 
 }
+.diary-card::before { 
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; 
+    background: linear-gradient(180deg, #8B5CF6 0%, #3B82F6 100%); 
+    opacity: 0.8; border-radius: 4px 0 0 4px;
+}
+.diary-card:active { transform: scale(0.98); }
+.diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100% !important; }
+.diary-title { font-size: 20px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
+.diary-title svg { color: var(--purple); }
+.diary-toggle-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #F1F5F9; font-size: 11px; color: var(--muted); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s; }
+.diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); background: rgba(139, 92, 246, 0.1); color: var(--purple); } 
 
-/* Metin kutusunun tam genişlik kaplamasını garanti edelim */
 .diary-ai-box { 
     width: 100% !important;
     margin-top: 18px; 
@@ -156,20 +166,13 @@ body {
     font-weight: 500; 
     color: var(--text); 
     line-height: 1.65;
-    text-align: left; /* Yazıyı sola yasla */
+    text-align: left;
+    display: block !important;
 }
-.diary-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #8B5CF6 0%, #3B82F6 100%); opacity: 0.8; }
-.diary-card:active { transform: scale(0.98); }
-.diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.diary-title { font-size: 20px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
-.diary-title svg { color: var(--purple); }
-.diary-toggle-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #F1F5F9; font-size: 11px; color: var(--muted); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s; }
-.diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); background: rgba(139, 92, 246, 0.1); color: var(--purple); } 
-.diary-ai-box { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 17.5px; font-weight: 500; color: var(--text); line-height: 1.65; }
 .diary-card.collapsed .diary-ai-box { display: none; }
 
 /* --- İSTATİSTİK ÖZETİ BAŞLIKLARI --- */
-.stat-ai-summary { padding: 4px; font-size: 17px; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--purple); padding-left: 14px; }
+.stat-ai-summary { padding: 14px; font-size: 17px; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--purple); background: rgba(139, 92, 246, 0.04); border-radius: 0 12px 12px 0; }
 .stat-ai-summary strong { color: var(--purple); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
 
 /* --- İLAÇ KARTI (OKUMA PANELİ) --- */
@@ -177,7 +180,6 @@ body {
 .card.done-card { border-color: var(--done-border); background: var(--done-bg); box-shadow: none; }
 .card-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 16px; width: 100%; padding: 4px 0; }
 
-/* EKSİK OLAN KISIM EKLENDİ: İkon Arka Planları (Zeminleri) */
 .drug-name { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 12px; margin: 0; color: var(--text); letter-spacing: -0.3px;}
 .drug-name svg, .card-icon { background: rgba(100, 116, 139, 0.08); padding: 6px; border-radius: 12px; color: var(--muted); width: 34px; height: 34px; box-sizing: border-box; }
 .done-card .drug-name svg { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
@@ -192,7 +194,7 @@ body {
 
 .check-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--muted); flex-shrink: 0; background: var(--card); opacity: 0.6; }
 .check-icon.done { background-color: var(--accent); border-color: var(--accent); color: white; opacity: 1; }
-.check-icon svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.check-icon svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin_round; }
 
 .meds-container { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 0; transition: opacity 0.3s; }
 .history-item { display: flex; align-items: flex-start; padding: 16px 0; border-bottom: 1px dashed var(--line); gap: 14px;} 
@@ -210,7 +212,7 @@ body {
 .late-card { border-color: rgba(244, 63, 94, 0.3) !important; animation: latePulse-soft 3s infinite; }
 @keyframes latePulse-soft { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.1); } 70% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
 
-/* EKSİK OLAN KISIM EKLENDİ: Arşiv Sekmesi İstatistik Satırları */
+/* --- ARŞİV İSTATİSTİK SATIRLARI --- */
 .stat-row { padding: 12px 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between;}
 .stat-row:last-child { border-bottom: none; }
 .stat-date { font-weight: 700; font-size: 14px; width: 65px; color: var(--text); }
@@ -218,34 +220,17 @@ body {
 .stat-status { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
 .stat-missed-list { font-size: 12.5px; font-weight: 500; opacity: 0.9; }
 
-/* --- BUTON VE RAPOR ALANI --- */
+/* --- RAPOR BUTONU VE ALANI --- */
 .rapor-btn { background: var(--text); color: var(--card); padding: 18px 20px; border: none; border-radius: 20px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 8px; margin-bottom: 24px; width: 100%; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); flex-shrink:0; transition: transform 0.2s ease;}
 .rapor-btn:active { transform: scale(0.97); }
-
 #print-report-area { display: none; }
 
-/* --- DOKTOR RAPORU YAZDIRMA CSS --- */
-@media print {
-  @page { margin: 10mm; } 
-  html, body { position: static !important; overflow: visible !important; height: auto !important; width: auto !important; display: block !important; background: white !important; padding: 0 !important; margin: 0 !important; }
-  body > :not(#print-report-area) { display: none !important; }
-  #print-report-area { display: block !important; position: relative !important; width: 100% !important; padding: 10px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; color: #000 !important; font-size: 12px !important; }
-  .rap-baslik { font-size: 20px; font-weight: bold; text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 16px; color: #111; }
-  .rap-bolum { margin-bottom: 16px; } 
-  .rap-bolum h3 { font-size: 15px; border-bottom: 2px solid #ccc; padding-bottom: 4px; margin-bottom: 8px; color: #222; }
-  .rap-tablo { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 4px; } 
-  .rap-tablo th, .rap-tablo td { border: 1px solid #000; padding: 5px; text-align: center; }
-  .rap-tablo th { background-color: #eaeaea; font-weight: bold; } 
-  .ai-rapor-kutu { background-color: #f8f9fa; border-left: 4px solid #007aff; padding: 10px; margin-top: 8px; font-size: 12px; line-height: 1.5; border-radius: 4px; text-align: left !important; }
-  .ai-rapor-kutu * { text-align: left !important; }
-}
-
-/* --- SAĞLIK TREND GRAFİĞİ STİLLERİ --- */
+/* --- SAĞLIK TREND GRAFİĞİ --- */
 .chart-container-wrapper { padding: 22px; margin-bottom: 14px; background: var(--card); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
 .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .chart-title { font-size: 18px; font-weight: 700; color: var(--text); margin: 0; display: flex; align-items: center; letter-spacing: -0.3px; }
 .chart-area { width: 100%; height: 240px; position: relative; } 
-.chart-legend { display: flex; justify-content: center; gap: 24px; margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--line); }
+.chart-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--line); }
 .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
 .dot { width: 10px; height: 10px; border-radius: 50%; }
 .dot.pain { background-color: #F43F5E; } 
@@ -259,16 +244,12 @@ body {
     background: #FFFFFF;
     animation: premiumPulse 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     transition: all 0.5s ease;
-    /* KRİTİK: Işığın dışarı taşması için kilit komut */
     overflow: visible !important; 
 }
 
-/* Parlayan haleyi ::after kısmına aldık. 
-   Böylece diary-card'ın sol çizgisi (::before) ile çakışmayacak. */
 .unread-premium-card::after {
     content: '';
     position: absolute;
-    /* Kartın biraz dışına taşarak aura oluşturması için */
     top: -10px; left: -10px; right: -10px; bottom: -10px;
     z-index: -1; 
     background: linear-gradient(45deg, #8B5CF6, #3B82F6, #D8B4FE, #8B5CF6);
@@ -296,14 +277,12 @@ body {
     }
     100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
 }
-}
 
-/* Yeni rozet tasarımı - Siri stili */
 .premium-new-badge {
     background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
     color: white;
     padding: 5px 12px;
-    border-radius: 100px; /* Tam yuvarlak (pill) rozet */
+    border-radius: 100px;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.8px;
@@ -311,39 +290,22 @@ body {
     border: 1px solid rgba(255,255,255,0.3);
 }
 
-/* Rozetin içindeki nefes alan (nabız) zarif nokta */
 .premium-new-badge::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: #fff;
-    border-radius: 50%;
-    margin-right: 5px;
-    animation: dotPulse 2s infinite ease-in-out;
+    content: ''; display: inline-block; width: 6px; height: 6px; background: #fff;
+    border-radius: 50%; margin-right: 5px; animation: dotPulse 2s infinite ease-in-out;
 }
 
-@keyframes dotPulse {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-    100% { opacity: 1; transform: scale(1); }
-}
+@keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
 
 /* SYNC İKONU */
 @keyframes spin-anim { 100% { transform: rotate(360deg); } }
 .spin { display: inline-block; animation: spin-anim 1s linear infinite; }
 
-
-/* --- ALT SEKME BİLDİRİM NOKTASI (PREMIUM DOT) --- */
-.nav-item {
-    position: relative; /* Noktanın konumlanması için gerekli */
-}
-
-/* Nokta Tasarımı */
+/* --- ALT SEKME BİLDİRİM NOKTASI --- */
 .nav-item.unread-indicator::after {
     content: '';
     position: absolute;
-    bottom: -8px; /* Yazının tam altına hizalar */
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
     width: 6px;
@@ -354,7 +316,6 @@ body {
     animation: dotBreath 2s infinite ease-in-out;
 }
 
-/* Noktanın yumuşak yanıp sönme animasyonu */
 @keyframes dotBreath {
     0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(0.8); }
     50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
