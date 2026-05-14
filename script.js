@@ -779,11 +779,10 @@ document.addEventListener("visibilitychange", () => {
 
 let pStartY = 0; let pCurrentY = 0; let pIsPulling = false;
 document.addEventListener('touchstart', (e) => {
-    // Aktif olan sekmenin içeriğini bul
     const activeTab = document.querySelector('.tab-content.active');
-    // Sadece sekme en üstteyse (scrollTop <= 0) yenilemeye izin ver
     if (activeTab && activeTab.scrollTop <= 0) { 
         pStartY = e.touches[0].clientY; 
+        pCurrentY = pStartY; // <-- KRİTİK EKLEME: Dokunduğun an eski koordinatları siler
         pIsPulling = true; 
     }
 }, {passive: true});
