@@ -62,11 +62,22 @@
 html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
 * { box-sizing: border-box; font-family: 'Inter', sans-serif !important; }
 body { 
-    margin: 0; background: var(--bg); background-image: var(--bg-mesh); color: var(--text); 
-    padding: 0; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-    height: 100dvh; width: 100vw; display: flex; flex-direction: column; overflow: hidden; 
-    -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s;
-    -webkit-user-select: none; user-select: none; overscroll-behavior-y: none;
+    margin: 0; 
+    background: var(--bg); 
+    background-image: var(--bg-mesh); 
+    color: var(--text); 
+    padding: 0; 
+    /* position: fixed ve yönleri SİLİNDİ! iOS çakışması bitti */
+    height: 100dvh; 
+    width: 100vw; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    -webkit-font-smoothing: antialiased; 
+    transition: background 0.3s, color 0.3s;
+    -webkit-user-select: none; 
+    user-select: none; 
+    overscroll-behavior-y: none;
 }
 
 /* --- SEKME SİSTEMİ --- */
