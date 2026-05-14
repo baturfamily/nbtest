@@ -70,7 +70,16 @@ body {
 }
 
 /* --- SEKME SİSTEMİ --- */
-.tab-content { display: none; flex-direction: column; padding: 16px; padding-bottom: 140px; overflow-y: auto; height: 100%; animation: spatialZoom 0.3s ease-out; }
+.tab-content { 
+    display: none; 
+    flex-direction: column; 
+    padding: 16px; 
+    padding-bottom: 160px; /* Alttaki navbara çarpmaması için boşluk */
+    overflow-y: auto; 
+    flex: 1; /* Yüksekliği dinamik doldurması için */
+    -webkit-overflow-scrolling: touch; /* iOS'ta akıcı kaydırma için */
+    animation: spatialZoom 0.3s ease-out; 
+}
 .tab-content.active { display: flex; }
 @keyframes spatialZoom { from { opacity: 0; transform: scale(0.98) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
