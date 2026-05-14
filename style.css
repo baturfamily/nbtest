@@ -97,7 +97,15 @@ body {
 .nav-item span { font-size: 12px; font-weight: 700; letter-spacing: -0.2px; }
 
 /* --- HEADER SİSTEMİ --- */
-.sticky-top-wrapper { position: relative; z-index: 100; flex-shrink: 0; padding: max(12px, env(safe-area-inset-top)) 16px 8px 16px; }
+.sticky-top-wrapper { 
+    position: relative; 
+    z-index: 100; 
+    flex-shrink: 0; 
+    /* KRİTİK EKLEME: Üst bölgeyi uygulamanın ana rengiyle doldurur */
+    background: var(--bg); 
+    padding: max(12px, env(safe-area-inset-top)) 16px 8px 16px; 
+    transition: background 0.3s ease;
+}
 .header-compact { text-align: center; background: var(--vip-bg); padding: 18px 16px; border-radius: 24px; border: 1px solid var(--line); box-shadow: var(--vip-shadow); user-select: none; transition: transform 0.15s ease; }
 .header-compact:active { transform: scale(0.98); }
 .app-title { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
