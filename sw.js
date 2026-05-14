@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nurten-saglik-v100'; // Numarayı 100 yaptık
+const CACHE_NAME = 'nurten-saglik-v101'; // Numarayı 100 yaptık
 
 const ASSETS = [
   'index.html',
