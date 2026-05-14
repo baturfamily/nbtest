@@ -7,13 +7,10 @@
     
     <link rel="apple-touch-icon" href="https://i.ibb.co/JW7nK9RK/nurten-ikon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
     <meta name="apple-mobile-web-app-title" content="İlaç Paneli">
 
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=200">
+    <link rel="stylesheet" href="style.css?v=final_1">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -22,7 +19,7 @@
 </head>
 <body>
 
-        <div class="sticky-top-wrapper">
+    <div class="sticky-top-wrapper">
         <div class="header-compact" id="dynamicHeaderBg" ontouchstart="">
             <div class="app-title">
                 <span class="greeting" id="greetingText"></span> 
@@ -40,55 +37,50 @@
         
         <section id="tab-today" class="tab-content active">
             <div class="premium-card ios-weather-card" id="weatherCard">
-    <div class="ios-w-top">
-        <div class="ios-w-city">📍 Avrupark Hayat</div>
-        <div class="ios-w-right-group">
-            <div class="ios-w-temp" id="wTempText">--°</div>
-            <div class="ios-w-icon" id="wMainIcon">
+                <div class="ios-w-top">
+                    <div class="ios-w-city">📍 Avrupark Hayat</div>
+                    <div class="ios-w-right-group">
+                        <div class="ios-w-temp" id="wTempText">--°</div>
+                        <div class="ios-w-icon" id="wMainIcon"></div>
+                        <div class="ios-w-hum" id="wHumText">%-- Nem</div>
+                    </div>
                 </div>
-            <div class="ios-w-hum" id="wHumText">%-- Nem</div>
-        </div>
-    </div>
-    <div class="ios-w-divider"></div>
-    <div class="ios-w-advice">
-        <div class="ios-w-adv-icon" id="wAdvIcon">
+                <div class="ios-w-divider"></div>
+                <div class="ios-w-advice">
+                    <div class="ios-w-adv-icon" id="wAdvIcon"></div>
+                    <div class="ios-w-adv-text" id="wAdvice">Hava durumu analiz ediliyor...</div>
+                </div>
             </div>
-        <div class="ios-w-adv-text" id="wAdvice">Hava durumu analiz ediliyor...</div>
-    </div>
-</div>
 
             <div id="alertsArea"></div>
-
             <div id="timelineArea"></div>
         </section>
 
-                <section id="tab-analysis" class="tab-content">
-    <div id="healthDiaryArea"></div>
-
-    <div class="premium-card chart-container-wrapper card collapsed" id="chartCard">
-        <div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;">
-            <div class="drug-name">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                Haftalık Sağlık Trendi
-            </div>
-            <div class="badge badge-wait">ANALİZ <span class="exp-arrow">▲</span></div>
-        </div>
-        
-        <div class="meds-container">
-            <div class="chart-area" style="height: 240px; margin-top: 10px;">
-                <canvas id="healthChart"></canvas>
-            </div>
-            <div style="display: flex; justify-content: center; gap: 24px; margin-top: 15px; border-top: 1px solid var(--line); padding-top: 12px; padding-bottom: 5px;">
-                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text);">
-                    <span style="width: 10px; height: 10px; border-radius: 50%; background-color: #F43F5E;"></span> Ağrı
+        <section id="tab-analysis" class="tab-content">
+            <div id="healthDiaryArea"></div>
+            <div class="premium-card chart-container-wrapper card collapsed" id="chartCard">
+                <div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')" style="cursor:pointer;">
+                    <div class="drug-name">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        Haftalık Sağlık Trendi
+                    </div>
+                    <div class="badge badge-wait">ANALİZ <span class="exp-arrow">▲</span></div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text);">
-                    <span style="width: 10px; height: 10px; border-radius: 50%; background-color: #3B82F6;"></span> Uyku
+                <div class="meds-container">
+                    <div class="chart-area" style="height: 240px; margin-top: 10px;">
+                        <canvas id="healthChart"></canvas>
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 24px; margin-top: 15px; border-top: 1px solid var(--line); padding-top: 12px; padding-bottom: 5px;">
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text);">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background-color: #F43F5E;"></span> Ağrı
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text);">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background-color: #3B82F6;"></span> Uyku
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <section id="tab-archive" class="tab-content">
             <div id="statsArea">
@@ -141,12 +133,12 @@
 
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('tab-today', this)">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 3px;">
-        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-        <path d="M3.22 12H9.5l2-3 2 6 2-3h5.28"/>
-    </svg>
-    Günüm
-</button>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 3px;">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                <path d="M3.22 12H9.5l2-3 2 6 2-3h5.28"/>
+            </svg>
+            Günüm
+        </button>
         <button class="nav-item" onclick="switchTab('tab-analysis', this)">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             <span>Analiz</span>
@@ -159,37 +151,37 @@
 
     <div id="print-report-area"></div>
 
-    <script src="script.js"></script>
+    <script src="app.js?v=final_1"></script>
 
     <script>
-                function switchTab(tabId, btn) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    
-    const target = document.getElementById(tabId);
-    if(target) target.classList.add('active');
-    btn.classList.add('active');
-    
-    // tab-today kontrolü eklendi
-    if(tabId === 'tab-today') {
-        if(typeof ekraniCiz === 'function') ekraniCiz();
-    } 
-    else if(tabId === 'tab-analysis') {
-        if(typeof renderHealthDiary === 'function') renderHealthDiary();
-        if(typeof grafikCiz === 'function') setTimeout(grafikCiz, 100);
-    } 
-    else if(tabId === 'tab-archive') {
-        if(typeof istatistikleriCiz === 'function') istatistikleriCiz();
-    }
-}
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if(target) target.classList.add('active');
+            btn.classList.add('active');
+            
+            if(tabId === 'tab-today') {
+                if(typeof ekraniCiz === 'function') ekraniCiz();
+            } 
+            else if(tabId === 'tab-analysis') {
+                if(typeof renderHealthDiary === 'function') renderHealthDiary();
+                if(typeof grafikCiz === 'function') setTimeout(grafikCiz, 100);
+            } 
+            else if(tabId === 'tab-archive') {
+                if(typeof istatistikleriCiz === 'function') istatistikleriCiz();
+            }
+        }
 
+        // --- İPHONE HAFIZASINDAKİ ESKİ SW.JS'Yİ ZORLA ÖLDÜREN KOD ---
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('Nurten PWA: Servis Kaydı Başarılı.');
-                }).catch(err => {
-                    console.error('Nurten PWA: Servis Kaydı Hatası: ', err);
-                });
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister().then(function(boolean) {
+                        console.log("Eski Service Worker başarıyla yok edildi!");
+                    });
+                }
             });
         }
     </script>
