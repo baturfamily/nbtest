@@ -722,22 +722,22 @@ document.addEventListener('touchend', (e) => {
 });
 
 function updateTabGlows() {
-    // 1. ANALİZ SEKMESİ (Günün Analizi Kartı Burada)
+    // 1. GÜNÜM SEKMESİ (Günün Analizi Kartı Burada)
     const gununAnalizi = document.getElementById('aiDiaryCard');
-    const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
-    if(tabAnaliz) {
+    const tabGunum = document.querySelector('button[onclick*="tab-day"]');
+    if(tabGunum) {
         const isDayNew = gununAnalizi && gununAnalizi.classList.contains('unread-premium-card');
-        tabAnaliz.classList.toggle('unread-indicator', !!isDayNew);
+        tabGunum.classList.toggle('unread-indicator', !!isDayNew);
     }
 
-    // 2. ARŞİV SEKMESİ (Bu Ay, Geçen Ay, Yıllık Karne Burada)
+    // 2. ANALİZ SEKMESİ (Bu Ay, Geçen Ay ve Yıllık Arşiv Kartları Burada)
     const arsivKartlari = ['card-stat-this-month', 'card-stat-last-month', 'card-stat-yearly'];
-    const tabArsiv = document.querySelector('button[onclick*="tab-archive"]');
-    if(tabArsiv) {
+    const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
+    if(tabAnaliz) {
         let hasUnreadArchive = arsivKartlari.some(id => {
             let el = document.getElementById(id);
             return el && el.classList.contains('unread-premium-card');
         });
-        tabArsiv.classList.toggle('unread-indicator', hasUnreadArchive);
+        tabAnaliz.classList.toggle('unread-indicator', hasUnreadArchive);
     }
 }
