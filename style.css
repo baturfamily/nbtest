@@ -134,7 +134,12 @@ body {
 .header-compact:active { transform: scale(0.98); }
 .app-title { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
 /* GÜNÜM YAZISINI KALINLAŞTIRAN KOD BURADA */
-.app-title .greeting { font-size: 18px; font-weight: 800 !important; opacity: 1 !important; color: #FFFFFF !important; }
+.app-title .greeting { 
+    font-size: 18px; 
+    font-weight: 900 !important; /* En kalın ayar */
+    opacity: 1 !important;
+    color: #FFFFFF !important;
+}
 .app-title .name-tag { font-size: 21px; font-weight: 700; white-space: nowrap; color: #fff; }
 .header-sub { font-size: 13px; color: rgba(255, 255, 255, 0.8); font-weight: 500; margin-bottom: 12px; }
 .header-info { display: flex; justify-content: center; align-items: center; gap: 12px; }
