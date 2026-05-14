@@ -755,10 +755,21 @@ document.addEventListener('touchstart', (e) => {
         pIsPulling = true; 
     }
 }, {passive: true});
+// touchmove olayını bu şekilde değiştir (app.js içinde ara)
 document.addEventListener('touchmove', (e) => {
     if (!pIsPulling || fetchDevamEdiyor) return;
+    
     pCurrentY = e.touches[0].clientY;
-    if (pCurrentY - pStartY > 60) { const uText = document.getElementById('update-text'); if(uText) uText.innerHTML = `Bırakın Güncellensin ${svgSync}`; }
+    let diff = pCurrentY - pStartY;
+
+    // Sadece PARMAK AŞAĞI çekiliyorsa ve mesafe 60px'den fazlaysa tetikle
+    if (diff > 60) { 
+        const uText = document.getElementById('update-text');
+        if(uText) uText.innerHTML = `Bırakın Güncellensin ${svgSync}`;
+    } else {
+        // Eğer yukarı kaydırılıyorsa güncelleme modundan çık
+        pIsPulling = (diff > 0); 
+    }
 }, {passive: true});
 document.addEventListener('touchend', (e) => {
     if (!pIsPulling) return;
