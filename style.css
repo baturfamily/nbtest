@@ -188,7 +188,17 @@ body {
 .diary-card.collapsed .diary-ai-box { display: none !important; }
 
 /* --- İSTATİSTİK ÖZETİ BAŞLIKLARI --- */
-.stat-ai-summary { padding: 4px; font-size: 17px; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 16px; border-left: 4px solid var(--purple); padding-left: 14px; }
+.stat-ai-summary { 
+    padding: 14px 14px 14px 18px; /* Rengin içinde yazının ferah durması için boşlukları artırdık */
+    font-size: 17px; 
+    font-weight: 500; 
+    line-height: 1.6; 
+    color: var(--text); 
+    margin-bottom: 16px; 
+    border-left: 4px solid var(--purple); 
+    background: rgba(139, 92, 246, 0.04); /* İşte o sevdiğin hafif pembe/mor arka plan rengi */
+    border-radius: 0 12px 12px 0; /* Sağ köşeleri modern bir şekilde yuvarlattık */
+}
 .stat-ai-summary strong { color: var(--purple); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
 
 /* --- İLAÇ KARTI (OKUMA PANELİ) --- */
