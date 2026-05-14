@@ -9,16 +9,13 @@ const svgSync = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" str
 const svgWait = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
 
 window.switchTab = function(tabId, btn) {
-    // 1. Tüm içerikleri ve aktif butonları temizle
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    
-    // 2. Tıklanan sekmeyi aktif yap
     const targetTab = document.getElementById(tabId);
     if(targetTab) targetTab.classList.add('active');
     btn.classList.add('active');
     
-    // 3. SEKMEYE GÖRE İÇERİĞİ ZORLA YENİLE (Sayfanın boş gelmemesi için)
+    // tab-today kontrolü burada da olmalı
     if(tabId === 'tab-today') {
         if(typeof ekraniCiz === 'function') ekraniCiz();
     }
@@ -29,8 +26,6 @@ window.switchTab = function(tabId, btn) {
     else if(tabId === 'tab-archive') {
         if(typeof istatistikleriCiz === 'function') istatistikleriCiz();
     }
-
-    // Alt noktaları hemen kontrol et
     setTimeout(updateTabGlows, 50); 
 };
 
@@ -751,15 +746,25 @@ function ekraniCiz() {
     if(tArea) tArea.innerHTML = pendingHTML + completedHTML;
 }
 
+// --- ZAMANLAYICILAR VE OTOMATİK GÜNCELLEME ---
+
+// 1. Uygulama açılır açılmaz ilk verileri çek
 veriCek();
-fetchWeather(); // <-- EKSİK OLAN BUYDU, ŞİMDİ TETİKLENECEK
-setInterval(veriCek, 600000); 
-setInterval(fetchWeather, 3600000); // <-- Hava durumunu saatte bir yenile
+fetchWeather(); 
+
+// 2. Verileri her 30 saniyede bir otomatik tazele (30000 ms = 30 saniye)
+setInterval(veriCek, 30000); 
+
+// 3. Hava durumunu saatte bir yenile (3600000 ms = 1 saat)
+setInterval(fetchWeather, 3600000); 
+
+// 4. Saati ve bağlantı durumunu her saniye kontrol et
 setInterval(saniyeTiktak, 1000);
 
+// 5. Uygulama arka plana atılıp tekrar açıldığında (Ekran uyanınca) kontrol et
 document.addEventListener("visibilitychange", () => { 
     if (document.visibilityState === 'visible') { 
-        // 30 saniyeden fazla zaman geçtiyse ekran açılır açılmaz güncelle
+        // Eğer son başarılı güncellemeden bu yana 30 saniyeden fazla geçmişse hemen yenile
         if (sonBasariZamani === 0 || (Date.now() - sonBasariZamani > 30000)) { 
             veriCek(); 
             fetchWeather(); 
