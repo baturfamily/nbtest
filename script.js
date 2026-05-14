@@ -177,6 +177,7 @@ async function fetchWeather() {
     const hEl = document.getElementById('wHumText');
     const aIEl = document.getElementById('wAdvIcon');
     const aTEl = document.getElementById('wAdvice');
+    const cardEl = document.getElementById('weatherCard');
 
     try {
         const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.07&longitude=28.64&current=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=uv_index_max&timezone=auto');
@@ -189,19 +190,66 @@ async function fetchWeather() {
         const uv = (data.daily && data.daily.uv_index_max) ? data.daily.uv_index_max[0] : 0; 
         const isDay = (new Date().getHours() >= 7 && new Date().getHours() < 19);
 
-        let icon = "🌥️", advI = "🩺", advC = "var(--accent)", advice = "Hava bugün senin için gayet güzel. Keyfini çıkar!";
+        // Şık, minimal SVG İkon Setleri
+        const icons = {
+            sun: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`,
+            cloud: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>`,
+            wind: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.8 19.6A2 2 0 1 0 14 16H2M17.5 8a2.5 2.5 0 1 1 2 4H2M9.8 4.4A2 2 0 1 1 11 8H2"/></svg>`,
+            rain: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 13v8M8 13v8M12 15v8M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>`,
+            moon: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`
+        };
 
-        if (isDay && uv > 5) { advI = "🕶️"; advC = "var(--warning)"; advice = "Güneş dik geliyor, koruyucu sür ve gölgede kal."; } 
-        else if (w > 20) { icon = "🌬️"; advI = "💧"; advC = "var(--early)"; advice = "Dışarısı rüzgarlı, Sjögren için damlanı yanına al."; } 
-        else if (h > 70 && t < 15) { icon = "🌧️"; advI = "⚠️"; advC = "var(--danger)"; advice = `Hava nemli (%${h}), eklemlerini sıcak tut.`; } 
-        else if (t < 12) { icon = "🥶"; advI = "🧣"; advC = "var(--warning)"; advice = "Dışarısı soğuk, kat kat giyinmeyi unutma."; } 
-        else if (!isDay) { icon = "🌙"; advice = `Hava ${t}°C. İlaçlarını alıp dinlenme vakti Nurten Hanım.`; }
+        const advIcons = {
+            shield: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+            drop: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
+            alert: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+            cold: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>`,
+            bed: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"/></svg>`,
+            heart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
+        };
 
+        // Varsayılan Değerler
+        let icon = icons.cloud, advI = advIcons.heart;
+        let advice = "Hava bugün senin için gayet dengeli. Keyfini çıkar Nurten Hanım!";
+        let bgColor = "var(--card)"; // Varsayılan temiz zemin
+
+        // Tıbbi ve Dinamik Şartlar
+        if (!isDay) { 
+            icon = icons.moon; advI = advIcons.bed;
+            bgColor = "rgba(139, 92, 246, 0.04)"; // Çok uçuk gece moru
+            advice = `Gün yavaş yavaş bitiyor. İlaçlarını zamanında alıp eklemlerini dinlendirme vakti.`; 
+        } 
+        else if (isDay && uv > 5) { 
+            icon = icons.sun; advI = advIcons.shield;
+            bgColor = "rgba(245, 158, 11, 0.05)"; // Çok uçuk şeftali/güneş rengi
+            advice = "Güneş ışınları dik açıyla geliyor. Plaquenil cildini hassaslaştırdığı için 50 faktör güneş kremini ve şapkanı almadan çıkma."; 
+        } 
+        else if ((h < 40 && t > 25) || w > 20) { 
+            icon = (w > 20) ? icons.wind : icons.sun; advI = advIcons.drop;
+            bgColor = "rgba(59, 130, 246, 0.04)"; // Uçuk rüzgar mavisi
+            advice = "Hava bugün kurumaya çok müsait. Sjögren için göz damlanı yanından ayırma ve bol bol su yudumla."; 
+        } 
+        else if (h > 65 && t < 15) { 
+            icon = icons.rain; advI = advIcons.alert;
+            bgColor = "rgba(244, 63, 94, 0.03)"; // Uçuk kırmızı (Romatizma Uyarısı)
+            advice = `Dışarısı soğuk ve oldukça nemli (%${h}). Sabah tutukluğunu kırmak için dışarı çıkmadan önce kalın giyin ve ellerini sıcak tut.`; 
+        } 
+        else if (t < 12) { 
+            icon = icons.rain; advI = advIcons.cold;
+            bgColor = "rgba(14, 165, 233, 0.05)"; // Uçuk buz mavisi
+            advice = "Hava epey soğuk. Eklemlerini üşütmemek için rüzgar geçirmeyen kıyafetler tercih etmelisin."; 
+        }
+
+        // Değerleri HTML'e yazdır
         if(tEl) tEl.innerText = t + "°";
-        if(mEl) mEl.innerText = icon;
+        if(mEl) mEl.innerHTML = icon;
         if(hEl) hEl.innerText = "%" + h + " Nem";
-        if(aIEl) { aIEl.innerText = advI; aIEl.style.color = advC; }
+        if(aIEl) aIEl.innerHTML = advI;
         if(aTEl) aTEl.innerText = advice;
+        
+        // Dinamik arka plan rengini uygula
+        if(cardEl) cardEl.style.backgroundColor = bgColor;
+
     } catch(e) { 
         if(aTEl) aTEl.innerText = "Hava durumu şu an alınamıyor, ancak ilaç takibiniz aktif.";
     }
