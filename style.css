@@ -223,34 +223,16 @@ body {
     display: flex !important; 
     flex-direction: column !important; 
     align-items: stretch !important; 
-    
-    /* İŞTE DOKUNMATİĞİ VE KAYDIRMAYI ÇÖZEN İKİ SİHİRLİ KOMUT */
-    overflow: visible !important; 
-    touch-action: pan-y !important; 
 }
+.diary-ai-box { width: 100% !important; margin-top: 18px; padding: 14px 14px 14px 18px; border-left: 4px solid var(--purple); background: rgba(139, 92, 246, 0.04); border-radius: 0 12px 12px 0; font-size: 17.5px; font-weight: 500; color: var(--text); line-height: 1.65; text-align: left; display: block !important; }
+.diary-card.collapsed::before { display: none; }
+
+/* 🚀 İŞTE BURADAN .diary-card:active { transform: scale(0.98); } SATIRINI TAMAMEN SİLDİK! */
 
 .diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; }
 .diary-title { font-size: 20px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
 .diary-title svg { color: var(--purple); }
 .diary-toggle-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #F1F5F9; font-size: 11px; color: var(--muted); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s; }
-
-/* KUTUNUN BOZULMASINA SEBEP OLAN ÇİFT YAZIM TEMİZLENDİ, MOR ÇİZGİ VE BOŞLUKLAR GERİ GELDİ */
-.diary-ai-box { 
-    width: 100% !important; 
-    margin-top: 18px; 
-    padding: 16px 16px 16px 20px; 
-    border-left: 4px solid var(--purple); 
-    background: rgba(139, 92, 246, 0.04); 
-    border-radius: 0 12px 12px 0; 
-    font-size: 17.5px; 
-    font-weight: 500; 
-    color: var(--text); 
-    line-height: 1.65; 
-    text-align: left; 
-    display: block !important; 
-}
-
-.diary-card:active { transform: scale(0.98); }
 .diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); background: rgba(139, 92, 246, 0.1); color: var(--purple); } 
 .diary-card.collapsed .diary-ai-box { display: none !important; }
 
