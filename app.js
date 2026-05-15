@@ -314,13 +314,10 @@ function getDailyProgram(dateObj) {
 
 // --- RENDER FONKSİYONLARI (KARTLAR VE BİLDİRİMLER) ---
 function renderHealthDiary() {
-    // DÜZELTME 1: "Veri yoksa çık (return)" komutunu sildik. Artık boşken de "Yükleniyor" iskeletiyle çizilecek.
-    
     let isCollapsed = true; 
     const existingCard = document.getElementById('aiDiaryCard');
     if (existingCard) { isCollapsed = existingCard.classList.contains('collapsed'); }
 
-    // DÜZELTME 2: Veri yoksa hata vermemesi için güvenli veri çekme mantığı
     let aiMsg = (apiData && apiData.ai && apiData.ai.gunluk) ? apiData.ai.gunluk : "Yapay zeka verileri değerlendiriyor, lütfen bekleyin...";
     
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
@@ -328,14 +325,13 @@ function renderHealthDiary() {
     let pulseClass = isNew ? "unread-premium-card" : "";
     let badgeHTML = isNew ? `<div style="margin-top:8px;"><span class="premium-new-badge">YENİ</span></div>` : "";
     
+    /* 🚀 İŞTE DÜZELTME BURADA: onclick komutunu ana karttan SİLDİK ve bir alt satırdaki diary-header'a taşıdık! */
     let finalHTML = `
         <div class="diary-card ${pulseClass} ${isCollapsed ? 'collapsed' : ''}" 
              id="aiDiaryCard" 
-             data-new-text="${isNew ? aiMsg : ''}" 
-             onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.classList.toggle('collapsed');" 
-             style="cursor:pointer;">
+             data-new-text="${isNew ? aiMsg : ''}">
             
-            <div class="diary-header">
+            <div class="diary-header" onclick="markStatAsRead('gunluk', 'aiDiaryCard'); this.parentElement.classList.toggle('collapsed');" style="cursor:pointer;">
                 <h3 class="diary-title" id="title-gunluk" style="display:flex; align-items:flex-start; gap:10px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                     <div style="display:flex; flex-direction:column;">
