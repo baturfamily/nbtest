@@ -209,22 +209,47 @@ body {
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
 
 /* --- 10. GÜNÜN ANALİZİ (YAPAY ZEKA) KARTI --- */
-.diary-ai-box { 
-    width: 100% !important; margin-top: 18px; padding: 14px 14px 14px 18px; border-left: 4px solid var(--purple); background: rgba(139, 92, 246, 0.04); border-radius: 0 12px 12px 0; font-size: 17.5px; font-weight: 500; color: var(--text); line-height: 1.65; text-align: left; display: block; 
-    /* YAĞ GİBİ KAYMA ANİMASYONU EKLENDİ */
-    max-height: 1000px; opacity: 1; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin 0.3s ease, padding 0.3s ease; overflow: hidden;
+.diary-card { 
+    padding: 22px 24px; 
+    border-radius: 28px; 
+    margin-bottom: 16px; 
+    cursor: pointer; 
+    background: var(--card); 
+    border: 1px solid rgba(139, 92, 246, 0.12); 
+    box-shadow: 0 12px 36px rgba(139, 92, 246, 0.08), 0 4px 12px rgba(0,0,0,0.02); 
+    position: relative; 
+    z-index: 1; 
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+    display: flex !important; 
+    flex-direction: column !important; 
+    align-items: stretch !important; 
+    overflow: hidden !important; 
 }
-.diary-card.collapsed::before { display: none; }
-.diary-card:active { transform: scale(0.98); }
+
 .diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; }
 .diary-title { font-size: 20px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
 .diary-title svg { color: var(--purple); }
 .diary-toggle-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #F1F5F9; font-size: 11px; color: var(--muted); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s; }
-.diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); background: rgba(139, 92, 246, 0.1); color: var(--purple); } 
-.diary-card.collapsed .diary-ai-box { 
-    /* KAPANIRKEN KUTUYU YUMUŞAKÇA YOK EDER */
-    max-height: 0; opacity: 0; margin-top: 0; padding-top: 0; padding-bottom: 0; border: none;
+
+/* KUTUNUN BOZULMASINA SEBEP OLAN ÇİFT YAZIM TEMİZLENDİ, MOR ÇİZGİ VE BOŞLUKLAR GERİ GELDİ */
+.diary-ai-box { 
+    width: 100% !important; 
+    margin-top: 18px; 
+    padding: 16px 16px 16px 20px; 
+    border-left: 4px solid var(--purple); 
+    background: rgba(139, 92, 246, 0.04); 
+    border-radius: 0 12px 12px 0; 
+    font-size: 17.5px; 
+    font-weight: 500; 
+    color: var(--text); 
+    line-height: 1.65; 
+    text-align: left; 
+    display: block !important; 
 }
+
+.diary-card:active { transform: scale(0.98); }
+.diary-card.collapsed .diary-toggle-icon { transform: rotate(180deg); background: rgba(139, 92, 246, 0.1); color: var(--purple); } 
+.diary-card.collapsed .diary-ai-box { display: none !important; }
 
 /* --- 11. İLAÇ KARTI (OKUMA PANELİ VE HAFIZALI KAPANMA) --- */
 .card { display: flex; flex-direction: column; padding: 20px; margin-bottom: 14px; cursor: pointer; transition: 0.3s ease; } 
