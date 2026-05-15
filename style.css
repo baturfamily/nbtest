@@ -223,7 +223,8 @@ body {
     display: flex !important; 
     flex-direction: column !important; 
     align-items: stretch !important; 
-    overflow: hidden !important; 
+    /* 🚀 İŞTE DOKUNMATİĞİ KİLİTLEYEN KODU SİLDİK VE VISIBLE YAPTIK */
+    overflow: visible !important; 
 }
 
 .diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; }
