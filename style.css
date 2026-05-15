@@ -223,8 +223,10 @@ body {
     display: flex !important; 
     flex-direction: column !important; 
     align-items: stretch !important; 
-    /* 🚀 İŞTE DOKUNMATİĞİ KİLİTLEYEN KODU SİLDİK VE VISIBLE YAPTIK */
+    
+    /* İŞTE DOKUNMATİĞİ VE KAYDIRMAYI ÇÖZEN İKİ SİHİRLİ KOMUT */
     overflow: visible !important; 
+    touch-action: pan-y !important; 
 }
 
 .diary-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; }
