@@ -451,14 +451,24 @@ function renderMonthStat(prefix, data, statType, cardId) {
         aiText = (apiData.ai && apiData.ai.buAy) ? apiData.ai.buAy : "İstatistik bekleniyor...";
     }
     let html = `<div class="stat-ai-summary"><strong>✨ Dönem Özeti</strong>${aiText}</div>`;
+    let eksikGunSayisi = 0;
+    
     data.breakdown.forEach(day => {
         let ayIsmi = aylar[parseInt(day.dateStr.split('.')[1])-1].substring(0,3);
-        if (day.isAllDone) {
-            html += `<div class="stat-row"><span class="stat-date">${day.dayNum} ${ayIsmi}</span><div class="stat-info"><div class="stat-status" style="color: var(--accent);"><div class="check-icon done">${svgCheck}</div>Tüm ilaçlar alındı</div></div></div>`;
-        } else {
+        // SADECE EKSİK İLAÇ OLAN GÜNLERİ LİSTELER
+        if (!day.isAllDone) {
+            eksikGunSayisi++;
             html += `<div class="stat-row"><span class="stat-date">${day.dayNum} ${ayIsmi}</span><div class="stat-info"><div class="stat-status" style="color: var(--text);">⚠️ ${day.totalCount - day.missedCount}/${day.totalCount} İlaç</div><div class="stat-missed-list" style="color: var(--danger);">Eksik: ${day.missedNames.join(', ')}</div></div></div>`;
         }
     });
+
+    // EĞER HİÇ EKSİK YOKSA VEYA BAZI GÜNLER EKSİKSİZSE BİLGİ NOTU EKLER
+    if (eksikGunSayisi === 0 && data.breakdown.length > 0) {
+        html += `<div class="stat-row" style="justify-content: center; color: var(--accent); font-weight: 600; padding: 16px 0; border:none;"><div class="check-icon done" style="width:18px; height:18px; margin-right:6px;">${svgCheck}</div>Bu dönemde hiç ilaç atlanmadı!</div>`;
+    } else if (eksikGunSayisi > 0 && eksikGunSayisi < data.breakdown.length) {
+        html += `<div class="stat-row" style="justify-content: center; font-size: 13px; color: var(--muted); padding-top: 12px; border:none;">Diğer günlerde tüm ilaçlar eksiksiz alınmıştır.</div>`;
+    }
+    
     detailsEl.innerHTML = html;
     if (aiText && !aiText.includes("bekleniyor") && !aiText.includes("güncellenemiyor")) {
         let lastRead = localStorage.getItem('lastRead_' + statType);
@@ -588,7 +598,8 @@ function grafikCiz() {
             datasets: [
                 { 
                     label: 'Ağrı', 
-                    data: agriMetinleri.map(m => puanla.agri(m)), 
+                    /* VERİ BOŞSA SIFIR YERİNE NULL DÖNER, GRAFİK ÇAKILMAZ */
+                    data: agriMetinleri.map(m => m !== "" ? puanla.agri(m) : null), 
                     metinler: agriMetinleri, 
                     borderColor: '#F43F5E', 
                     backgroundColor: 'rgba(244, 63, 94, 0.05)', 
@@ -598,7 +609,8 @@ function grafikCiz() {
                 },
                 { 
                     label: 'Uyku', 
-                    data: uykuMetinleri.map(m => puanla.uyku(m)), 
+                    /* VERİ BOŞSA SIFIR YERİNE NULL DÖNER, GRAFİK ÇAKILMAZ */
+                    data: uykuMetinleri.map(m => m !== "" ? puanla.uyku(m) : null), 
                     metinler: uykuMetinleri, 
                     borderColor: '#3B82F6', 
                     backgroundColor: 'transparent',
