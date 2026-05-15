@@ -8,6 +8,7 @@ const svgCheck = `<svg viewBox="0 0 14 10"><polyline points="1.5 5 5 8.5 12.5 1"
 const svgSync = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>`;
 const svgWait = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
 
+// --- SEKME (TAB) DEĞİŞTİRME MANTIĞI ---
 window.switchTab = function(tabId, btn) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -16,8 +17,8 @@ window.switchTab = function(tabId, btn) {
     if(targetTab) {
         targetTab.classList.add('active');
         
-        // --- KRİTİK EKLENTİ: Sekme değişince o sekmenin içini en tepeye kaydırır ---
-        targetTab.scrollTop = 0; 
+        // KRİTİK: Doğal kaydırma mimarisine uyumlu olması için sekme değiştiğinde sayfayı tepeye alır
+        window.scrollTo(0, 0); 
         
         btn.classList.add('active');
     }
@@ -36,6 +37,7 @@ window.switchTab = function(tabId, btn) {
     setTimeout(updateTabGlows, 50); 
 };
 
+// --- DİNAMİK KARŞILAMA VE ARKA PLAN ---
 const now = new Date();
 const hour = now.getHours();
 let gMsg = "İyi Geceler"; 
@@ -66,6 +68,7 @@ if(document.getElementById('currentYearText')) document.getElementById('currentY
 const dynamicHeaderBg = document.getElementById('dynamicHeaderBg');
 if (dynamicHeaderBg) { dynamicHeaderBg.style.background = vipBg; dynamicHeaderBg.style.border = "none"; }
 
+// --- SAĞLIK PUANLAMA MANTIĞI ---
 const puanla = {
     agri: (val) => {
         if (!val) return 0;
@@ -102,6 +105,7 @@ const puanla = {
     }
 };
 
+// --- İLAÇ AÇIKLAMALARI ---
 const ilacAciklamalari = {
   "INH": [
     "Bağışıklık sistemin dinlenirken akciğerlerini mikroplara karşı özenle korur. Böylece sen fark etmeden vücudunun savunma hattını güçlü tutar.",
@@ -168,6 +172,7 @@ function rastgeleAciklama(ilacAdi) {
   return (liste && liste.length > 0) ? liste[Math.floor(Math.random() * liste.length)] : "";
 }
 
+// --- VERİ ÇEKME VE HAVA DURUMU SİSTEMİ ---
 function manuelYenile() {
     if(fetchDevamEdiyor) return;
     const uText = document.getElementById('update-text');
@@ -255,6 +260,7 @@ async function fetchWeather() {
         if(aTEl) aTEl.innerText = "Hava durumu şu an alınamıyor, ancak ilaç takibiniz aktif.";
     }
 }
+
 function saniyeTiktak() {
     const clockElement = document.getElementById('clock');
     const statusEl = document.getElementById('connection-status');
@@ -286,6 +292,7 @@ function saniyeTiktak() {
     }
 }
 
+// --- TIP MANTIĞI VE PROGRAM ---
 function getDailyProgram(dateObj) {
     let day = dateObj.getDay(); let mid = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
     let p = [
@@ -305,6 +312,7 @@ function getDailyProgram(dateObj) {
     return p;
 }
 
+// --- RENDER FONKSİYONLARI (KARTLAR VE BİLDİRİMLER) ---
 function renderHealthDiary() {
     if (!apiData || !apiData.ai) return;
 
@@ -677,6 +685,7 @@ async function veriCek() {
     }
 }
 
+// KARTLARI (VE HAFIZASINI) ÇİZEN FONKSİYON
 function ekraniCiz() {
     const dNow = new Date(); 
     const todayProg = getDailyProgram(dNow);
@@ -693,6 +702,7 @@ function ekraniCiz() {
         });
     });
     const alertsEl = document.getElementById('alertsArea'); if(alertsEl) alertsEl.innerHTML = alertsHTML;
+    
     let pendingHTML = "";
     let completedHTML = "";
 
@@ -704,17 +714,21 @@ function ekraniCiz() {
             const iconHTML = isDone ? `<div class="check-icon done">${svgCheck}</div>` : `<div class="check-icon"></div>`;
             medsHTML += `<div class="history-item ${isDone ? 'is-done' : ''}">${iconHTML}<div class="med-info"><span class="drug-title">${m.name}</span><span class="drug-purpose">${m.purpose}</span></div></div>`; 
         });
+        
         const isAllDone = (sTC === s.meds.length);
         let isLate = false;
+        
         if (!isAllDone && s.time) {
             const cardMins = (parseInt(s.time.split(':')[0], 10) * 60) + parseInt(s.time.split(':')[1], 10);
             const nowMins = (dNow.getHours() * 60) + dNow.getMinutes();
             if (nowMins > cardMins + 90) isLate = true;
         }
+        
         let bClass = isAllDone ? "badge-safe" : isLate ? "badge-danger" : "badge-wait";
         let bText = isAllDone ? `TAMAMLANDI <span class="exp-arrow">▲</span>` : isLate ? "🚨 İÇİLMEYEN İLAÇ VAR" : "BEKLİYOR";
         let cClass = isAllDone ? "done-card" : isLate ? "late-card" : "";
         
+        // KART HAFIZASI MANTIĞI: Zaten kapalıysa kapalı kalır, tamamlandıysa otomatik kapanır
         let isCardCollapsed = isAllDone; 
         const existingCard = document.getElementById(`timeline-card-${s.id}`);
         if (existingCard) {
@@ -735,6 +749,7 @@ function ekraniCiz() {
     if(tArea) tArea.innerHTML = pendingHTML + completedHTML;
 }
 
+// --- BAŞLATICI ZAMANLAYICILAR ---
 veriCek();
 fetchWeather(); 
 setInterval(veriCek, 30000); 
@@ -750,12 +765,12 @@ document.addEventListener("visibilitychange", () => {
     }
 });
 
+// --- PULL TO REFRESH (SAYFA YENİLEME) SİSTEMİ ---
 let pStartY = 0; let pCurrentY = 0; let pIsPulling = false;
 
 document.addEventListener('touchstart', (e) => {
-    const activeTab = document.querySelector('.tab-content.active');
-    // activeTab'in içindeki kaydırma miktarına bakar
-    if (activeTab && activeTab.scrollTop <= 0) { 
+    // DOĞAL KAYDIRMAYA UYUM: Sayfanın en üstünde miyiz? (window.scrollY)
+    if (window.scrollY <= 0) { 
         pStartY = e.touches[0].clientY; 
         pCurrentY = pStartY; 
         pIsPulling = true; 
@@ -800,6 +815,7 @@ document.addEventListener('touchend', (e) => {
     }
 });
 
+// --- OKUNMAMIŞ BİLDİRİM IŞIKLARI ---
 function updateTabGlows() {
     const gununAnalizi = document.getElementById('aiDiaryCard');
     const tabAnaliz = document.querySelector('button[onclick*="tab-analysis"]');
