@@ -314,15 +314,17 @@ function getDailyProgram(dateObj) {
 
 // --- RENDER FONKSİYONLARI (KARTLAR VE BİLDİRİMLER) ---
 function renderHealthDiary() {
-    if (!apiData || !apiData.ai) return;
-
+    // DÜZELTME 1: "Veri yoksa çık (return)" komutunu sildik. Artık boşken de "Yükleniyor" iskeletiyle çizilecek.
+    
     let isCollapsed = true; 
     const existingCard = document.getElementById('aiDiaryCard');
     if (existingCard) { isCollapsed = existingCard.classList.contains('collapsed'); }
 
-    let aiMsg = apiData.ai.gunluk || "Veriler değerlendiriliyor...";
+    // DÜZELTME 2: Veri yoksa hata vermemesi için güvenli veri çekme mantığı
+    let aiMsg = (apiData && apiData.ai && apiData.ai.gunluk) ? apiData.ai.gunluk : "Yapay zeka verileri değerlendiriyor, lütfen bekleyin...";
+    
     let lastReadReport = localStorage.getItem('lastRead_gunluk');
-    let isNew = (aiMsg && !aiMsg.includes("değerlendiriliyor") && !aiMsg.includes("güncellenemiyor") && lastReadReport !== aiMsg);
+    let isNew = (apiData && apiData.ai && apiData.ai.gunluk && !aiMsg.includes("değerlendiriliyor") && !aiMsg.includes("güncellenemiyor") && lastReadReport !== aiMsg);
     let pulseClass = isNew ? "unread-premium-card" : "";
     let badgeHTML = isNew ? `<div style="margin-top:8px;"><span class="premium-new-badge">YENİ</span></div>` : "";
     
